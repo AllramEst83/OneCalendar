@@ -1,15 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Text;
+using AutoMapper;
+using CaseSolutionsTokenValidationParameters;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using OneCalendar.Context;
+using OneCalendar.Data;
+using OneCalendar.Helpers.Settings;
+using OneCalendar.Interfaces;
+using OneCalendar.Models;
+using OneCalendar.Services;
 
 namespace OneCalendar
 {
@@ -25,7 +31,70 @@ namespace OneCalendar
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            string section = "AppSettings";
+            string assemblyName = "OneCalendar";
+            IConfigurationSection configuration = Configuration.GetSection(section);
+            services.Configure<AppSettings>(configuration);
+            AppSettings appsettings = configuration.Get<AppSettings>();
+
+            services.AddDbContext<UserContext>(options =>
+            {
+                options.UseSqlServer(appsettings.AuthDbConnectionString,
+                    migrationOptions =>
+                    {
+                        migrationOptions.MigrationsAssembly(assemblyName);
+                    });
+            });
+
+            services.AddDbContext<CalenderContext>(optionsCal =>
+            {
+                optionsCal.UseSqlServer(appsettings.CalenderConnectionString,
+                    migrationOptions =>
+                    {
+                        migrationOptions.MigrationsAssembly(assemblyName);
+                    });
+            });
+
+            SymmetricSecurityKey _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(appsettings.Secret));
+            SigningCredentials signingCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256);
+
+            services.Configure<JwtIssuerOptions>(options =>
+            {
+                options.Issuer = appsettings.Issuer;
+                options.Audience = appsettings.Audience;
+                options.SigningCredentials = signingCredentials;
+            });
+
+            IdentityBuilder builder = services.AddIdentityCore<User>(o =>
+            {
+                // configure identity options
+                o.Password.RequireDigit = false;
+                o.Password.RequireLowercase = false;
+                o.Password.RequireUppercase = false;
+                o.Password.RequireNonAlphanumeric = false;
+                o.Password.RequiredLength = 6;
+            });
+
+            builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), builder.Services);
+            builder
+                .AddEntityFrameworkStores<UserContext>()
+                .AddDefaultTokenProviders()
+                .AddRoles<IdentityRole>();
+
+            services.AddValidationParameters(
+                       appsettings.Issuer,
+                       appsettings.Audience,
+                       _signingKey
+                       );
+
+            services.AddAutoMapper();
+
+            services.AddScoped<IJwtService,JwtService>();
+            services.AddScoped<IAccountService, AccountService>();
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                       .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +111,7 @@ namespace OneCalendar
             }
 
             app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseMvc();
         }
     }

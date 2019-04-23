@@ -7,13 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace OneCalendar.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
-    public class CalendarController : ControllerBase
+    public class CalenderController : ControllerBase
     {
-        public CalendarController()
+        public CalenderController()
         {
-
+          
         }
 
 
