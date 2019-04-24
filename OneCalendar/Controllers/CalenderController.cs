@@ -13,9 +13,15 @@ namespace OneCalendar.Controllers
     {
         public CalenderController()
         {
-          
+
         }
 
+        [HttpGet]
+        public List<string> GetTasksByUserId(int id)
+        {
 
+            List<string> list = new List<string>() { "test", "test", "test" };
+            return list;
+        }
     }
 }

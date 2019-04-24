@@ -1,5 +1,4 @@
 ﻿import React, { Component } from 'react';
-import Calendar from 'react-calendar';
 
 class Calender extends Component {
     constructor(props) {
@@ -8,14 +7,15 @@ class Calender extends Component {
             date: new Date(),
         }
     }
-    onChange = date => this.setState({ date })
-    
+
     render() {
         return (
             <div>
-                <Calendar
-                    onChange={this.onChange}
-                    value={this.state.date}
+                <BigCalendar
+                    localizer={localizer}
+                    events={myEventsList}
+                    startAccessor="start"
+                    endAccessor="end"
                 />
             </div>
         );
