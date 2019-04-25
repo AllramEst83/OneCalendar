@@ -90,7 +90,7 @@ namespace OneCalendar
 
             services.AddAutoMapper();
 
-            services.AddScoped<IJwtService,JwtService>();
+            services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<IAccountService, AccountService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
@@ -111,6 +111,14 @@ namespace OneCalendar
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors(builder =>
+            {
+                builder.AllowAnyOrigin() // TODO: revisit and check if this can be more strict and still allow preflight OPTION requests
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            });
+
             app.UseAuthentication();
             app.UseMvc();
         }

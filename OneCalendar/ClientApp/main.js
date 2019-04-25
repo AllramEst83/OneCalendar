@@ -1,13 +1,15 @@
 ﻿
 var CalenderObject = CalenderObject || {};
+var FormObject = FormObject || {};
 
-$(function () {
+$(document).ready(function () {
 
 
     console.log("ready!");
 
+    CalenderObject.CheckForUserTokenAndReValidate();
     CalenderObject.InitiateCalender();
-    //CalenderObject.GetEvents();
-
+    CalenderObject.GetEvents(123456);
+    FormObject.BindLoggaIn();
 
 });

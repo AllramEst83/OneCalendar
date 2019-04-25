@@ -9,6 +9,7 @@ namespace OneCalendar.ResponseModels
     public class JwtResponse
     {
         public HttpStatusCode StatusCode { get; set; }
+        public string UserName { get; set; }
         public string Error { get; set; }
         public string Description { get; set; }
         public string Id { get; set; }

@@ -1,17 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
+using System.Security.Principal;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using CaseSolutionsTokenValidationParameters.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using OneCalendar.Data;
 using OneCalendar.Helpers.Settings;
 using OneCalendar.Interfaces;
@@ -31,6 +37,7 @@ namespace OneCalendar.Controllers
         public RoleManager<IdentityRole> RoleManager { get; }
         public IJwtService JwtService { get; }
         private readonly JwtIssuerOptions _jwtOptions;
+        private readonly AppSettings _appsettings;
 
         public AuthController(
             IAccountService accountService,
@@ -38,7 +45,8 @@ namespace OneCalendar.Controllers
             UserContext context,
             RoleManager<IdentityRole> roleManager,
             IJwtService jwtService,
-            IOptions<JwtIssuerOptions> jwtOptions)
+               IOptions<JwtIssuerOptions> jwtOptions,
+            IOptions<AppSettings> appsettings)
         {
             AccountService = accountService;
             Mapper = mapper;
@@ -46,6 +54,7 @@ namespace OneCalendar.Controllers
             RoleManager = roleManager;
             JwtService = jwtService;
             _jwtOptions = jwtOptions.Value;
+            _appsettings = appsettings.Value;
         }
 
         [AllowAnonymous]
@@ -159,30 +168,43 @@ namespace OneCalendar.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return new OkObjectResult(new LoginResponseModel()
+                string formatedResponse = JsonConvert.SerializeObject(new LoginResponseModel()
                 {
                     Content = new { },
                     StatusCode = HttpStatusCode.BadRequest,
                     Error = "bad_request",
                     Description = "Bad Request."
+                }, new JsonSerializerSettings
+                {
+                    Formatting = Formatting.Indented,
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
                 });
+
+                return new JsonResult(formatedResponse);
             }
 
             ClaimsIdentity identity = await JwtService.GetClaimsIdentity(model.UserName, model.Password);
             if (identity == null)
             {
-                return new JsonResult(new LoginResponseModel()
+
+                string formatedResponse = JsonConvert.SerializeObject(new LoginResponseModel()
                 {
                     Content = new { },
                     StatusCode = HttpStatusCode.Unauthorized,
                     Error = "login_failure",
                     Description = "Faild to login. Please verify your username or password."
 
+                }, new JsonSerializerSettings
+                {
+                    Formatting = Formatting.Indented,
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
                 });
+
+                return new JsonResult(formatedResponse);
             }
 
             string jwtResponse = await JwtService
-                .GenerateJwt(identity, JwtService, model.UserName, _jwtOptions, new JsonSerializerSettings { Formatting = Formatting.Indented });
+                .GenerateJwt(identity, JwtService, model.UserName, _jwtOptions, new JsonSerializerSettings { Formatting = Formatting.Indented, ContractResolver = new CamelCasePropertyNamesContractResolver() });
 
             return new OkObjectResult(jwtResponse);
         }
@@ -213,5 +235,39 @@ namespace OneCalendar.Controllers
 
             return new JsonResult(new { message = "Roles have been seeded successfully.", Roles = listOfRoles });
         }
+
+
+
+        [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
+        [HttpPost]
+        public ActionResult<string> RevalidateToken(string Authorization)
+        {
+            var token = Authorization.Substring(7, Authorization.Length - 7);
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            TokenValidationParameters validationParameters = GetValidationParameters();
+
+            SecurityToken validatedToken;
+            IPrincipal principal = tokenHandler.ValidateToken(token, validationParameters, out validatedToken);
+
+            //RevalidateToken manually
+            //https://stackoverflow.com/a/50206750/6804444
+
+            return "revalidated";
+        }
+
+
+        private TokenValidationParameters GetValidationParameters()
+        {
+            return new TokenValidationParameters()
+            {
+                ValidateLifetime = false, // Because there is no expiration in the generated token
+                ValidateAudience = false, // Because there is no audiance in the generated token
+                ValidateIssuer = false,   // Because there is no issuer in the generated token
+                ValidIssuer = _appsettings.Issuer,
+                ValidAudience = _appsettings.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appsettings.Secret))
+            };
+        }
+
     }
 }
