@@ -31,11 +31,17 @@ var CalenderObject = {
                 mediaType: 'application/json',
                 token: userData.token,
             };
+
             $.when(ApiObject.RequestWithOutData(settings))
+
                 .then(function (data, textStatus) {
                     if (textStatus === "success") {
 
-                        LocalStorage.Set(LocalStorage.KeyStart + data.email, data.token);
+                        LocalStorage.Set(LocalStorage.KeyStart + data.userName, data.token);
+
+                        $("#titlePane").empty();
+                        $("#titlePane").append(userData.userName);
+                        $(".panel-body").slideUp(500);
 
                         console.log(data);
                         //Display message to user and propt for login again
