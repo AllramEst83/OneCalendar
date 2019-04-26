@@ -19,7 +19,7 @@ namespace OneCalendar.Context
 }
 
 
-//Only migrate with this ppowerShell command (the other contexts will be auto generated)
+
 //dotnet ef migrations add <migrationName> --context <contextName>
 //dotnet ef database update --context <contextName>
 
