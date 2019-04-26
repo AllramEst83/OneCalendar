@@ -16,46 +16,57 @@ var CalenderObject = {
                 right: ' prev,next'
             },
             defaultView: "agendaWeek",
-            slotLabelFormat: "HH:mm"
+            slotLabelFormat: "HH:mm",
+            eventBackgroundColor: '#33cc33',
+            lang: 'sv',
+
+
+            eventClick: function (calEvent, jsEvent, view) {
+                jQuery(this).css('background-color', '#b3ffb3');
+            }
         });
     },
     CheckForUserTokenAndReValidate: function () {
-        console.log(1);
-        var userData = LocalStorage.KeyStartsWith(LocalStorage.KeyStart);
+
+        var userData = LocalStorage.Get(LocalStorage.LocalStorageKey);
+      
 
         if (userData !== "0") {
+            console.log(`%c Found key: ${LocalStorage.LocalStorageKey}, userName is: ${userData.userName}, ${userData.userId}`, "background: #222; color:#bada55");
 
             var settings = {
                 url: "https://localhost:44305/api/auth/revalidatetoken",
                 method: "POST",
                 mediaType: 'application/json',
-                token: userData.token,
+                token: userData.token
             };
 
             $.when(ApiObject.RequestWithOutData(settings))
 
                 .then(function (data, textStatus) {
                     if (textStatus === "success") {
+                        if (data.isAuthenticated) {
 
-                        LocalStorage.Set(LocalStorage.KeyStart + data.userName, data.token);
+                            $("#titlePane").empty();
+                            $("#titlePane").append(userData.userName);
+                            $(".panel-body").slideUp(500);
 
-                        $("#titlePane").empty();
-                        $("#titlePane").append(userData.userName);
-                        $(".panel-body").slideUp(500);
-
-                        console.log(data);
-                        //Display message to user and propt for login again
-                        console.log("%c successfully logged in", 'background: #222; color:#bada55');
-
+                            console.log(data);
+                            //Display message to user and propt for login again
+                            console.log("%c successfully logged in", 'background: #222; color:#bada55');
+                        } else {
+                            alert("Token invalid please login again");
+                        }
                     } else {
-                        console.log("%c If not successfull revalidation. Show login", 'background: #222; color:#bada55');
-
+                        console.log("The revalidate request is not a success");
                     }
                 });
 
         } else {
             //Show login?
-            console.log("Show login screen?");
+            console.log(`%c No key found`, "background: #222; color:#bada55");
+            console.log("%c Show login screen?", "background: #222; color:#bada55");
+
         }
 
     },

@@ -130,6 +130,7 @@ namespace OneCalendar.Services
             JwtResponse response = new JwtResponse
             {
                 Id = identity.Claims.Single(c => c.Type == "id").Value,
+                UserName = userName,
                 Auth_Token = await GenerateEncodedToken(userName, identity),
                 Expires_In = (int)jwtOptions.ValidFor.TotalSeconds,
                 StatusCode = HttpStatusCode.OK,

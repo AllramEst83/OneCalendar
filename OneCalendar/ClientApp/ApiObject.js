@@ -20,6 +20,7 @@ var ApiObject = {
             })
             .fail(function (jqXHR, textStatus) {
                 console.log(`%c request failed: ${textStatus}, ${jqXHR}`, 'background: #222; color:red');
+                alert(`Det verkar vara ett problem med kontakten till servern. URL: ${settings.url}`);
             });
     },
     RequestWithOutData: function (settings) {
@@ -38,6 +39,7 @@ var ApiObject = {
             })
             .fail(function (jqXHR, textStatus) {
                 console.log(`%c request failed: ${textStatus}, ${jqXHR}`, 'background: #222; color:red');
+                alert(`Det verkar vara ett problem med kontakten till servern. URL: ${settings.url}`);
             });
     },
     RequestWithOutAuth: function (settings) {
@@ -56,6 +58,7 @@ var ApiObject = {
             })
             .fail(function (jqXHR, textStatus) {
                 console.log(`%c request failed: ${textStatus}, ${jqXHR}`, 'background: #222; color:red');
+                alert(`Det verkar vara ett problem med kontakten till servern. URL: ${settings.url}`);
             });
     }
 

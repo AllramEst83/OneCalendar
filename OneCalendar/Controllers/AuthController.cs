@@ -240,7 +240,7 @@ namespace OneCalendar.Controllers
 
         [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
         [HttpPost]
-        public ActionResult<string> RevalidateToken([FromQuery] string Authorization)
+        public ActionResult<object> RevalidateToken([FromQuery] string Authorization)
         {
             string token = Authorization.Substring(7, Authorization.Length - 7);
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
@@ -249,18 +249,20 @@ namespace OneCalendar.Controllers
             SecurityToken validatedToken;
             IPrincipal principal = tokenHandler.ValidateToken(token, validationParameters, out validatedToken);
 
-            if (!principal.Identity.IsAuthenticated)
+            bool isAuthenticated = principal.Identity.IsAuthenticated;
+
+            if (!isAuthenticated)
             {
-                //Return not Authenticated
+                return new { isValid = isAuthenticated, userId = 0, userName = 0};
             }
 
             JwtSecurityToken jwtToken = new JwtSecurityToken(token);
-            string subject = jwtToken.Claims.Single(c => c.Type == "sub").Value;
+            string subjectName = jwtToken.Claims.Single(c => c.Type == "sub").Value;
             string subjectId = jwtToken.Claims.Single(c => c.Type == "id").Value;
             //RevalidateToken manually
             //https://stackoverflow.com/a/50206750/6804444
 
-            return "revalidated";
+            return new { IsAuthenticated = isAuthenticated, userId = subjectId, userName = subjectName };
         }
 
 

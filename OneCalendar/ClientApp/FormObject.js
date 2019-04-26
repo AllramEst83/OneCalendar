@@ -22,11 +22,21 @@ var FormObject = {
                 };
                 $.when(ApiObject.RequestWithOutAuth(settings)).then(function (data, textStatus) {
 
-                
+
                     var userData = JSON.parse(data);
                     if (userData.statusCode === 200) {
 
-                        LocalStorage.Set(LocalStorage.KeyStart + userData.userName, userData.auth_Token);
+                        var userCookie = { userId: userData.id, userName: userData.userName, token: userData.auth_Token };
+
+                        var existingUserData = LocalStorage.Get(LocalStorage.LocalStorageKey);
+
+                        if (existingUserData !== "0") {
+
+                            LocalStorage.DeleteLocalStorageWithKey(LocalStorage.LocalStorageKey);
+
+                        }
+
+                        LocalStorage.Set(LocalStorage.LocalStorageKey, userCookie);
 
                         $("#titlePane").empty();
                         $("#titlePane").append(userData.userName);
@@ -40,7 +50,7 @@ var FormObject = {
 
                         alert(userData.description);
                     }
-                 
+
                 });
             }
         });
