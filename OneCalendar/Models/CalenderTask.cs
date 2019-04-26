@@ -10,7 +10,7 @@ namespace OneCalendar.Models
         public int Id { get; set; }
         public string TaskName { get; set; }
         public string TaskDescription { get; set; }
-        public User TaskCreatedByUser { get; set; }
+        public int TaskCreatedByUserId { get; set; } //<--Manually insert UserId from Auth DB
         public IEnumerable<EditedByUser> Edited { get; set; }
     }
 }

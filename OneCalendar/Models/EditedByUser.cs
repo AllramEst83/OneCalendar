@@ -6,6 +6,6 @@ namespace OneCalendar.Models
     {
         public int Id { get; set; }
         public DateTime DateOfEdit { get; set; }
-        public User EditedBy { get; set; }
+        public int EditedByUserId { get; set; } //<--Manually insert UserId from Auth DB
     }
 }

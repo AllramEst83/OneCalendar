@@ -17,9 +17,12 @@ var CalenderObject = {
             },
             defaultView: "agendaWeek",
             slotLabelFormat: "HH:mm",
-            eventBackgroundColor: '#33cc33',
+            slotEventOverlap: false,
+            eventBackgroundColor: 'brown',
             lang: 'sv',
-
+            firstDay: 1,
+            locale: 'sv',
+            timeFormat: 'H(:mm)',
 
             eventClick: function (calEvent, jsEvent, view) {
                 jQuery(this).css('background-color', '#b3ffb3');
@@ -29,7 +32,7 @@ var CalenderObject = {
     CheckForUserTokenAndReValidate: function () {
 
         var userData = LocalStorage.Get(LocalStorage.LocalStorageKey);
-      
+
 
         if (userData !== "0") {
             console.log(`%c Found key: ${LocalStorage.LocalStorageKey}, userName is: ${userData.userName}, ${userData.userId}`, "background: #222; color:#bada55");
@@ -82,15 +85,23 @@ var CalenderObject = {
             ApiObject.RequestWithOutAuth(settings))
             .then(function (data) {
 
-                var test = {
+                var test = [{
                     "id": 'a',
                     "title": "test title",
                     "allDay": false,
                     "start": '2019-04-25T09:00:00Z',
                     "end": '2019-04-25T15:00:00Z'
-                };
+                }, {
+                    "id": 'b',
+                    "title": "test title",
+                    "allDay": false,
+                    "start": '2019-04-24T09:00:00Z',
+                    "end": '2019-04-24T15:00:00Z'
+                }];
 
-                $("#calender").fullCalendar('renderEvent', test);
+                $('#calender').fullCalendar('removeEvents');
+                $('#calender').fullCalendar('addEventSource', test);
+                $('#calender').fullCalendar('rerenderEvents');
             });
     }
 };
