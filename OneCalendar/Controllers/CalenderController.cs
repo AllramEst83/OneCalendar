@@ -32,22 +32,38 @@ namespace OneCalendar.Controllers
         {
             Guid userId = id;
             List<int> groupIds = new List<int>();
-            var groupAndUserIds =
-                  CalenderContext.CalenderGroups.Select(x => new { x.Id, x.ListOfUserIds }).ToList();
-            foreach (var item in groupAndUserIds)
+            List<CalenderGroup> allGroups =
+                  CalenderContext.CalenderGroups.ToList();
+
+            foreach (var item in allGroups)
             {
-                for (int i = 0; i < item.ListOfUserIds.Length; i++)
+                int position = Array.IndexOf(item.ListOfUserIds, userId.ToString());
+                if (position > -1)
                 {
-                    if (item.ListOfUserIds[i].Equals(userId.ToString()))
-                    {
-                        groupIds.Add(item.Id);
-                    }
+                    groupIds.Add(item.Id);
                 }
             }
 
-            //var allCalenderTasks = CalenderContext.CalenderTasks.Where(x=> groupIds.Contains(x)
+            List<CalenderGroup> userGroups = CalenderContext.CalenderGroups.Where(x => groupIds.Contains(x.Id)).Include(i => i.CalenderTasks).ToList();
 
-            return JsonConvert.SerializeObject(new JsonSerializerSettings { Formatting = Formatting.Indented, ContractResolver = new CamelCasePropertyNamesContractResolver() });
+            var groupsAndEvents = userGroups.Select(x =>
+            new
+            {
+                groupId = x.Id,
+                groupName = x.Name,
+                events = x.CalenderTasks.Select(p =>
+                new TaskResponse()
+                {
+                    Id = p.Id,
+                    Title = p.TaskName,
+                    Start = p.StartDate,
+                    End = p.EndDate,
+                    AllDay = false
+                }).ToList()
+
+            });
+
+            return JsonConvert.SerializeObject(groupsAndEvents, new JsonSerializerSettings { Formatting = Formatting.Indented, ContractResolver = new CamelCasePropertyNamesContractResolver() });
         }
     }
 }

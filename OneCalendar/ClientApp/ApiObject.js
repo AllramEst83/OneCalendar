@@ -16,6 +16,7 @@ var ApiObject = {
             }
         })
             .done(function (data, textStatus) {
+
                 console.log(`%c Request success: ${data}`, 'background: #222; color:#bada55');
             })
             .fail(function (jqXHR, textStatus) {

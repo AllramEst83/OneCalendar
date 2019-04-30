@@ -92,23 +92,17 @@ var CalenderObject = {
 
 
                     var taskData = JSON.parse(data);
-
+                    debugger;
                     var test = [{
                         "id": 'a',
                         "title": "test title",
                         "allDay": false,
                         "start": '2019-04-25T09:00:00Z',
                         "end": '2019-04-25T15:00:00Z'
-                    }, {
-                        "id": 'b',
-                        "title": "test title",
-                        "allDay": false,
-                        "start": '2019-04-24T09:00:00Z',
-                        "end": '2019-04-24T15:00:00Z'
                     }];
 
                     $('#calender').fullCalendar('removeEvents');
-                    $('#calender').fullCalendar('addEventSource', taskData);
+                    $('#calender').fullCalendar('addEventSource', taskData[0].events);
                     $('#calender').fullCalendar('rerenderEvents');
                 });
         }

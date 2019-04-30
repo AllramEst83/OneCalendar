@@ -31,7 +31,7 @@ namespace OneCalendar.Services
                     TaskName = "Seminarium",
                     StartDate = new DateTime(2019,04,25,13,15,00,DateTimeKind.Local),
                     EndDate = new DateTime(2019,04,25,18,30,00,DateTimeKind.Local),
-                    CreatedBy = "4bb4c370-763f-44b3-a9e2-23b9133d9d17",
+                    CreatedBy = "64b2fdbf-1280-4cdf-ac3d-a13b9ab14e72",
                     TaskDescription = "Ett seminarium om saker och ting",
                     Edited = null,
                 },
@@ -40,7 +40,7 @@ namespace OneCalendar.Services
                     TaskName = "Häsloundersökning",
                     StartDate = new DateTime(2019,04,29,17,45,00,DateTimeKind.Local),
                     EndDate = new DateTime(2019,04,29,18,30,00,DateTimeKind.Local),
-                    CreatedBy = "4bb4c370-763f-44b3-a9e2-23b9133d9d17",
+                    CreatedBy = "64b2fdbf-1280-4cdf-ac3d-a13b9ab14e72",
                     TaskDescription = "PÅ vårdcentralen, var inte sen.",
                     Edited = null,
 
@@ -50,7 +50,7 @@ namespace OneCalendar.Services
                     TaskName = "Handla grönsaker till festen",
                     StartDate = new DateTime(2019,04,22,09,00,00,DateTimeKind.Local),
                     EndDate = new DateTime(2019,04,22,10,30,00,DateTimeKind.Local),
-                    CreatedBy = "4bb4c370-763f-44b3-a9e2-23b9133d9d17",
+                    CreatedBy = "64b2fdbf-1280-4cdf-ac3d-a13b9ab14e72",
                     TaskDescription = "Glöm inte papaya",
                     Edited = null,
                 },
@@ -78,7 +78,7 @@ namespace OneCalendar.Services
 
             string[] kaylistOfUserIds = new string[]
             {
-                "4bb4c370-763f-44b3-a9e2-23b9133d9d17",
+                "64b2fdbf-1280-4cdf-ac3d-a13b9ab14e72",
             };
             string[] RebeckaslistOfUserIds = new string[]
     {
