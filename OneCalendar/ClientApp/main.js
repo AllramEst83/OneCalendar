@@ -10,7 +10,7 @@ $(document).ready(function () {
 
     CalenderObject.CheckForUserTokenAndReValidate();
     CalenderObject.InitiateCalender();
-    CalenderObject.GetEvents(123456);
+    CalenderObject.GetEvents();
     FormObject.BindLoggaIn();
     //LocalStorage.DeleteStorageOnBrowserClose();
 

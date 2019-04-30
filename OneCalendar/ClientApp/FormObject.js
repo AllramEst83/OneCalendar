@@ -1,6 +1,7 @@
 
 var ApiObject = ApiObject || {};
 
+    
 var FormObject = {
 
     BindLoggaIn: function () {
@@ -21,9 +22,9 @@ var FormObject = {
                     data: JSON.stringify({ userName: userName, password: password })
                 };
                 $.when(ApiObject.RequestWithOutAuth(settings)).then(function (data, textStatus) {
-
-
+                    
                     var userData = JSON.parse(data);
+
                     if (userData.statusCode === 200) {
 
                         var userCookie = { userId: userData.id, userName: userData.userName, token: userData.auth_Token };
@@ -41,6 +42,8 @@ var FormObject = {
                         $("#titlePane").empty();
                         $("#titlePane").append(userData.userName);
                         $(".panel-body").slideUp(500);
+
+                        CalenderObject.GetEvents();
 
                     } else if (userData.statusCode === 400) {
 

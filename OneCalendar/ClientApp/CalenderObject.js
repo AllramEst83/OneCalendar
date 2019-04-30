@@ -73,35 +73,45 @@ var CalenderObject = {
         }
 
     },
-    GetEvents: function (userToken) {
-        var settings = {
-            url: "https://localhost:44305/api/calender/gettasksbyuserid",
-            method: "GET",
-            data: { id: userToken },
-            mediaType: 'application/json'
-        };
+    GetEvents: function () {
+        
+        var userData = LocalStorage.Get(LocalStorage.LocalStorageKey);
 
-        $.when(
-            ApiObject.RequestWithOutAuth(settings))
-            .then(function (data) {
+        if (userData !== "0") {
+            var settings = {
+                url: "https://localhost:44305/api/calender/gettasksbyuserid",
+                method: "GET",
+                data: { id: userData.userId },
+                mediaType: 'application/json',
+                token: userData.token
+            };
 
-                var test = [{
-                    "id": 'a',
-                    "title": "test title",
-                    "allDay": false,
-                    "start": '2019-04-25T09:00:00Z',
-                    "end": '2019-04-25T15:00:00Z'
-                }, {
-                    "id": 'b',
-                    "title": "test title",
-                    "allDay": false,
-                    "start": '2019-04-24T09:00:00Z',
-                    "end": '2019-04-24T15:00:00Z'
-                }];
+            $.when(
+                ApiObject.Request(settings))
+                .then(function (data) {
 
-                $('#calender').fullCalendar('removeEvents');
-                $('#calender').fullCalendar('addEventSource', test);
-                $('#calender').fullCalendar('rerenderEvents');
-            });
+
+                    var taskData = JSON.parse(data);
+
+                    var test = [{
+                        "id": 'a',
+                        "title": "test title",
+                        "allDay": false,
+                        "start": '2019-04-25T09:00:00Z',
+                        "end": '2019-04-25T15:00:00Z'
+                    }, {
+                        "id": 'b',
+                        "title": "test title",
+                        "allDay": false,
+                        "start": '2019-04-24T09:00:00Z',
+                        "end": '2019-04-24T15:00:00Z'
+                    }];
+
+                    $('#calender').fullCalendar('removeEvents');
+                    $('#calender').fullCalendar('addEventSource', taskData);
+                    $('#calender').fullCalendar('rerenderEvents');
+                });
+        }
+    
     }
 };

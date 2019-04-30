@@ -14,7 +14,14 @@ namespace OneCalendar.Context
         }
 
         public DbSet<CalenderTask> CalenderTasks { get; set; }
-        public List<CalenderGroup> CalenderGroups { get; set; }
+        public DbSet<CalenderGroup> CalenderGroups { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CalenderGroup>()
+                .Property<string>("IdsCollection")
+                .HasField("_ids");
+        }
     }
 }
 

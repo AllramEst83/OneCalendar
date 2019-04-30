@@ -4,35 +4,22 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace OneCalendar.Migrations
 {
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "CalenderGroups",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    UserName = table.Column<string>(nullable: true),
-                    NormalizedUserName = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    NormalizedEmail = table.Column<string>(nullable: true),
-                    EmailConfirmed = table.Column<bool>(nullable: false),
-                    PasswordHash = table.Column<string>(nullable: true),
-                    SecurityStamp = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                    LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false),
-                    FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true)
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true),
+                    IdsCollection = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_CalenderGroups", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -42,16 +29,19 @@ namespace OneCalendar.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     TaskName = table.Column<string>(nullable: true),
+                    StartDate = table.Column<DateTime>(nullable: false),
+                    EndDate = table.Column<DateTime>(nullable: false),
                     TaskDescription = table.Column<string>(nullable: true),
-                    TaskCreatedByUserId = table.Column<string>(nullable: true)
+                    CreatedBy = table.Column<string>(nullable: true),
+                    CalenderGroupId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CalenderTasks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CalenderTasks_User_TaskCreatedByUserId",
-                        column: x => x.TaskCreatedByUserId,
-                        principalTable: "User",
+                        name: "FK_CalenderTasks_CalenderGroups_CalenderGroupId",
+                        column: x => x.CalenderGroupId,
+                        principalTable: "CalenderGroups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -63,7 +53,7 @@ namespace OneCalendar.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     DateOfEdit = table.Column<DateTime>(nullable: false),
-                    EditedById = table.Column<string>(nullable: true),
+                    EditedByUserId = table.Column<int>(nullable: false),
                     CalenderTaskId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -75,28 +65,17 @@ namespace OneCalendar.Migrations
                         principalTable: "CalenderTasks",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_EditedByUser_User_EditedById",
-                        column: x => x.EditedById,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CalenderTasks_TaskCreatedByUserId",
+                name: "IX_CalenderTasks_CalenderGroupId",
                 table: "CalenderTasks",
-                column: "TaskCreatedByUserId");
+                column: "CalenderGroupId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EditedByUser_CalenderTaskId",
                 table: "EditedByUser",
                 column: "CalenderTaskId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EditedByUser_EditedById",
-                table: "EditedByUser",
-                column: "EditedById");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -108,7 +87,7 @@ namespace OneCalendar.Migrations
                 name: "CalenderTasks");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "CalenderGroups");
         }
     }
 }

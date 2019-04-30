@@ -7,16 +7,16 @@ var ApiObject = {
         return $.ajax({
             url: settings.url + `?Authorization=Bearer ${settings.token}`,
             method: settings.method,
-            data: JSON.stringify(settings.data),
+            data: settings.data,
             mediaType: settings.mediaType,
             headers: {
                 'Authorization': `Bearer  ${settings.token}`,
-                "Access-Control-Allow-Origin": "*",
-                "Content-Type": "application/json",
+                //"Access-Control-Allow-Origin": "*",
+                "Content-Type": "application/json"
             }
         })
             .done(function (data, textStatus) {
-                console.log(`%c Request success: ${data}`, 'background: #222; color:green');
+                console.log(`%c Request success: ${data}`, 'background: #222; color:#bada55');
             })
             .fail(function (jqXHR, textStatus) {
                 console.log(`%c request failed: ${textStatus}, ${jqXHR}`, 'background: #222; color:red');

@@ -15,9 +15,24 @@ namespace OneCalendar.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
+                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("OneCalendar.Models.CalenderGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("IdsCollection");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CalenderGroups");
+                });
 
             modelBuilder.Entity("OneCalendar.Models.CalenderTask", b =>
                 {
@@ -25,13 +40,21 @@ namespace OneCalendar.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("TaskCreatedByUserId");
+                    b.Property<int?>("CalenderGroupId");
+
+                    b.Property<string>("CreatedBy");
+
+                    b.Property<DateTime>("EndDate");
+
+                    b.Property<DateTime>("StartDate");
 
                     b.Property<string>("TaskDescription");
 
                     b.Property<string>("TaskName");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CalenderGroupId");
 
                     b.ToTable("CalenderTasks");
                 });
@@ -53,6 +76,13 @@ namespace OneCalendar.Migrations
                     b.HasIndex("CalenderTaskId");
 
                     b.ToTable("EditedByUser");
+                });
+
+            modelBuilder.Entity("OneCalendar.Models.CalenderTask", b =>
+                {
+                    b.HasOne("OneCalendar.Models.CalenderGroup")
+                        .WithMany("CalenderTasks")
+                        .HasForeignKey("CalenderGroupId");
                 });
 
             modelBuilder.Entity("OneCalendar.Models.EditedByUser", b =>
