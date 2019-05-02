@@ -23,24 +23,30 @@ namespace OneCalendar.Services
             _calenderContext.CalenderTasks.RemoveRange(_calenderContext.CalenderTasks);
             _calenderContext.CalenderGroups.RemoveRange(_calenderContext.CalenderGroups);
 
+            string Kay = "64b2fdbf-1280-4cdf-ac3d-a13b9ab14e72";
+            string Rebecka = "d0b16a9c-1fb0-440b-94b6-44fad5ed68b2";
+            int Year = DateTime.Now.Year;
+            int month = DateTime.Now.Month;
+            int day = DateTime.Now.Day;
+
 
             List<CalenderTask> KaylistOfCalenderTasks = new List<CalenderTask>()
             {
                 new CalenderTask()
                 {
                     TaskName = "Seminarium",
-                    StartDate = new DateTime(2019,04,25,13,15,00,DateTimeKind.Local),
-                    EndDate = new DateTime(2019,04,25,18,30,00,DateTimeKind.Local),
-                    CreatedBy = "64b2fdbf-1280-4cdf-ac3d-a13b9ab14e72",
+                    StartDate = new DateTime(Year,month,day,13,15,00,DateTimeKind.Local),
+                    EndDate = new DateTime(Year,month,day,18,30,00,DateTimeKind.Local),
+                    CreatedBy = Kay,
                     TaskDescription = "Ett seminarium om saker och ting",
                     Edited = null,
                 },
                 new CalenderTask()
                 {
                     TaskName = "Häsloundersökning",
-                    StartDate = new DateTime(2019,04,29,17,45,00,DateTimeKind.Local),
-                    EndDate = new DateTime(2019,04,29,18,30,00,DateTimeKind.Local),
-                    CreatedBy = "64b2fdbf-1280-4cdf-ac3d-a13b9ab14e72",
+                    StartDate = new DateTime(Year,month,DateTime.Now.AddDays(1).Day,17,45,00,DateTimeKind.Local),
+                    EndDate = new DateTime(Year,month,DateTime.Now.AddDays(1).Day,18,30,00,DateTimeKind.Local),
+                    CreatedBy = Kay,
                     TaskDescription = "PÅ vårdcentralen, var inte sen.",
                     Edited = null,
 
@@ -48,9 +54,9 @@ namespace OneCalendar.Services
                 new CalenderTask()
                 {
                     TaskName = "Handla grönsaker till festen",
-                    StartDate = new DateTime(2019,04,22,09,00,00,DateTimeKind.Local),
-                    EndDate = new DateTime(2019,04,22,10,30,00,DateTimeKind.Local),
-                    CreatedBy = "64b2fdbf-1280-4cdf-ac3d-a13b9ab14e72",
+                    StartDate = new DateTime(Year,month,DateTime.Now.AddDays(2).Day,09,00,00,DateTimeKind.Local),
+                    EndDate = new DateTime(Year,month,DateTime.Now.AddDays(2).Day,10,30,00,DateTimeKind.Local),
+                    CreatedBy = Kay,
                     TaskDescription = "Glöm inte papaya",
                     Edited = null,
                 },
@@ -58,14 +64,16 @@ namespace OneCalendar.Services
             };
 
 
+
+         
             List<CalenderTask> RebeckaslistOfCalenderTasks = new List<CalenderTask>()
             {
                                 new CalenderTask()
                 {
                     TaskName = "Öppethus på skolan",
-                    StartDate = new DateTime(2019,04,30,18,00,00,DateTimeKind.Local),
-                    EndDate = new DateTime(2019,04,30,20,30,00,DateTimeKind.Local),
-                    CreatedBy = "d0b16a9c-1fb0-440b-94b6-44fad5ed68b2",
+                    StartDate = new DateTime(Year,month,DateTime.Now.AddDays(3).Day,18,00,00,DateTimeKind.Local),
+                    EndDate = new DateTime(Year,month,DateTime.Now.AddDays(3).Day,20,30,00,DateTimeKind.Local),
+                    CreatedBy = Kay,
                     TaskDescription = "Glöm inte",
                     Edited = null,
                 }
@@ -78,11 +86,11 @@ namespace OneCalendar.Services
 
             string[] kaylistOfUserIds = new string[]
             {
-                "64b2fdbf-1280-4cdf-ac3d-a13b9ab14e72",
+                Kay,
             };
             string[] RebeckaslistOfUserIds = new string[]
     {
-                "d0b16a9c-1fb0-440b-94b6-44fad5ed68b2"
+                Kay
     };
 
             List<CalenderGroup> listOfCalenderGroups = new List<CalenderGroup>()
