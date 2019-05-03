@@ -7,7 +7,7 @@ var FullCalenderVariables = {
     DeselectEventColor: null
 };
 
-var CalenderObject = {   
+var CalenderObject = {
     InitiateCalender: function () {
         moment().locale("sv");
 
@@ -26,7 +26,25 @@ var CalenderObject = {
             locale: 'sv',
             timeFormat: 'H(:mm)',
             dayClick: function (date, jsEvent, view) {
-                alert('Clicked on: ' + moment(date).format("LLLL"));
+                //alert('Clicked on: ' + moment(date).format("LLLL"));
+
+                var startEvent = date.format();
+                var endEvent = moment(date).add(30, 'minutes').format();
+
+                var title = `<input type='text' placeholder='Skriv en titel' value='' class='form-control'/>`;
+                var start = `<input type='datetime-local' value="${startEvent}" class='form-control'/>`;
+                var end = `<input type='datetime-local' value="${endEvent}" class='form-control'/>`;
+
+                $(".modal-title").empty();
+                $("#calederEvent .title").empty();
+                $("#calederEvent .start").empty();
+                $("#calederEvent .end").empty();
+
+                $(".modal-title").append("Lägg till event");
+                $("#calederEvent .start").append(start);
+                $("#calederEvent .end").append(end);
+
+                $("#calederEvent").modal();
             },
             eventClick: function (calEvent, jsEvent, view) {
 
@@ -42,17 +60,25 @@ var CalenderObject = {
 
                 FullCalenderVariables.DeselectEventColor = jQuery(this);
 
+                $(".modal-title").empty();
                 $("#calederEvent .title").empty();
                 $("#calederEvent .start").empty();
                 $("#calederEvent .end").empty();
+                $("#calederEvent .selectGroup").empty();
 
                 var startEvent = calEvent.start.format();
                 var endEvent = calEvent.end.format();
 
+                var selectHtml = "";
+                $.map(); //<---Load Groups here.
+
                 var title = `<input type='text' value='${calEvent.title}' class='form-control'/>`;
                 var start = `<input type='datetime-local' value="${startEvent}" class='form-control'/>`;
                 var end = `<input type='datetime-local' value="${endEvent}" class='form-control'/>`;
+                var groups = `<select class="form-control"></select>`;
 
+                $("#calederEvent .selectGroup").append(groups);
+                $(".modal-title").append("Ändra event");
                 $("#calederEvent .title").append(title);
                 $("#calederEvent .start").append(start);
                 $("#calederEvent .end").append(end);
@@ -112,7 +138,7 @@ var CalenderObject = {
 
     },
     GetEvents: function () {
-        
+
         var userData = LocalStorage.Get(LocalStorage.LocalStorageKey);
 
         if (userData !== "0") {
@@ -127,12 +153,12 @@ var CalenderObject = {
             $.when(
                 ApiObject.Request(settings))
                 .then(function (data) {
-                    
+
                     var taskData = JSON.parse(data);
-                    
+
                     var allEvents = [];
 
-                    $.map(taskData, function (val) {               
+                    $.map(taskData, function (val) {
                         $.map(val.events, function (eventVal) {
                             allEvents.push({
                                 "id": eventVal.id,
@@ -153,6 +179,33 @@ var CalenderObject = {
                     //$('#calender').fullCalendar('rerenderEvents');
                 });
         }
-    
+
+    },
+    GetAllGroups: function () {
+
+        //-->Save groups in localStorage<---
+        var settings = {
+            url: "https://localhost:44305/api/calender/getallgroups",
+            method: "GET",
+            mediaType: 'application/json'
+        };
+
+        $.when(ApiObject.SimpleRequest(settings)).then(function (data) {
+
+            var groups = JSON.parse(data);
+
+            if (groups.length > 0) {
+                var html = "";
+
+                $.map(groups, function (val, index) {
+                    html += `<option value='${val.id}'>${val.name}</option>`;
+                });
+
+                $("#groupSelection").empty().append(html).show();
+
+            }
+
+
+        });
     }
 };

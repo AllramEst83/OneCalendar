@@ -16,5 +16,11 @@ namespace OneCalendar.Interfaces
         Task<IdentityResult> AddRoleToUser(User userIdentity, string userRole);
         void SeedRoles();
         Task<IList<string>> GetRolesForUser(User user);
+        Task<User> GetUserByEmail(string email);
+        Task<User> GetUserById(string userId);
+        Task<IList<string>> GetUserRoles(User user);
+        Task<IdentityResult> RemoveRolesFromUser(User user, IList<string> userRoles);
+        Task<IdentityResult> DeleteUser(User userIdentity);
+        Task<IdentityResult> AddRolesToUser(User userIdentity, IEnumerable<string> userRoles);
     }
 }

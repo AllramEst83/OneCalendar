@@ -26,6 +26,39 @@ namespace OneCalendar.Services
             Context = context;
         }
 
+        public async Task<IdentityResult> AddRolesToUser(User userIdentity, IEnumerable<string> userRoles)
+        {
+            IdentityResult identityResult = null;
+
+            identityResult = await UserManager.AddToRolesAsync(userIdentity, userRoles);
+
+            SaveChages();
+
+            return identityResult;
+        }
+
+        public async Task<IdentityResult> DeleteUser(User userIdentity)
+        {
+            IdentityResult removeUserResult = null;
+
+            removeUserResult = await UserManager.DeleteAsync(userIdentity);
+
+            SaveChages();
+
+            return removeUserResult;
+        }
+
+        public async Task<IdentityResult> RemoveRolesFromUser(User user, IList<string> userRoles)
+        {
+            IdentityResult removeRolesFromUserResult = null;
+
+            removeRolesFromUserResult = await UserManager.RemoveFromRolesAsync(user, userRoles);
+
+            SaveChages();
+
+            return removeRolesFromUserResult;
+        }
+
         public async Task<bool> UserExistByUserName(string userEmail)
         {
             User result = null;
@@ -35,6 +68,22 @@ namespace OneCalendar.Services
             }
 
             return result == null ? false : true;
+        }
+
+        public async Task<User> GetUserById(string userId)
+        {
+            User user = null;
+
+            user = await UserManager.FindByIdAsync(userId);
+
+            return user;
+        }
+
+        public async Task<IList<string>> GetUserRoles(User user)
+        {
+            IList<string> userRoles = await UserManager.GetRolesAsync(user);
+
+            return userRoles;
         }
 
         public async Task<bool> RoleExists(string userRole)
@@ -54,6 +103,7 @@ namespace OneCalendar.Services
             if (userIdentity != null && !string.IsNullOrEmpty(password))
             {
                 addUserResult = await UserManager.CreateAsync(userIdentity, password);
+
                 SaveChages();
             }
 
@@ -127,6 +177,18 @@ namespace OneCalendar.Services
             }
 
             return userRoles;
+        }
+
+        public async Task<User> GetUserByEmail(string email)
+        {
+            User user = null;
+
+            if (!String.IsNullOrEmpty(email))
+            {
+                user = await UserManager.FindByEmailAsync(email);
+            }
+
+            return user;
         }
     }
 }

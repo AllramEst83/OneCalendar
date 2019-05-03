@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using OneCalendar.Context;
+using OneCalendar.Interfaces;
 using OneCalendar.Models;
 using OneCalendar.ResponseModels;
 
@@ -19,55 +20,39 @@ namespace OneCalendar.Controllers
     [ApiController]
     public class CalenderController : ControllerBase
     {
-        public CalenderController(CalenderContext calenderContext)
+        public CalenderController(ICalenderService calenderService)
         {
-            CalenderContext = calenderContext;
+            CalenderService = calenderService;
         }
 
         public CalenderContext CalenderContext { get; }
+        public ICalenderService CalenderService { get; }
+
+        [HttpGet]
+        public ActionResult<string> GetAllGroups()
+        {
+            List<ShortHandCalanderGroup> groups = CalenderService.GetCalenderGroups();
+
+            //Serialize groupAndEvents
+            return JsonConvert
+                .SerializeObject(
+                groups,
+                new JsonSerializerSettings
+                {
+                    Formatting = Formatting.Indented,
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                });
+        }
+
 
         [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
         [HttpGet]
         public ActionResult<string> GetTasksByUserId(Guid id)
         {
             Guid userId = id;
-            List<int> groupIds = new List<int>();
-            List<CalenderGroup> allGroups =
-                  CalenderContext.CalenderGroups.ToList();
+            IEnumerable<GroupResponse> groupsAndEvents = CalenderService.GetGroupsAndEvents(userId);
 
-            foreach (CalenderGroup item in allGroups)
-            {
-                int position = Array.IndexOf(item.ListOfUserIds, userId.ToString());
-                if (position > -1)
-                {
-                    groupIds.Add(item.Id);
-                }
-            }
-
-            List<CalenderGroup> userGroups = CalenderContext
-                .CalenderGroups.Where(x =>
-                groupIds
-                .Contains(x.Id))
-                .Include(i => i.CalenderTasks).ToList();
-
-            IEnumerable<GroupResponse> groupsAndEvents = userGroups.Select(x =>
-            new GroupResponse()
-            {
-                GroupId = x.Id,
-                GroupName = x.Name,
-                Events = x.CalenderTasks.Select(p =>
-                new TaskResponse()
-                {
-                    Id = p.Id,
-                    Title = p.TaskName,
-                    Start = p.StartDate,
-                    End = p.EndDate,
-                    AllDay = false
-
-                }).ToList()
-
-            });
-
+            //Serialize groupAndEvents
             return JsonConvert
                 .SerializeObject(
                 groupsAndEvents,

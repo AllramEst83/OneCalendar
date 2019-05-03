@@ -11,7 +11,9 @@ $(document).ready(function () {
     CalenderObject.CheckForUserTokenAndReValidate();
     CalenderObject.InitiateCalender();
     CalenderObject.GetEvents();
-    FormObject.BindLoggaIn();
+    FormObject.LogInBinding();
+    CalenderObject.GetAllGroups();
+    FormObject.AddUser();
     //LocalStorage.DeleteStorageOnBrowserClose();
 
 });
