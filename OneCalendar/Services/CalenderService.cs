@@ -3,6 +3,7 @@ using OneCalendar.Context;
 using OneCalendar.Interfaces;
 using OneCalendar.Models;
 using OneCalendar.ResponseModels;
+using OneCalendar.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,18 +13,71 @@ namespace OneCalendar.Services
 {
     public class CalenderService : ICalenderService
     {
-        public CalenderService(CalenderContext calenderContext)
+        public CalenderService(CalenderContext calenderContext, IAccountService accountService)
         {
             CalenderContext = calenderContext;
+            AccountService = accountService;
         }
 
         public CalenderContext CalenderContext { get; }
+        public IAccountService AccountService { get; }
+
+        public async Task<bool> AddCalenderEvent(AddEventViewModel model)
+        {
+            bool userExists = await AccountService.UserExistByUserName(model.UserName);
+            if (userExists)
+            {
+                DateTime startDate = DateTime.Parse(model.Start);
+                DateTime endDate = DateTime.Parse(model.End);
+                string userId = model.UserId.ToString();
+                CalenderTask calenderTask = new CalenderTask()
+                {
+                    TaskName = model.Title,
+                    StartDate = startDate,
+                    EndDate = endDate,
+                    TaskDescription = "no description",
+                    CreatedBy = userId,
+                    Edited = null
+                };
+                await CalenderContext.CalenderTasks.AddAsync(calenderTask);
+                SaveChanges();
+
+
+                CalenderGroup calenderGroup = await CalenderContext.CalenderGroups.Include(i => i.CalenderTasks).FirstOrDefaultAsync(x => x.Id == model.GroupId);
+
+                List<string> listOfUserIds = calenderGroup.ListOfUserIds.ToList();
+                List<CalenderTask> listOfTasks = calenderGroup.CalenderTasks;
+
+                CheckIfUserIsInList(listOfUserIds, userId);
+                listOfTasks.Add(calenderTask);
+
+                calenderGroup.CalenderTasks = listOfTasks;
+                calenderGroup.ListOfUserIds = listOfUserIds.ToArray();
+
+                CalenderContext.CalenderGroups.Update(calenderGroup);
+                SaveChanges();
+
+                return true;
+
+            }
+
+            return false;
+        }
+
+        private void CheckIfUserIsInList(List<string> list, string userId)
+        {
+            if (!list.Contains(userId))
+            {
+                list.Add(userId);
+            }
+        }
 
         public List<ShortHandCalanderGroup> GetCalenderGroups()
         {
             List<ShortHandCalanderGroup> groups =
                CalenderContext
-                .CalenderGroups.Select(x => new ShortHandCalanderGroup() { Id = x.Id, Name = x.Name }).ToList();
+                .CalenderGroups.
+                Select(x => new ShortHandCalanderGroup() { Id = x.Id, Name = x.Name }).OrderBy(o => o.Name).ToList();
             return groups;
         }
 

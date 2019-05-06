@@ -65,7 +65,7 @@
                             <input id="addPassword" type="password" class="form-control" value="test123!!" placeholder="Lösenord" required="required" autocomplete="off" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
                         </div>
                         <div class="form-group">
-                            <select class="form-control hiddenInput" id="groupSelection">
+                            <select class="form-control" id="groupSelection">
                                 <option value="test">test grupp</option>'
                             </select>
                         </div>
@@ -104,13 +104,16 @@
                     <div class="form-group end">
 
                     </div>
-                    <div class="form-group selectGroup">
-             
+                    <div class="form-group">
+                        <select class="form-control" id="groupSelectionModal">
+                            
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" data-dismiss="modal">Spara</button>
+                    <button id="addEvent" type="button" class="btn btn-success">Spara</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Avbryt</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Tabort</button>
                 </div>
             </div>
 
