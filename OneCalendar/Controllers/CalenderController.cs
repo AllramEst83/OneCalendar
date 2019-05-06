@@ -31,6 +31,45 @@ namespace OneCalendar.Controllers
         public ICalenderService CalenderService { get; }
 
         [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
+        [HttpDelete]
+        public async Task<ActionResult<string>> DeleteEvent(DeleteEventViewModel model)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return new OkObjectResult(new { messsage = "build error" });
+            }
+
+            bool DeleteEventReuslt = await CalenderService.DeleteCalenderEvent(model);
+            if (!DeleteEventReuslt)
+            {
+                return new JsonResult(new AddEventResponseModel()
+                {
+                    Content = new { },
+                    StatusCode = HttpStatusCode.UnprocessableEntity,
+                    Error = "unable_to_delete_event",
+                    Description = "Unable to add event at this time."
+                });
+            }
+
+            return JsonConvert
+               .SerializeObject(
+                new AddEventResponseModel()
+                {
+                    Content = DeleteEventReuslt,
+                    StatusCode = HttpStatusCode.OK,
+                    Error = "event_successfully_deleted",
+                    Description = "Event successfully deleted."
+                },
+               new JsonSerializerSettings
+               {
+                   Formatting = Formatting.Indented,
+                   ContractResolver = new CamelCasePropertyNamesContractResolver()
+               });
+        }
+
+
+        [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
         [HttpPost]
         public async Task<ActionResult<string>> AddEvent(AddEventViewModel model)
         {

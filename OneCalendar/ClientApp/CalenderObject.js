@@ -79,6 +79,7 @@ var CalenderObject = {
                 $("#calederEvent .start").empty();
                 $("#calederEvent .end").empty();
                 $("#calederEvent #groupSelectionModal").empty();
+                $("#calederEvent #eventId").empty();
 
                 var startEvent = calEvent.start.format();
                 var endEvent = calEvent.end.format();
@@ -104,6 +105,8 @@ var CalenderObject = {
 
                 $(".modal-title").append("Ändra event");
 
+                var eventId = eventIdAndGroupName[0];
+                $("#calederEvent #eventId").attr('value', eventId);
                 $("#calederEvent .title").append(title);
                 $("#calederEvent .start").append(start);
                 $("#calederEvent .end").append(end);
@@ -285,8 +288,8 @@ var CalenderObject = {
 
                     $.when(ApiObject.Request(settings))
                         .then(function (data) {
-                            var calenderData = JSON.parse(data);
-                            if (calenderData.statusCode === 200) {
+                            var calenderResponse = JSON.parse(data);
+                            if (calenderResponse.statusCode === 200) {
 
                                 CalenderObject.GetEvents();
                                 $('#calederEvent').modal('hide');
@@ -304,5 +307,44 @@ var CalenderObject = {
         }
 
         return true;
+    },
+    DeleteEvent: function () {
+
+        $("#deleteEvent").on('click', function () {
+
+            var eventId = $("#calederEvent #eventId"),
+                userData = LocalStorage.Get(LocalStorage.LocalStorageKey),
+                groupId = $("#groupSelectionModal");
+
+            if (userData !== "0") {
+
+                var calenderData = {
+                    eventId: eventId.val(),
+                    groupId: groupId.val()
+                };
+
+                var settings = {
+                    url: "https://localhost:44305/api/calender/deleteevent",
+                    method: "DELETE",
+                    data: JSON.stringify(calenderData),
+                    mediaType: 'application/json',
+                    token: userData.token
+                };
+
+                $.when(ApiObject.Request(settings))
+                    .then(function (data) {
+                        var calenderResponse = JSON.parse(data);
+                        if (calenderResponse.statusCode === 200) {
+
+                            CalenderObject.GetEvents();
+                            $('#calederEvent').modal('hide');
+
+                        }
+                    });
+            }
+
+
+        });
+
     }
 };

@@ -16,5 +16,6 @@ namespace OneCalendar.Interfaces
         IEnumerable<GroupResponse> GetGroupsAndEvents(Guid userId);
         CalenderGroup AddUserToCalenderGroup(int groupId, string userId);
         Task<bool> AddCalenderEvent(AddEventViewModel model);
+        Task<bool> DeleteCalenderEvent(DeleteEventViewModel model);
     }
 }

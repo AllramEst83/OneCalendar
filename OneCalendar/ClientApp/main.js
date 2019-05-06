@@ -15,6 +15,7 @@ $(document).ready(function () {
     CalenderObject.GetAllGroups();
     FormObject.AddUser();
     CalenderObject.AddCalanderEvent();
+    CalenderObject.DeleteEvent();
     //LocalStorage.DeleteStorageOnBrowserClose();
 
 });

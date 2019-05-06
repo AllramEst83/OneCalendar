@@ -22,6 +22,32 @@ namespace OneCalendar.Services
         public CalenderContext CalenderContext { get; }
         public IAccountService AccountService { get; }
 
+        public async Task<bool> DeleteCalenderEvent(DeleteEventViewModel model)
+        {
+            if (await EventExists(model.EventId))
+            {
+                CalenderTask calenderTaskToDelete = await CalenderContext.CalenderTasks.FirstOrDefaultAsync(x => x.Id == model.EventId);
+                CalenderGroup calenderGroup = await CalenderContext.CalenderGroups.Include(i=>i.CalenderTasks).FirstOrDefaultAsync(x => x.Id == model.GroupId);
+
+                IEnumerable<CalenderTask> filteredCalenderTasks = calenderGroup.CalenderTasks.Where(x => x.Id != model.EventId);
+                calenderGroup.CalenderTasks = filteredCalenderTasks.ToList();
+
+                CalenderContext.CalenderGroups.Update(calenderGroup);
+                CalenderContext.CalenderTasks.Remove(calenderTaskToDelete);
+                SaveChanges();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private async Task<bool> EventExists(int eventId)
+        {
+            CalenderTask eventExists = await CalenderContext.CalenderTasks.FirstOrDefaultAsync(x=>x.Id == eventId);
+            return eventExists == null ? false : true;
+        }
+
         public async Task<bool> AddCalenderEvent(AddEventViewModel model)
         {
             bool userExists = await AccountService.UserExistByUserName(model.UserName);
@@ -41,7 +67,6 @@ namespace OneCalendar.Services
                 };
                 await CalenderContext.CalenderTasks.AddAsync(calenderTask);
                 SaveChanges();
-
 
                 CalenderGroup calenderGroup = await CalenderContext.CalenderGroups.Include(i => i.CalenderTasks).FirstOrDefaultAsync(x => x.Id == model.GroupId);
 
