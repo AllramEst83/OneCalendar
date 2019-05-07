@@ -92,6 +92,8 @@ var CalenderObject = {
                             $("#titlePane").append(userData.userName);
                             $(".panel-body").slideUp(500);
 
+                            CalenderObject.GetEvents();
+
                             console.log(data);
                             //Display message to user and propt for login again
                             console.log("%c successfully logged in", 'background: #222; color:#bada55');
