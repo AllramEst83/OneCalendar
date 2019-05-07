@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using CaseSolutionsTokenValidationParameters.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -10,8 +11,10 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using OneCalendar.Context;
+using OneCalendar.Interfaces;
 using OneCalendar.Models;
 using OneCalendar.ResponseModels;
+using OneCalendar.ViewModels;
 
 namespace OneCalendar.Controllers
 {
@@ -19,55 +22,115 @@ namespace OneCalendar.Controllers
     [ApiController]
     public class CalenderController : ControllerBase
     {
-        public CalenderController(CalenderContext calenderContext)
+        public CalenderController(ICalenderService calenderService)
         {
-            CalenderContext = calenderContext;
+            CalenderService = calenderService;
         }
 
         public CalenderContext CalenderContext { get; }
+        public ICalenderService CalenderService { get; }
+
+        [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
+        [HttpDelete]
+        public async Task<ActionResult<string>> DeleteEvent(DeleteEventViewModel model)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return new OkObjectResult(new { messsage = "build error" });
+            }
+
+            bool DeleteEventReuslt = await CalenderService.DeleteCalenderEvent(model);
+            if (!DeleteEventReuslt)
+            {
+                return new JsonResult(new AddEventResponseModel()
+                {
+                    Content = new { },
+                    StatusCode = HttpStatusCode.UnprocessableEntity,
+                    Error = "unable_to_delete_event",
+                    Description = "Unable to add event at this time."
+                });
+            }
+
+            return JsonConvert
+               .SerializeObject(
+                new AddEventResponseModel()
+                {
+                    Content = DeleteEventReuslt,
+                    StatusCode = HttpStatusCode.OK,
+                    Error = "event_successfully_deleted",
+                    Description = "Event successfully deleted."
+                },
+               new JsonSerializerSettings
+               {
+                   Formatting = Formatting.Indented,
+                   ContractResolver = new CamelCasePropertyNamesContractResolver()
+               });
+        }
+
+
+        [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
+        [HttpPost]
+        public async Task<ActionResult<string>> AddEvent(AddEventViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new OkObjectResult(new { messsage = "build error" });
+            }
+
+            bool addEventResult = await CalenderService.AddCalenderEvent(model);
+            if (addEventResult == false)
+            {
+                return new JsonResult(new AddEventResponseModel()
+                {
+                    Content = new { },
+                    StatusCode = HttpStatusCode.UnprocessableEntity,
+                    Error = "unable_to_add_event",
+                    Description = "Unable to add event at this time."
+                });
+            }
+
+            return JsonConvert
+               .SerializeObject(
+              new AddEventResponseModel()
+              {
+                  Content = new { },
+                  StatusCode = HttpStatusCode.OK,
+                  Error = "event_successfully_added",
+                  Description = "Event successfully added."
+              },
+               new JsonSerializerSettings
+               {
+                   Formatting = Formatting.Indented,
+                   ContractResolver = new CamelCasePropertyNamesContractResolver()
+               });
+        }
+
+        [HttpGet]
+        public ActionResult<string> GetAllGroups()
+        {
+            List<ShortHandCalanderGroup> groups = CalenderService.GetCalenderGroups();
+
+            //Serialize groupAndEvents
+            return JsonConvert
+                .SerializeObject(
+                groups,
+                new JsonSerializerSettings
+                {
+                    Formatting = Formatting.Indented,
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                });
+        }
+
 
         [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
         [HttpGet]
         public ActionResult<string> GetTasksByUserId(Guid id)
         {
             Guid userId = id;
-            List<int> groupIds = new List<int>();
-            List<CalenderGroup> allGroups =
-                  CalenderContext.CalenderGroups.ToList();
+            IEnumerable<GroupResponse> groupsAndEvents = CalenderService.GetGroupsAndEvents(userId);
 
-            foreach (CalenderGroup item in allGroups)
-            {
-                int position = Array.IndexOf(item.ListOfUserIds, userId.ToString());
-                if (position > -1)
-                {
-                    groupIds.Add(item.Id);
-                }
-            }
-
-            List<CalenderGroup> userGroups = CalenderContext
-                .CalenderGroups.Where(x =>
-                groupIds
-                .Contains(x.Id))
-                .Include(i => i.CalenderTasks).ToList();
-
-            IEnumerable<GroupResponse> groupsAndEvents = userGroups.Select(x =>
-            new GroupResponse()
-            {
-                GroupId = x.Id,
-                GroupName = x.Name,
-                Events = x.CalenderTasks.Select(p =>
-                new TaskResponse()
-                {
-                    Id = p.Id,
-                    Title = p.TaskName,
-                    Start = p.StartDate,
-                    End = p.EndDate,
-                    AllDay = false
-
-                }).ToList()
-
-            });
-
+            //Serialize groupAndEvents
             return JsonConvert
                 .SerializeObject(
                 groupsAndEvents,

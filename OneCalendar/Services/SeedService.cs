@@ -3,19 +3,20 @@ using OneCalendar.Interfaces;
 using OneCalendar.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace OneCalendar.Services
 {
     public class SeedService : ISeedService
     {
-        public SeedService(CalenderContext calenderContext)
+        public SeedService(CalenderContext calenderContext, IAccountService accountService)
         {
             _calenderContext = calenderContext;
+            _accountService = accountService;
         }
 
         public CalenderContext _calenderContext { get; }
+        public IAccountService _accountService { get; }
 
         public void SeedCalenderTasks()
         {
@@ -23,7 +24,8 @@ namespace OneCalendar.Services
             _calenderContext.CalenderTasks.RemoveRange(_calenderContext.CalenderTasks);
             _calenderContext.CalenderGroups.RemoveRange(_calenderContext.CalenderGroups);
 
-            string Kay = "64b2fdbf-1280-4cdf-ac3d-a13b9ab14e72";
+            User user = _accountService.GetUserByEmail("kaywib@altavisat.com").Result;
+            string Kay = user.Id;
             string Rebecka = "d0b16a9c-1fb0-440b-94b6-44fad5ed68b2";
             int Year = DateTime.Now.Year;
             int month = DateTime.Now.Month;

@@ -61,6 +61,24 @@ var ApiObject = {
                 console.log(`%c request failed: ${textStatus}, ${jqXHR}`, 'background: #222; color:red');
                 alert(`Det verkar vara ett problem med kontakten till servern. URL: ${settings.url}`);
             });
+    },
+    SimpleRequest: function (settings) {
+        return $.ajax({
+            url: settings.url,
+            method: settings.method,
+            mediaType: settings.mediaType,
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .done(function (data, textStatus) {
+                var userData = JSON.parse(data);
+                console.log(`%c Request success`, 'background: #222; color:#bada55');
+            })
+            .fail(function (jqXHR, textStatus) {
+                console.log(`%c request failed: ${textStatus}, ${jqXHR}`, 'background: #222; color:red');
+                alert(`Det verkar vara ett problem med kontakten till servern. URL: ${settings.url}`);
+            });
     }
 
 };

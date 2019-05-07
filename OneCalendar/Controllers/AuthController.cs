@@ -18,6 +18,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using OneCalendar.Context;
 using OneCalendar.Data;
 using OneCalendar.Helpers.Settings;
 using OneCalendar.Interfaces;
@@ -36,6 +37,8 @@ namespace OneCalendar.Controllers
         public UserContext Context { get; }
         public RoleManager<IdentityRole> RoleManager { get; }
         public IJwtService JwtService { get; }
+        public ICalenderService CalenderService { get; }
+
         private readonly JwtIssuerOptions _jwtOptions;
         private readonly AppSettings _appsettings;
 
@@ -46,13 +49,15 @@ namespace OneCalendar.Controllers
             RoleManager<IdentityRole> roleManager,
             IJwtService jwtService,
                IOptions<JwtIssuerOptions> jwtOptions,
-            IOptions<AppSettings> appsettings)
+            IOptions<AppSettings> appsettings,
+            ICalenderService calenderService)
         {
             AccountService = accountService;
             Mapper = mapper;
             Context = context;
             RoleManager = roleManager;
             JwtService = jwtService;
+            CalenderService = calenderService;
             _jwtOptions = jwtOptions.Value;
             _appsettings = appsettings.Value;
         }
@@ -146,6 +151,35 @@ namespace OneCalendar.Controllers
                 });
             }
 
+            int parsedGroupId;
+            string groupId = model.GroupId.Trim();
+            if (!int.TryParse(groupId, out parsedGroupId))
+            {
+                return new JsonResult(new SignupResponseModel()
+                {
+                    Content = new { },
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Error = "group_id_can_not_be_empty",
+                    Description = "GroupId can not be empty."
+                });
+            }
+
+            CalenderGroup addUserToCalenderGroupResult = CalenderService.AddUserToCalenderGroup(parsedGroupId, userIdentity.Id);
+            if (addUserToCalenderGroupResult == null)
+            {
+                RedirectToAction("DeleteUser", userIdentity.Id);
+
+                return new JsonResult(new SignupResponseModel()
+                {
+                    Content = new { },
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Error = "no_group_with_matching_id",
+                    Description = "No group with matching id."
+                });
+
+
+            }
+
             await Context.SaveChangesAsync();
 
             IList<string> userRoles = await AccountService.GetRolesForUser(userIdentity);
@@ -158,6 +192,92 @@ namespace OneCalendar.Controllers
                 StatusCode = HttpStatusCode.OK,
                 Error = "no_error",
                 Description = "User has successfully been created."
+            });
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUser(DeleteUserViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new OkObjectResult(new { messsage = "build error" });
+            }
+
+            User user = await AccountService.GetUserById(model.Id);
+            if (user == null)
+            {
+                return new JsonResult(
+                    new DeleteUserResponse()
+                    {
+                        Content = new { },
+                        StatusCode = HttpStatusCode.NotFound,
+                        Error = "user_not_found",
+                        Description = "User is not found."
+                    });
+            }
+
+            IList<string> rolesForUser = await AccountService.GetUserRoles(user);
+            if (rolesForUser == null)
+            {
+                return new JsonResult(
+                    new DeleteUserResponse()
+                    {
+                        Content = new { },
+                        StatusCode = HttpStatusCode.NotFound,
+                        Error = "roles_not_found",
+                        Description = "Roles for user is not found."
+                    });
+            }
+
+            if (rolesForUser.Any())
+            {
+                IdentityResult removeRolesFromUserResult = await AccountService.RemoveRolesFromUser(user, rolesForUser);
+
+                if (!removeRolesFromUserResult.Succeeded)
+                {
+                    return new JsonResult(
+                       new DeleteUserResponse()
+                       {
+                           Content = new { },
+                           StatusCode = HttpStatusCode.UnprocessableEntity,
+                           Error = "Unable to complete delete opretaion of user related roles.",
+                           Description = "Roles realted to the current user could not be removed at this time.",
+                       });
+                }
+
+                IdentityResult removeUserResult = await AccountService.DeleteUser(user);
+                if (!removeUserResult.Succeeded)
+                {
+                    IdentityResult reAddRolesToUserResult = await AccountService.AddRolesToUser(user, rolesForUser);
+
+                    if (reAddRolesToUserResult.Succeeded)
+                    {
+                        return new JsonResult(new DeleteUserResponse()
+                        {
+                            Content = new { },
+                            StatusCode = HttpStatusCode.UnprocessableEntity,
+                            Description = "User was not deleted. The delete task could not be completed at this time.",
+                            Error = "Unable to complete delete opretaion."
+                        });
+                    }
+                    return new JsonResult(new DeleteUserResponse()
+                    {
+                        Content = new { id = user.Id, email = user.Email },
+                        StatusCode = HttpStatusCode.UnprocessableEntity,
+                        Description = "User was not deleted. The delete task could not be completed at this time. User has no roles assign. Pleas add roles to user for access.",
+                        Error = "Unable to complete delete opretaion. User does not have any roles"
+                    });
+
+                }
+
+            }
+
+            return new OkObjectResult(new DeleteUserResponse()
+            {
+                Content = new { id = user.Id, email = user.Email },
+                StatusCode = HttpStatusCode.OK,
+                Description = "user_deleted",
+                Error = "User hase successfully been deleted"
             });
         }
 
@@ -253,7 +373,7 @@ namespace OneCalendar.Controllers
 
             if (!isAuthenticated)
             {
-                return new { isValid = isAuthenticated, userId = 0, userName = 0};
+                return new { isValid = isAuthenticated, userId = 0, userName = 0 };
             }
 
             JwtSecurityToken jwtToken = new JwtSecurityToken(token);
