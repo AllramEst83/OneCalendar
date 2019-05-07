@@ -68,6 +68,44 @@ namespace OneCalendar.Controllers
                });
         }
 
+        [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
+        [HttpPut]
+        public async Task<ActionResult<string>> UpdateEvent(UpdateEventViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new OkObjectResult(new { messsage = "build error" });
+            }
+
+            bool updateEvenrResult = await CalenderService.UpdateCalenderEvent(model);
+            if (!updateEvenrResult)
+            {
+                return new JsonResult(new UpdateEventResponseModel()
+                {
+                    Content = new { },
+                    StatusCode = HttpStatusCode.UnprocessableEntity,
+                    Error = "unable_to_add_event",
+                    Description = "Unable to add event at this time."
+                });
+            }
+
+
+            return JsonConvert
+           .SerializeObject(
+          new UpdateEventResponseModel()
+          {
+              Content = model,
+              StatusCode = HttpStatusCode.OK,
+              Error = "event_successfully_updated",
+              Description = "Event successfully updated."
+          },
+           new JsonSerializerSettings
+           {
+               Formatting = Formatting.Indented,
+               ContractResolver = new CamelCasePropertyNamesContractResolver()
+           });
+        }
+
 
         [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
         [HttpPost]
@@ -94,7 +132,7 @@ namespace OneCalendar.Controllers
                .SerializeObject(
               new AddEventResponseModel()
               {
-                  Content = new { },
+                  Content = model,
                   StatusCode = HttpStatusCode.OK,
                   Error = "event_successfully_added",
                   Description = "Event successfully added."

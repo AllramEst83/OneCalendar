@@ -27,7 +27,7 @@ namespace OneCalendar.Services
             if (await EventExists(model.EventId))
             {
                 CalenderTask calenderTaskToDelete = await CalenderContext.CalenderTasks.FirstOrDefaultAsync(x => x.Id == model.EventId);
-                CalenderGroup calenderGroup = await CalenderContext.CalenderGroups.Include(i=>i.CalenderTasks).FirstOrDefaultAsync(x => x.Id == model.GroupId);
+                CalenderGroup calenderGroup = await CalenderContext.CalenderGroups.Include(i => i.CalenderTasks).FirstOrDefaultAsync(x => x.Id == model.GroupId);
 
                 IEnumerable<CalenderTask> filteredCalenderTasks = calenderGroup.CalenderTasks.Where(x => x.Id != model.EventId);
                 calenderGroup.CalenderTasks = filteredCalenderTasks.ToList();
@@ -42,10 +42,89 @@ namespace OneCalendar.Services
             return false;
         }
 
-        private async Task<bool> EventExists(int eventId)
+        private async Task<bool> EventExists(int? eventId)
         {
-            CalenderTask eventExists = await CalenderContext.CalenderTasks.FirstOrDefaultAsync(x=>x.Id == eventId);
+            CalenderTask eventExists = await CalenderContext.CalenderTasks.FirstOrDefaultAsync(x => x.Id == eventId);
             return eventExists == null ? false : true;
+        }
+
+
+        public async Task<bool> UpdateCalenderEvent(UpdateEventViewModel model)
+        {
+            User user = await AccountService.GetUserByEmail(model.UserName);
+            if (await EventExists(model.EventId) && user != null)
+            {
+                DateTime startDate = DateTime.Parse(model.Start);
+                DateTime endDate = DateTime.Parse(model.End);
+                string userId = model.UserId.ToString();
+                string description = model.Description.Trim();
+                string title = model.Title.Trim();
+
+                CalenderTask taskToUpdate = await CalenderContext.CalenderTasks.FirstOrDefaultAsync(t => t.Id == model.EventId);
+
+                EditedByUser editedByUser = new EditedByUser()
+                {
+                    DateOfEdit = DateTime.Now,
+                    EditedByUserId = user.Id
+                };
+
+                List<EditedByUser> editedByList;
+
+                if (taskToUpdate.Edited == null)
+                {
+                    editedByList = new List<EditedByUser>();
+
+                }
+                else
+                {
+                    editedByList = taskToUpdate.Edited.ToList();
+
+                }
+
+                editedByList.Add(editedByUser);
+
+                taskToUpdate.TaskName = title;
+                taskToUpdate.TaskDescription = description;
+                taskToUpdate.StartDate = startDate;
+                taskToUpdate.EndDate = endDate;
+                taskToUpdate.Edited = editedByList;
+
+                CalenderContext.CalenderTasks.Update(taskToUpdate);
+                SaveChanges();
+
+
+                List<CalenderGroup> calenderGroups = CalenderContext.CalenderGroups.Include(i => i.CalenderTasks).ToList();
+                CalenderGroup caldenrGroupToREMOVE_TaskFrom;
+                CalenderGroup caldenrGroupToADD_TaskTo;
+                List<CalenderTask> tempFilteredCalenderTasks;
+
+                foreach (CalenderGroup group in calenderGroups)
+                {
+                    foreach (CalenderTask task in group.CalenderTasks)
+                    {
+                        if (task.Id == model.EventId.Value)
+                        {
+                            if (group.Id != model.GroupId)
+                            {
+                                caldenrGroupToREMOVE_TaskFrom = group;
+                                caldenrGroupToREMOVE_TaskFrom.CalenderTasks.Remove(task);
+
+                                CalenderGroup newGroupToAddToTaskTo = await CalenderContext.CalenderGroups.FirstOrDefaultAsync(x => x.Id == model.GroupId);
+                                newGroupToAddToTaskTo.CalenderTasks.Add(task);
+                               
+                                CalenderContext.CalenderGroups.Update(caldenrGroupToREMOVE_TaskFrom);
+                                CalenderContext.CalenderGroups.Update(newGroupToAddToTaskTo);
+                                SaveChanges();
+                                break;
+                            }
+
+                        }
+                    }
+                }
+                return true;
+            }
+
+            return false;
         }
 
         public async Task<bool> AddCalenderEvent(AddEventViewModel model)
@@ -58,10 +137,10 @@ namespace OneCalendar.Services
                 string userId = model.UserId.ToString();
                 CalenderTask calenderTask = new CalenderTask()
                 {
-                    TaskName = model.Title,
+                    TaskName = model.Title.Trim(),
                     StartDate = startDate,
                     EndDate = endDate,
-                    TaskDescription = "no description",
+                    TaskDescription = model.Description.Trim(),
                     CreatedBy = userId,
                     Edited = null
                 };
@@ -172,6 +251,7 @@ namespace OneCalendar.Services
                     Id = p.Id,
                     Title = p.TaskName,
                     Start = p.StartDate,
+                    Description = p.TaskDescription,
                     End = p.EndDate,
                     AllDay = false
 

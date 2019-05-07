@@ -41,7 +41,7 @@ var FormObject = {
 
                         $("#titlePane").empty();
                         $("#titlePane").append(userData.userName);
-                        $(".panel-body").slideUp(500);
+                        $(".loginUser").slideUp(500);
 
                         CalenderObject.GetEvents();
 

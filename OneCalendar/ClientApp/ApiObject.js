@@ -20,8 +20,9 @@ var ApiObject = {
                 console.log(`%c Request success: ${data}`, 'background: #222; color:#bada55');
             })
             .fail(function (jqXHR, textStatus) {
-                console.log(`%c request failed: ${textStatus}, ${jqXHR}`, 'background: #222; color:red');
-                alert(`Det verkar vara ett problem med kontakten till servern. URL: ${settings.url}`);
+                console.log(`%c request failed: ${jqXHR.responseJSON.errors.Description}, ${settings.url}`, 'background: #222; color:red');
+                ApiObject.ShowErrorMessage(jqXHR.responseJSON.errors.Description);
+       
             });
     },
     RequestWithOutData: function (settings) {
@@ -39,7 +40,7 @@ var ApiObject = {
                 console.log(`%c Request success: ${data}`, 'background: #222; color:#bada55');
             })
             .fail(function (jqXHR, textStatus) {
-                console.log(`%c request failed: ${textStatus}, ${jqXHR}`, 'background: #222; color:red');
+                console.log(`%c request failed: ${jqXHR.responseJSON.errors.Description}`, 'background: #222; color:red');
                 alert(`Det verkar vara ett problem med kontakten till servern. URL: ${settings.url}`);
             });
     },
@@ -58,7 +59,7 @@ var ApiObject = {
                 console.log(`%c Request success: ${userData.statusCode} & ${userData.description}`, 'background: #222; color:#bada55');
             })
             .fail(function (jqXHR, textStatus) {
-                console.log(`%c request failed: ${textStatus}, ${jqXHR}`, 'background: #222; color:red');
+                console.log(`%c request failed: ${jqXHR.responseJSON.errors.Description}`, 'background: #222; color:red');
                 alert(`Det verkar vara ett problem med kontakten till servern. URL: ${settings.url}`);
             });
     },
@@ -76,9 +77,17 @@ var ApiObject = {
                 console.log(`%c Request success`, 'background: #222; color:#bada55');
             })
             .fail(function (jqXHR, textStatus) {
-                console.log(`%c request failed: ${textStatus}, ${jqXHR}`, 'background: #222; color:red');
+                console.log(`%c request failed: ${jqXHR.responseJSON.errors.Description}`, 'background: #222; color:red');
                 alert(`Det verkar vara ett problem med kontakten till servern. URL: ${settings.url}`);
             });
+    },
+    ShowErrorMessage: function (message) {
+        var errorMessage = $(".errorMessage");
+        var html = `<b>${message}</b>`;
+        errorMessage.empty();
+        errorMessage.append(html);
+        $('#calederEvent').modal('hide');
+        $(".errorPanel").slideDown(500);
     }
 
 };

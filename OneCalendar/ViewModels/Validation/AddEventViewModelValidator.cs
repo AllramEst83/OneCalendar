@@ -16,6 +16,7 @@ namespace OneCalendar.ViewModels.Validation
             RuleFor(vm => vm.End).NotEmpty().WithMessage("End cannot be empty");
             RuleFor(vm => vm.GroupId).NotEmpty().WithMessage("GroupId cannot be empty");
             RuleFor(vm => vm.Title).NotEmpty().WithMessage("Title cannot be empty");
+            RuleFor(vm => vm.Description).NotEmpty().WithMessage("Description cannot be empty");
         }
     }
 }

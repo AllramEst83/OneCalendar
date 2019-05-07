@@ -1,8 +1,10 @@
-﻿using OneCalendar.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using OneCalendar.Context;
 using OneCalendar.Interfaces;
 using OneCalendar.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace OneCalendar.Services
@@ -21,10 +23,13 @@ namespace OneCalendar.Services
         public void SeedCalenderTasks()
         {
             _calenderContext.Database.EnsureCreated();
+
+            _calenderContext.EditedByUser.RemoveRange(_calenderContext.EditedByUser);
             _calenderContext.CalenderTasks.RemoveRange(_calenderContext.CalenderTasks);
             _calenderContext.CalenderGroups.RemoveRange(_calenderContext.CalenderGroups);
+            _calenderContext.SaveChanges();
 
-            User user = _accountService.GetUserByEmail("kaywib@altavisat.com").Result;
+            User user = _accountService.GetUserByEmail("Kajan@altavisat.com").Result;
             string Kay = user.Id;
             string Rebecka = "d0b16a9c-1fb0-440b-94b6-44fad5ed68b2";
             int Year = DateTime.Now.Year;
@@ -37,8 +42,8 @@ namespace OneCalendar.Services
                 new CalenderTask()
                 {
                     TaskName = "Seminarium",
-                    StartDate = new DateTime(Year,month,day,13,15,00,DateTimeKind.Local),
-                    EndDate = new DateTime(Year,month,day,18,30,00,DateTimeKind.Local),
+                    StartDate = new DateTime(Year,month,DateTime.Now.Day,10,00,00,DateTimeKind.Local),
+                    EndDate = new DateTime(Year,month,DateTime.Now.Day,15,00,00,DateTimeKind.Local),
                     CreatedBy = Kay,
                     TaskDescription = "Ett seminarium om saker och ting",
                     Edited = null,
@@ -46,8 +51,8 @@ namespace OneCalendar.Services
                 new CalenderTask()
                 {
                     TaskName = "Häsloundersökning",
-                    StartDate = new DateTime(Year,month,DateTime.Now.AddDays(1).Day,17,45,00,DateTimeKind.Local),
-                    EndDate = new DateTime(Year,month,DateTime.Now.AddDays(1).Day,18,30,00,DateTimeKind.Local),
+                    StartDate = new DateTime(Year,month,DateTime.Now.AddDays(1).Day,10,00,00,DateTimeKind.Local),
+                    EndDate = new DateTime(Year,month,DateTime.Now.AddDays(1).Day,15,00,00,DateTimeKind.Local),
                     CreatedBy = Kay,
                     TaskDescription = "PÅ vårdcentralen, var inte sen.",
                     Edited = null,
@@ -56,8 +61,8 @@ namespace OneCalendar.Services
                 new CalenderTask()
                 {
                     TaskName = "Handla grönsaker till festen",
-                    StartDate = new DateTime(Year,month,DateTime.Now.AddDays(2).Day,09,00,00,DateTimeKind.Local),
-                    EndDate = new DateTime(Year,month,DateTime.Now.AddDays(2).Day,10,30,00,DateTimeKind.Local),
+                    StartDate = new DateTime(Year,month,DateTime.Now.AddDays(2).Day,10,00,00,DateTimeKind.Local),
+                    EndDate = new DateTime(Year,month,DateTime.Now.AddDays(2).Day,15,00,00,DateTimeKind.Local),
                     CreatedBy = Kay,
                     TaskDescription = "Glöm inte papaya",
                     Edited = null,
@@ -67,14 +72,14 @@ namespace OneCalendar.Services
 
 
 
-         
+
             List<CalenderTask> RebeckaslistOfCalenderTasks = new List<CalenderTask>()
             {
                                 new CalenderTask()
                 {
                     TaskName = "Öppethus på skolan",
-                    StartDate = new DateTime(Year,month,DateTime.Now.AddDays(3).Day,18,00,00,DateTimeKind.Local),
-                    EndDate = new DateTime(Year,month,DateTime.Now.AddDays(3).Day,20,30,00,DateTimeKind.Local),
+                    StartDate = new DateTime(Year,month,DateTime.Now.AddDays(3).Day,10,00,00,DateTimeKind.Local),
+                    EndDate = new DateTime(Year,month,DateTime.Now.AddDays(3).Day,15,00,00,DateTimeKind.Local),
                     CreatedBy = Kay,
                     TaskDescription = "Glöm inte",
                     Edited = null,
@@ -101,13 +106,13 @@ namespace OneCalendar.Services
                 {
                     ListOfUserIds = kaylistOfUserIds,
                     CalenderTasks =   KaylistOfCalenderTasks,
-                    Name ="Kays kalendergrupp"
+                    Name ="Kays - Kalendergrupp"
                 },
                    new CalenderGroup()
                 {
                     ListOfUserIds = RebeckaslistOfUserIds,
                     CalenderTasks =   RebeckaslistOfCalenderTasks,
-                    Name ="Rebeckas Grupp"
+                    Name ="Rebeckas - Kalendergrupp"
                 }
             };
 

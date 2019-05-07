@@ -34,8 +34,10 @@ var CalenderObject = {
                 var endEvent = moment(date).add(30, 'minutes').format();
 
                 var title = `<input type='text' placeholder='Skriv en titel' value='' class='form-control titleInput'/>`;
+                var description = `<input type='text' placeholder='Skriv en beskrivning' value="" class='form-control descriptionInput'/>`;
                 var start = `<input type='datetime-local' value="${startEvent}" class='form-control startInput'/>`;
                 var end = `<input type='datetime-local' value="${endEvent}" class='form-control endInput'/>`;
+
 
                 $.map(groups, function (val, index) {
                     selectHtml += `<option value='${val.id}'>${val.name}</option>`;
@@ -43,12 +45,14 @@ var CalenderObject = {
 
                 $(".modal-title").empty();
                 $("#calederEvent .title").empty();
+                $("#calederEvent .description").empty();
                 $("#calederEvent .start").empty();
                 $("#calederEvent .end").empty();
                 $("#calederEvent #groupSelectionModal").empty();
 
                 $(".modal-title").append("Lägg till event");
                 $("#calederEvent .title").append(title);
+                $("#calederEvent .description").append(description);
                 $("#calederEvent .start").append(start);
                 $("#calederEvent .end").append(end);
                 $("#calederEvent #groupSelectionModal").append(selectHtml);
@@ -76,6 +80,7 @@ var CalenderObject = {
 
                 $(".modal-title").empty();
                 $("#calederEvent .title").empty();
+                $("#calederEvent .description").empty();
                 $("#calederEvent .start").empty();
                 $("#calederEvent .end").empty();
                 $("#calederEvent #groupSelectionModal").empty();
@@ -100,6 +105,7 @@ var CalenderObject = {
                 }
 
                 var title = `<input type='text' value='${calEvent.title}' class='form-control titleInput'/>`;
+                var description = `<input type='text' placeholder='Skriv en beskrivning' value="${calEvent.description}" class='form-control descriptionInput'/>`;
                 var start = `<input type='datetime-local' value="${startEvent}" class='form-control startInput'/>`;
                 var end = `<input type='datetime-local' value="${endEvent}" class='form-control endInput'/>`;
 
@@ -108,6 +114,7 @@ var CalenderObject = {
                 var eventId = eventIdAndGroupName[0];
                 $("#calederEvent #eventId").attr('value', eventId);
                 $("#calederEvent .title").append(title);
+                $("#calederEvent .description").append(description);
                 $("#calederEvent .start").append(start);
                 $("#calederEvent .end").append(end);
 
@@ -116,12 +123,21 @@ var CalenderObject = {
                 $("#calederEvent").modal();
 
             },
-            editable: true,
+            editable: false,
             selectable: true,
-            validRange: {
-                start: moment()
+            //validRange: {
+            //    start: moment()
+            //},
+            columnFormat: 'ddd D MMM',
+            eventRender: function (eventObj, $el) {
+                $el.popover({
+                    title: eventObj.title,
+                    content: eventObj.description,
+                    trigger: 'hover',
+                    placement: 'top',
+                    container: 'body'
+                });
             },
-            columnFormat: 'ddd D MMM'
         });
     },
     CheckForUserTokenAndReValidate: function () {
@@ -146,7 +162,7 @@ var CalenderObject = {
 
                             $("#titlePane").empty();
                             $("#titlePane").append(userData.userName);
-                            $(".panel-body").slideUp(500);
+                            $(".loginUser").slideUp(500);
 
                             CalenderObject.GetEvents();
 
@@ -197,7 +213,8 @@ var CalenderObject = {
                                 "title": eventVal.title,
                                 "start": eventVal.start,
                                 "end": eventVal.end,
-                                "allDay": eventVal.allDay
+                                "allDay": eventVal.allDay,
+                                "description": eventVal.description
                             });
                         });
                     });
@@ -254,20 +271,25 @@ var CalenderObject = {
         var eventIdArray = eventId.split(";");
         return eventIdArray;
     },
-    AddCalanderEvent: function () {
+    AddOrUpdateCalanderEvent: function () {
 
         $("#addEvent").on('click', function () {
             var title = "",
+                description = "",
                 start = "",
                 end = "",
-                groupId = "";
+                groupId = "",
+                eventId = "",
+                settings = {};
 
             title = $(".titleInput");
+            description = $(".descriptionInput");
             start = $(".startInput");
             end = $(".endInput");
             groupId = $("#groupSelectionModal");
+            eventId = $("#eventId");
 
-            if (CalenderObject.CheckEmptyInput(title)) {
+            if (CalenderObject.CheckEmptyInput(title) && CalenderObject.CheckEmptyInput(description)) {
                 var userData = LocalStorage.Get(LocalStorage.LocalStorageKey);
                 if (userData !== "0") {
 
@@ -275,18 +297,31 @@ var CalenderObject = {
                         userId: userData.userId,
                         userName: userData.userName,
                         title: title.val(),
+                        description: description.val(),
                         start: start.val(),
                         end: end.val(),
                         groupId: groupId.val()
                     };
+                    if (!CalenderObject.CheckEmptyInput(eventId)) {
+                        settings = {
+                            url: "https://localhost:44305/api/calender/addevent",
+                            method: "POST",
+                            data: JSON.stringify(calenderData),
+                            mediaType: 'application/json',
+                            token: userData.token
+                        };
+                    } else {
+                        calenderData.eventId = eventId.val();
+                        settings = {
+                            url: "https://localhost:44305/api/calender/updateevent",
+                            method: "PUT",
+                            data: JSON.stringify(calenderData),
+                            mediaType: 'application/json',
+                            token: userData.token
+                        };
+                    }
 
-                    var settings = {
-                        url: "https://localhost:44305/api/calender/addevent",
-                        method: "POST",
-                        data: JSON.stringify(calenderData),
-                        mediaType: 'application/json',
-                        token: userData.token
-                    };
+
 
                     $.when(ApiObject.Request(settings))
                         .then(function (data) {

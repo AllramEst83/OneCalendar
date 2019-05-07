@@ -29,7 +29,7 @@
                     <div class="panel-heading">
                         <h3 id="titlePane" class="panel-title">Logga in</h3>
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body loginUser">
                         <div class="form-group">
                             <input id="userNameInput" type="text" class="form-control" value="Kajan@altavisat.com" placeholder="Användarnamn" required="required" autocomplete="off" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
                         </div>
@@ -79,6 +79,25 @@
                     </div>
                 </div>
                 <!-- add user end -->
+
+
+                <div class="panel panel-danger">
+
+                    <div class="panel-heading">
+                        <div>
+                            <h3 id="titlePane" class="panel-title">Felmeddelande</h3>
+                        </div>
+
+                        <div class="panel-body errorPanel" style="display:none">
+                            <div class="errorMessage">
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
         </div>
     </div>
@@ -98,6 +117,9 @@
                     <div class="form-group title">
 
                     </div>
+                    <div class="form-group description">
+
+                    </div>
                     <div class="form-group start">
 
                     </div>
@@ -105,12 +127,10 @@
 
                     </div>
                     <div class="form-group">
-                        <select class="form-control" id="groupSelectionModal">
-                            
-                        </select>
+                        <select class="form-control" id="groupSelectionModal"></select>
                     </div>
                 </div>
-                <input hidden id="eventId" value=""/>
+                <input hidden id="eventId" value="" />
                 <div class="modal-footer">
                     <button id="addEvent" type="button" class="btn btn-success">Spara</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Avbryt</button>

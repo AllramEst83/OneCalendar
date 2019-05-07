@@ -15,6 +15,7 @@ namespace OneCalendar.Context
 
         public DbSet<CalenderTask> CalenderTasks { get; set; }
         public DbSet<CalenderGroup> CalenderGroups { get; set; }
+        public DbSet<EditedByUser> EditedByUser { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -17,5 +17,6 @@ namespace OneCalendar.Interfaces
         CalenderGroup AddUserToCalenderGroup(int groupId, string userId);
         Task<bool> AddCalenderEvent(AddEventViewModel model);
         Task<bool> DeleteCalenderEvent(DeleteEventViewModel model);
+        Task<bool> UpdateCalenderEvent(UpdateEventViewModel model);
     }
 }
