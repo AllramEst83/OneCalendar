@@ -250,7 +250,7 @@ var CalenderObject = {
         };
 
         $.when(ApiObject.SimpleRequest(settings)).then(function (data) {
-  
+
             var groups = data.groups,
                 users = data.users;
 
@@ -272,20 +272,27 @@ var CalenderObject = {
 
         var groupsHtml = "",
             usersHtml = "";
-        if (groups !== "0" || users !== "0") {
+
+        if (groups !== "0") {
 
             $.map(groups, function (val, index) {
                 groupsHtml += `<option value='${val.id}'>${val.name}</option>`;
             });
+        } else {
+            groupsHtml = "Inga grupper";
+        }
 
+        if (users !== "0") {
             $.map(users, function (val, index) {
                 usersHtml += `<option value='${val.id}'>${val.userName}</option>`;
             });
-
-            $("#groupSelection").empty().append(groupsHtml).slideDown();
-            $("#assignUserInput").empty().append(usersHtml);
-            $("#assignGroupInput").empty().append(groupsHtml);
+        } else {
+            usersHtml = "Inga användare";
         }
+
+        $("#groupSelection").empty().append(groupsHtml).slideDown();
+        $("#assignUserInput").empty().append(usersHtml);
+        $("#assignGroupInput").empty().append(groupsHtml);
 
     },
     SplitEventId: function (eventId) {
