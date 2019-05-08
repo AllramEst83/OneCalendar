@@ -9,7 +9,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using OneCalendar.Context;
 using OneCalendar.Data;
 using OneCalendar.Helpers.Settings;
@@ -96,12 +99,19 @@ namespace OneCalendar
             services.AddScoped<ICalenderService, CalenderService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                       .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
+                       .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>())
+                       .AddJsonOptions(options =>
+                       {
+                           options.SerializerSettings.Formatting = Formatting.Indented;
+                           options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                       });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ISeedService seedService)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ISeedService seedService, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddConsole();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -122,6 +132,9 @@ namespace OneCalendar
                     .AllowAnyMethod()
                     .AllowAnyHeader();
             });
+
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
 
             app.UseAuthentication();
             app.UseMvc();

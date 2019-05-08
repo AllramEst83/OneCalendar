@@ -2,9 +2,10 @@
 
 var LocalStorage = {
 
-    LocalStorageKey: "__.__One__.__Calender__.__User__.__Data",
+    KeyToUserData: "__.__One__.__Calender__.__User__.__Data",
     KeyToTaskData: "___.___One__Calender__Task__Data___.___",
     KeyToGroupsData: "___.___One__Calender__Grouop__Data___.___",
+    KeyToListOfUsersData: "___.___List__Of__Users__Data___.___",
 
     Set: function (key, input) {      
 
@@ -38,7 +39,7 @@ var LocalStorage = {
     DeleteStorageOnBrowserClose: function () {
 
         $(window).on("unload", function (e) {
-            LocalStorage.DeleteLocalStorageWithKey(LocalStorage.LocalStorageKey);
+            LocalStorage.DeleteLocalStorageWithKey(LocalStorage.KeyToUserData);
         });
     }
 };

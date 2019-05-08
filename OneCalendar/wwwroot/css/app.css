@@ -1,0 +1,27 @@
+﻿
+
+#calender {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.loginPanel, .addNewUserPanel, .linkUserAndGroupOanel {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.container {
+    padding-top: 55px
+}
+
+.hiddenInput {
+    display: none;
+}
+
+.container-fluid {
+    padding: 30px;
+    border: 1px solid #ccc !important;
+    margin: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 16px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19) !important;
+}

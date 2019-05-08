@@ -12,7 +12,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "C:\\Users\\kaywi\\source\\repos\\OneCalendar\\OneCalendar\\ClientApp",
+      "launchUrl": "Index.html",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

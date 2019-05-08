@@ -185,6 +185,13 @@ namespace OneCalendar.Services
             return groups;
         }
 
+        public async Task<bool> GroupExistById(int groupId)
+        {
+            bool groupExist = await Task.FromResult(CalenderContext.CalenderGroups.Any(x => x.Id == groupId));
+
+            return groupExist;
+        }
+
         public CalenderGroup AddUserToCalenderGroup(int groupId, string userId)
         {
             CalenderGroup calenderGroup = CalenderContext.CalenderGroups.FirstOrDefault(x => x.Id == groupId);

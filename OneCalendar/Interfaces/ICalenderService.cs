@@ -18,5 +18,6 @@ namespace OneCalendar.Interfaces
         Task<bool> AddCalenderEvent(AddEventViewModel model);
         Task<bool> DeleteCalenderEvent(DeleteEventViewModel model);
         Task<bool> UpdateCalenderEvent(UpdateEventViewModel model);
+        Task<bool> GroupExistById(int groupId);
     }
 }

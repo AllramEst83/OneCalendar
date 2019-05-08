@@ -93,7 +93,7 @@ namespace OneCalendar.Controllers
         //Signup
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Signup([FromBody] RegistrationViewModel model)
+        public async Task<ActionResult<string>> Signup([FromBody] RegistrationViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -108,7 +108,7 @@ namespace OneCalendar.Controllers
                     Content = new { },
                     StatusCode = HttpStatusCode.Conflict,
                     Error = "user_exists",
-                    Description = "User already exists. Please use another email."
+                    Description = "Användaren finns redan. Var snäll och använd en annan mail adress"
                 });
             }
 
@@ -120,7 +120,30 @@ namespace OneCalendar.Controllers
                     Content = new { },
                     StatusCode = HttpStatusCode.NotFound,
                     Error = "role_not_found",
-                    Description = "Role is not found."
+                    Description = "Rollen finns inte"
+                });
+            }
+
+            int groupId;
+            if (!int.TryParse(model.GroupId, out groupId))
+            {
+                return new JsonResult(new SignupResponseModel()
+                {
+                    Content = new { },
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Error = "group_not_found",
+                    Description = "Fel när grupp id skulle behandlas"
+                });
+            }
+            bool groupExists = await CalenderService.GroupExistById(groupId);
+            if (!groupExists)
+            {
+                return new JsonResult(new SignupResponseModel()
+                {
+                    Content = new { },
+                    StatusCode = HttpStatusCode.NotFound,
+                    Error = "group_not_found",
+                    Description = "Gruppen finns inte."
                 });
             }
 
@@ -135,7 +158,7 @@ namespace OneCalendar.Controllers
                     Content = new { },
                     StatusCode = HttpStatusCode.UnprocessableEntity,
                     Error = "unprocessable_entity",
-                    Description = "User could not be created."
+                    Description = "Användaren kan inte skapas"
                 });
             }
 
@@ -147,34 +170,19 @@ namespace OneCalendar.Controllers
                     Content = new { },
                     StatusCode = HttpStatusCode.UnprocessableEntity,
                     Error = "unprocessable_entity",
-                    Description = "Unable to link role to user."
+                    Description = "Kan inte länka roll till användare"
                 });
             }
 
-            int parsedGroupId;
-            string groupId = model.GroupId.Trim();
-            if (!int.TryParse(groupId, out parsedGroupId))
-            {
-                return new JsonResult(new SignupResponseModel()
-                {
-                    Content = new { },
-                    StatusCode = HttpStatusCode.BadRequest,
-                    Error = "group_id_can_not_be_empty",
-                    Description = "GroupId can not be empty."
-                });
-            }
-
-            CalenderGroup addUserToCalenderGroupResult = CalenderService.AddUserToCalenderGroup(parsedGroupId, userIdentity.Id);
+            CalenderGroup addUserToCalenderGroupResult = CalenderService.AddUserToCalenderGroup(groupId, userIdentity.Id);
             if (addUserToCalenderGroupResult == null)
             {
-                RedirectToAction("DeleteUser", userIdentity.Id);
-
                 return new JsonResult(new SignupResponseModel()
                 {
                     Content = new { },
                     StatusCode = HttpStatusCode.BadRequest,
                     Error = "no_group_with_matching_id",
-                    Description = "No group with matching id."
+                    Description = "Ingen grupp med matchande id."
                 });
 
 
@@ -186,12 +194,12 @@ namespace OneCalendar.Controllers
 
             EndUser endUser = Mapper.Map<EndUser>(userIdentity);
 
-            return new OkObjectResult(new SignupResponseModel()
+            return new JsonResult(new SignupResponseModel()
             {
                 Content = new { user = endUser, userRoles = userRoles },
                 StatusCode = HttpStatusCode.OK,
                 Error = "no_error",
-                Description = "User has successfully been created."
+                Description = $"Användare {endUser.Email} har skapats."
             });
         }
 
@@ -333,6 +341,9 @@ namespace OneCalendar.Controllers
         [HttpGet]
         public async Task<IActionResult> SeedRoles()
         {
+            /*This should be in a service. At the time of coding DbContext 
+            did not allow this operation to be executed from service.*/
+
             bool result = await RoleManager.RoleExistsAsync(TokenValidationConstants.Roles.AdminAccess);
             List<IdentityRole> listOfRoles = null;
 
@@ -360,28 +371,43 @@ namespace OneCalendar.Controllers
 
         [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
         [HttpPost]
-        public ActionResult<object> RevalidateToken([FromQuery] string Authorization)
+        public async Task<ActionResult<object>> RevalidateToken([FromQuery] string Authorization)
         {
+            //Get the Authorization token from string -> 'Bearer <token>'
             string token = Authorization.Substring(7, Authorization.Length - 7);
+
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+
+            //Get token validation parameters
             TokenValidationParameters validationParameters = GetValidationParameters();
 
+            //RevalidateToken manually
+            //https://stackoverflow.com/a/50206750/6804444
+            //Manually revalidate token
             SecurityToken validatedToken;
             IPrincipal principal = tokenHandler.ValidateToken(token, validationParameters, out validatedToken);
 
-            bool isAuthenticated = principal.Identity.IsAuthenticated;
+            //Get subjectnam and id from token
+            JwtSecurityToken jwtToken = new JwtSecurityToken(token);
+            string subjectName = jwtToken.Claims.Single(c => c.Type == "sub").Value;
+            string subjectId = jwtToken.Claims.Single(c => c.Type == "id").Value;
 
+
+            //Check if userstill exists
+            bool userExists = await AccountService.UserExistByUserName(subjectName);
+            if (!userExists)
+            {
+                return new { userExists = userExists, userId = 0, userName = 0 };
+            }
+
+            //check if token is still valid
+            bool isAuthenticated = principal.Identity.IsAuthenticated;
             if (!isAuthenticated)
             {
                 return new { isValid = isAuthenticated, userId = 0, userName = 0 };
             }
 
-            JwtSecurityToken jwtToken = new JwtSecurityToken(token);
-            string subjectName = jwtToken.Claims.Single(c => c.Type == "sub").Value;
-            string subjectId = jwtToken.Claims.Single(c => c.Type == "id").Value;
-            //RevalidateToken manually
-            //https://stackoverflow.com/a/50206750/6804444
-
+            //User exists and token is valid
             return new { IsAuthenticated = isAuthenticated, userId = subjectId, userName = subjectName };
         }
 

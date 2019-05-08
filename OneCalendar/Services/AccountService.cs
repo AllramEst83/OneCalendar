@@ -26,6 +26,15 @@ namespace OneCalendar.Services
             Context = context;
         }
 
+        public async Task<List<ShortHandUsers>> GetAllUsers()
+        {
+            List<ShortHandUsers> listOfUsers = null;
+
+            listOfUsers = await Task.FromResult(UserManager.Users.Select(x=> new ShortHandUsers() {Id = x.Id, UserName = x.UserName }).ToList());
+
+            return listOfUsers;
+        }
+
         public async Task<IdentityResult> AddRolesToUser(User userIdentity, IEnumerable<string> userRoles)
         {
             IdentityResult identityResult = null;

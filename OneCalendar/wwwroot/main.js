@@ -12,7 +12,8 @@ $(document).ready(function () {
     CalenderObject.InitiateCalender();
     CalenderObject.GetEvents();
     FormObject.LogInBinding();
-    CalenderObject.GetAllGroups();
+    FormObject.Logout();
+    CalenderObject.GetAllUsersAndGroups();
     FormObject.AddUser();
     CalenderObject.AddOrUpdateCalanderEvent();
     CalenderObject.DeleteEvent();

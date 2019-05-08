@@ -22,13 +22,15 @@ namespace OneCalendar.Controllers
     [ApiController]
     public class CalenderController : ControllerBase
     {
-        public CalenderController(ICalenderService calenderService)
+        public CalenderController(ICalenderService calenderService, IAccountService accountService)
         {
             CalenderService = calenderService;
+            AccountService = accountService;
         }
 
         public CalenderContext CalenderContext { get; }
         public ICalenderService CalenderService { get; }
+        public IAccountService AccountService { get; }
 
         [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
         [HttpDelete]
@@ -145,19 +147,18 @@ namespace OneCalendar.Controllers
         }
 
         [HttpGet]
-        public ActionResult<string> GetAllGroups()
+        public async Task<ActionResult<string>> GetAllGroups()
         {
             List<ShortHandCalanderGroup> groups = CalenderService.GetCalenderGroups();
+            List<ShortHandUsers> users = await AccountService.GetAllUsers();
 
-            //Serialize groupAndEvents
-            return JsonConvert
-                .SerializeObject(
-                groups,
-                new JsonSerializerSettings
-                {
-                    Formatting = Formatting.Indented,
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
-                });
+            UsersAndGroups usersAndGroupsToClient = new UsersAndGroups()
+            {
+                Users = users,
+                Groups = groups
+            };
+
+            return new JsonResult(usersAndGroupsToClient);
         }
 
 

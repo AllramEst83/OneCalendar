@@ -2,7 +2,7 @@
 <html>
 <head>
 
-    <meta charset="utf-8" />
+    <meta http-equiv="content-type" content="text/html" charset="ISO-8859-1" />
     <title>OneCalender</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,18 +16,37 @@
 </head>
 <body>
 
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-9">
+            <div class="col-sm-6">
 
                 <div id="calender"></div>
 
             </div>
             <div class="col-md-3">
-                <!-- Login start -->
-                <div class="panel panel-default">
+
+                <!-- ErrorMessages -->
+                <div class="userMessagePanel panel panel-danger" style="display:none">
+
                     <div class="panel-heading">
-                        <h3 id="titlePane" class="panel-title">Logga in</h3>
+                        <div>
+                            <h3 id="titlePane" class="userMessageTitle panel-title">Felmeddelande</h3>
+                        </div>
+
+                        <div class="panel-body messageBodyPanel" style="display:none">
+                            <div class="messageBody">
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <!-- ErrorMessages -->
+                <!-- Login start -->
+                <div class="loginPanel panel panel-default">
+                    <div class="panel-heading">
+                        <h3 id="loginUserTitlePane" class="panel-title">Logga in</h3>
                     </div>
                     <div class="panel-body loginUser">
                         <div class="form-group">
@@ -46,10 +65,19 @@
                     </div>
                 </div>
                 <!-- Login end -->
+                <!-- Logout -->
+                <div>
+                    <input id="logoutButton" style="width:100%;margin-bottom:15px;" type="button" value="Logga ut" class="btn btn-warning" />
+                </div>
+                <!-- Logout -->
+       
+
+            </div>
+            <div class="col-md-3">
                 <!-- Add user start -->
-                <div class="panel panel-info">
+                <div class="addNewUserPanel panel panel-info">
                     <div class="panel-heading">
-                        <h3 id="titlePane" class="panel-title">Lägg till användare</h3>
+                        <h3 id="addUserTitlePane" class="panel-title">Lägg till användare</h3>
                     </div>
                     <div class="panel-body">
                         <div class="form-group">
@@ -65,8 +93,7 @@
                             <input id="addPassword" type="password" class="form-control" value="test123!!" placeholder="Lösenord" required="required" autocomplete="off" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
                         </div>
                         <div class="form-group">
-                            <select class="form-control" id="groupSelection">
-                                <option value="test">test grupp</option>'
+                            <select class="form-control" id="groupSelection">'
                             </select>
                         </div>
                         <div class="form-group">
@@ -79,28 +106,36 @@
                     </div>
                 </div>
                 <!-- add user end -->
-
-
-                <div class="panel panel-danger">
+                <!-- Grupp/User Admin -->
+                <div class="linkUserAndGroupOanel panel panel-info">
 
                     <div class="panel-heading">
                         <div>
-                            <h3 id="titlePane" class="panel-title">Felmeddelande</h3>
+                            <h3 class="panel-title">Lägg till använadre i en grupp</h3>
                         </div>
+                    </div>
 
-                        <div class="panel-body errorPanel" style="display:none">
-                            <div class="errorMessage">
-
-                            </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label for="assignUserInput">Användare</label>
+                            <select id="assignUserInput" class="form-control">
+                            </select>
                         </div>
-
+                        <div class="form-group">
+                            <label for="assignGroupInput">Grupper</label>
+                            <select id="assignGroupInput" class="form-control">
+                            </select>
+                        </div>
+                        <div>
+                            <input id="assignUserToGroupBtn" style="width:100%;margin-bottom:15px;" type="button" value="Länka" class="btn btn-success" />
+                        </div>
                     </div>
 
                 </div>
-
+                <!-- Grupp/User Admin -->
+            </div>
             </div>
         </div>
-    </div>
 
     <!-- Modal -->
     <!-- Modal -->

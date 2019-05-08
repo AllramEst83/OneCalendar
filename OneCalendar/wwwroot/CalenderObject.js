@@ -13,9 +13,10 @@ var CalenderObject = {
 
         $("#calender").fullCalendar({
             header: {
-                left: 'title',
-                center: 'today, month, agendaWeek,listWeek',
-                right: ' prev,next'
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month, agendaWeek,listWeek'
+
             },
             defaultView: "agendaWeek",
             slotLabelFormat: "HH:mm",
@@ -25,6 +26,12 @@ var CalenderObject = {
             firstDay: 1,
             locale: 'sv',
             timeFormat: 'H(:mm)',
+            editable: false,
+            selectable: true,
+            select: function (start, end, jsEvent, view) {
+                //https://fullcalendar.io/docs/v3/select-callback
+                alert('selected ' + moment(start).format("LLL") + ' to ' + moment(end).format("LLL"));
+            },
             dayClick: function (date, jsEvent, view) {
                 var groups = LocalStorage.Get(LocalStorage.KeyToGroupsData),
                     selectHtml = "";
@@ -123,8 +130,6 @@ var CalenderObject = {
                 $("#calederEvent").modal();
 
             },
-            editable: false,
-            selectable: true,
             //validRange: {
             //    start: moment()
             //},
@@ -134,18 +139,18 @@ var CalenderObject = {
                     title: eventObj.title,
                     content: eventObj.description,
                     trigger: 'hover',
-                    placement: 'top',
+                    placement: 'right',
                     container: 'body'
                 });
-            },
+            }
         });
     },
     CheckForUserTokenAndReValidate: function () {
 
-        var userData = LocalStorage.Get(LocalStorage.LocalStorageKey);
+        var userData = LocalStorage.Get(LocalStorage.KeyToUserData);
 
         if (userData !== "0") {
-            console.log(`%c Found key: ${LocalStorage.LocalStorageKey}, userName is: ${userData.userName}, ${userData.userId}`, "background: #222; color:#bada55");
+            console.log(`%c Found key: ${LocalStorage.KeyToUserData}, userName is: ${userData.userName}, ${userData.userId}`, "background: #222; color:#bada55");
 
             var settings = {
                 url: "https://localhost:44305/api/auth/revalidatetoken",
@@ -160,8 +165,10 @@ var CalenderObject = {
                     if (textStatus === "success") {
                         if (data.isAuthenticated) {
 
-                            $("#titlePane").empty();
-                            $("#titlePane").append(userData.userName);
+                            $("#loginUserTitlePane").empty();
+                            $("#loginUserTitlePane").append(userData.userName);
+                            $(".loginPanel").removeClass("panel-default");
+                            $(".loginPanel").addClass("panel-success");
                             $(".loginUser").slideUp(500);
 
                             CalenderObject.GetEvents();
@@ -169,8 +176,11 @@ var CalenderObject = {
                             console.log(data);
                             //Display message to user and propt for login again
                             console.log("%c successfully logged in", 'background: #222; color:#bada55');
-                        } else {
-                            alert("Token invalid please login again");
+                        } else if (!data.userExists) {
+
+                            CalenderObject.UserMessages.Show("Felmeddelande", "&#197;tervalidering av dina uppgifter misslyckades. V&#228;nligen logga in igen.", "panel-danger");
+                            CalenderObject.UserMessages.Hide(6000);
+
                         }
                     } else {
                         console.log("The revalidate request is not a success");
@@ -187,7 +197,7 @@ var CalenderObject = {
     },
     GetEvents: function () {
 
-        var userData = LocalStorage.Get(LocalStorage.LocalStorageKey);
+        var userData = LocalStorage.Get(LocalStorage.KeyToUserData);
 
         if (userData !== "0") {
             var settings = {
@@ -230,7 +240,7 @@ var CalenderObject = {
         }
 
     },
-    GetAllGroups: function () {
+    GetAllUsersAndGroups: function () {
 
         //-->Save groups in localStorage<---
         var settings = {
@@ -240,30 +250,41 @@ var CalenderObject = {
         };
 
         $.when(ApiObject.SimpleRequest(settings)).then(function (data) {
+  
+            var groups = data.groups,
+                users = data.users;
 
-            var groups = JSON.parse(data);
 
-            if (groups.length > 0) {
+            if (groups.length !== 'undefined' && users !== 'undefined') {
 
                 LocalStorage.Set(LocalStorage.KeyToGroupsData, groups);
+                LocalStorage.Set(LocalStorage.KeyToListOfUsersData, users);
 
-                CalenderObject.AddGroupInputToForm();
+                CalenderObject.AddGroupAndUserInputs();
             }
 
         });
     },
-    AddGroupInputToForm: function () {
+    AddGroupAndUserInputs: function () {
 
         var groups = LocalStorage.Get(LocalStorage.KeyToGroupsData);
+        var users = LocalStorage.Get(LocalStorage.KeyToListOfUsersData);
 
-        var html = "";
-        if (groups !== "0") {
+        var groupsHtml = "",
+            usersHtml = "";
+        if (groups !== "0" || users !== "0") {
 
             $.map(groups, function (val, index) {
-                html += `<option value='${val.id}'>${val.name}</option>`;
+                groupsHtml += `<option value='${val.id}'>${val.name}</option>`;
             });
 
-            $("#groupSelection").empty().append(html).slideDown();
+            $.map(users, function (val, index) {
+                usersHtml += `<option value='${val.id}'>${val.userName}</option>`;
+            });
+
+            $("#groupSelection").empty().append(groupsHtml).slideDown();
+            $("#assignUserInput").empty().append(usersHtml);
+            $("#assignGroupInput").empty().append(groupsHtml);
         }
 
     },
@@ -273,7 +294,9 @@ var CalenderObject = {
     },
     AddOrUpdateCalanderEvent: function () {
 
-        $("#addEvent").on('click', function () {
+        $("#addEvent").on('click', function (e) {
+            e.preventDefault();
+
             var title = "",
                 description = "",
                 start = "",
@@ -290,7 +313,7 @@ var CalenderObject = {
             eventId = $("#eventId");
 
             if (CalenderObject.CheckEmptyInput(title) && CalenderObject.CheckEmptyInput(description)) {
-                var userData = LocalStorage.Get(LocalStorage.LocalStorageKey);
+                var userData = LocalStorage.Get(LocalStorage.KeyToUserData);
                 if (userData !== "0") {
 
                     var calenderData = {
@@ -333,6 +356,10 @@ var CalenderObject = {
 
                             }
                         });
+                } else {
+                    $('#calederEvent').modal('hide');
+                    CalenderObject.UserMessages.Show("Meddelande", "V&#228;nligen logga in f&#246;r att skapa ett event.", "panel-info");
+                    CalenderObject.UserMessages.Hide(6000);
                 }
             }
         });
@@ -347,10 +374,11 @@ var CalenderObject = {
     },
     DeleteEvent: function () {
 
-        $("#deleteEvent").on('click', function () {
+        $("#deleteEvent").on('click', function (e) {
+            e.preventDefault();
 
             var eventId = $("#calederEvent #eventId"),
-                userData = LocalStorage.Get(LocalStorage.LocalStorageKey),
+                userData = LocalStorage.Get(LocalStorage.KeyToUserData),
                 groupId = $("#groupSelectionModal");
 
             if (userData !== "0") {
@@ -383,5 +411,59 @@ var CalenderObject = {
 
         });
 
+    },
+    UserMessages: {
+        Show: function (title, message, addClass) {
+            var userMessagePanel = $(".userMessagePanel");
+            var messageBody = $(".messageBody");
+            var messageBodyPanel = $(".messageBodyPanel");
+            var userMessageTitle = $(".userMessageTitle");
+            var panelInfo = "panel-info";
+            var pandelDanger = "panel-danger";
+
+            if (addClass === panelInfo || !userMessagePanel.hasClass(addClass)) {
+                userMessagePanel.removeClass(pandelDanger);
+                userMessagePanel.addClass(addClass);
+            }
+
+            userMessageTitle.empty();
+            messageBody.empty();
+
+            var html = `<b>${message}</b>`;
+            messageBody.append(html);
+            userMessageTitle.append(title);
+
+            userMessagePanel.fadeIn(500);
+            messageBodyPanel.slideDown(500);
+
+        },
+        Hide: function (interval) {
+            setTimeout(function () {
+                var userMessagePanel = $(".userMessagePanel"),
+                    messageBodyPanel = $(".messageBodyPanel"),
+                    messageBody = $(".messageBody"),
+                    userMessageTitle = $(".userMessageTitle");
+
+                messageBodyPanel.slideUp(500, function () {
+                    userMessagePanel.fadeOut(500);
+                    messageBody.empty();
+                    userMessageTitle.empty();
+                });
+
+
+            }, interval);
+
+        }
+    },
+    LinkUserAndGroup: function () {
+        $("#assignUserToGroupBtn").on('click', function (e) {
+            e.preventDefault();
+
+            var userId = $("#assignUserToGroupBtn").val(),
+                groupId = $("#assignGroupInput").val();
+            if (groupId !== '' && userId) {
+                //Continue here <--------------
+            }
+        });
     }
 };
