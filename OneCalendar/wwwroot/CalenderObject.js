@@ -274,7 +274,6 @@ var CalenderObject = {
             usersHtml = "";
 
         if (groups !== "0") {
-
             $.map(groups, function (val, index) {
                 groupsHtml += `<option value='${val.id}'>${val.name}</option>`;
             });
