@@ -293,6 +293,8 @@ var CalenderObject = {
         $("#groupSelection").empty().append(groupsHtml).slideDown();
         $("#assignUserInput").empty().append(usersHtml);
         $("#assignGroupInput").empty().append(groupsHtml);
+        $("#removeUserInput").empty().append(usersHtml);
+        $("#removeGroupInput").empty().append(groupsHtml);
 
     },
     SplitEventId: function (eventId) {
@@ -466,10 +468,68 @@ var CalenderObject = {
         $("#assignUserToGroupBtn").on('click', function (e) {
             e.preventDefault();
 
-            var userId = $("#assignUserToGroupBtn").val(),
+            var userId = $("#assignUserInput").val(),
                 groupId = $("#assignGroupInput").val();
             if (groupId !== '' && userId) {
-                //Continue here <--------------
+                var calenderData = { userId: userId, groupId: groupId };
+                var userData = LocalStorage.Get(LocalStorage.KeyToUserData);
+                var settings = {
+                    url: "https://localhost:44305/api/calender/addusertogroup",
+                    method: "POST",
+                    data: JSON.stringify(calenderData),
+                    mediaType: 'application/json',
+                    token: userData.token
+                };
+
+                $.when(ApiObject.Request(settings)).then(function (data) {
+                        if (data.statusCode === 200) {
+                            CalenderObject.UserMessages.Show("Meddelande", data.description, "panel-info");
+                            CalenderObject.GetEvents();
+                        }else if (data.statusCode === 400) {
+                            CalenderObject.UserMessages.Show("Felmeddelande", data.description, "panel-danger");
+                        } else if (data.statusCode === 404) {
+                            CalenderObject.UserMessages.Show("Felmeddelande", data.description, "panel-danger");
+                        }
+                        CalenderObject.UserMessages.Hide(6000);
+                    
+                });
+            }
+        });
+    },
+    RemoveUserFromGroup: function () {
+        $("#removeUserToGroupBtn").on('click', function (e) {
+            e.preventDefault();
+
+            var userId = $("#removeUserInput").val(),
+                groupId = $("#removeGroupInput").val();
+
+            if (groupId !== '' && userId) {
+
+                var calenderData = { userId: userId, groupId: groupId };
+
+                var userData = LocalStorage.Get(LocalStorage.KeyToUserData);
+
+                var settings = {
+                    url: "https://localhost:44305/api/calender/removeuserfromgroup",
+                    method: "DELETE",
+                    data: JSON.stringify(calenderData),
+                    mediaType: 'application/json',
+                    token: userData.token
+                };
+
+                $.when(ApiObject.Request(settings)).then(function (data) {
+                
+                        if (data.statusCode === 200) {
+                            CalenderObject.UserMessages.Show("Meddelande", data.description, "panel-info");
+                            CalenderObject.GetEvents();
+                        } else if (data.statusCode === 400) {
+                            CalenderObject.UserMessages.Show("Felmeddelande", data.description, "panel-danger");
+                        } else if (data.statusCode === 404) {
+                            CalenderObject.UserMessages.Show("Felmeddelande", data.description, "panel-danger");
+                        }
+                        CalenderObject.UserMessages.Hide(6000);
+                    
+                });
             }
         });
     }

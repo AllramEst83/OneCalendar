@@ -70,10 +70,6 @@
                     <input id="logoutButton" style="width:100%;margin-bottom:15px;" type="button" value="Logga ut" class="btn btn-warning" />
                 </div>
                 <!-- Logout -->
-       
-
-            </div>
-            <div class="col-md-3">
                 <!-- Add user start -->
                 <div class="addNewUserPanel panel panel-info">
                     <div class="panel-heading">
@@ -93,7 +89,8 @@
                             <input id="addPassword" type="password" class="form-control" value="test123!!" placeholder="Lösenord" required="required" autocomplete="off" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
                         </div>
                         <div class="form-group">
-                            <select class="form-control" id="groupSelection">'
+                            <select class="form-control" id="groupSelection">
+                                '
                             </select>
                         </div>
                         <div class="form-group">
@@ -106,7 +103,12 @@
                     </div>
                 </div>
                 <!-- add user end -->
-                <!-- Grupp/User Admin -->
+
+
+            </div>
+            <div class="col-md-3">
+
+                <!--Add to Grupp/User Admin -->
                 <div class="linkUserAndGroupOanel panel panel-info">
 
                     <div class="panel-heading">
@@ -118,24 +120,66 @@
                     <div class="panel-body">
                         <div class="form-group">
                             <label for="assignUserInput">Användare</label>
-                            <select id="assignUserInput" class="form-control">
-                            </select>
+                            <select id="assignUserInput" class="form-control"></select>
                         </div>
                         <div class="form-group">
                             <label for="assignGroupInput">Grupper</label>
-                            <select id="assignGroupInput" class="form-control">
-                            </select>
+                            <select id="assignGroupInput" class="form-control"></select>
                         </div>
                         <div>
-                            <input id="assignUserToGroupBtn" style="width:100%;margin-bottom:15px;" type="button" value="Länka" class="btn btn-success" />
+                            <input id="assignUserToGroupBtn" style="width:100%;margin-bottom:15px;" type="button" value="Lägg till" class="btn btn-success" />
                         </div>
                     </div>
 
                 </div>
-                <!-- Grupp/User Admin -->
-            </div>
+                <!--Add to Grupp/User Admin -->
+                <!--Remove from Grupp/User Admin -->
+                <div class="RemoveUserAndGroupOanel panel panel-danger">
+
+                    <div class="panel-heading">
+                        <div>
+                            <h3 class="panel-title">Tabort använadre i en grupp</h3>
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label for="removeUserInput">Användare</label>
+                            <select id="removeUserInput" class="form-control"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="removeGroupInput">Grupper</label>
+                            <select id="removeGroupInput" class="form-control"></select>
+                        </div>
+                        <div>
+                            <input id="removeUserToGroupBtn" style="width:100%;margin-bottom:15px;" type="button" value="Tabort" class="btn btn-success" />
+                        </div>
+                    </div>
+
+                </div>
+                <!--Remove from Grupp/User Admin -->
+
+                <div class="accordion">
+                    <div class="item">
+                        <div class="heading">This is the first title</div>
+                        <div class="content">This is the first content</div>
+                    </div>
+                    <div class="item">
+                        <div class="heading">This is the second title</div>
+                        <div class="content">This is the second content</div>
+                    </div>
+                    <div class="item">
+                        <div class="heading">This is the third title</div>
+                        <div class="content">This is the third content</div>
+                    </div>
+                    <div class="item">
+                        <div class="heading">This is the third title</div>
+                        <div class="content">This is the third content</div>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
 
     <!-- Modal -->
     <!-- Modal -->
@@ -186,6 +230,7 @@
     <script src="ApiObject.js"></script>
     <script src="CalenderObject.js"></script>
     <script src="FormObject.js"></script>
+    <script src="Accordion.js"></script>
     <script src="main.js"></script>
 
 </body>

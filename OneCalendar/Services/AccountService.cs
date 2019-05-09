@@ -78,6 +78,17 @@ namespace OneCalendar.Services
 
             return result == null ? false : true;
         }
+        public async Task<bool> UserExistById(string userId)
+        {
+            User result = null;
+            if (!string.IsNullOrEmpty(userId))
+            {
+                result = await UserManager.FindByIdAsync(userId);
+            }
+
+            return result == null ? false : true;
+        }
+
 
         public async Task<User> GetUserById(string userId)
         {

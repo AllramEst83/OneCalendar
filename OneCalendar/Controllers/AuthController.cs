@@ -174,7 +174,7 @@ namespace OneCalendar.Controllers
                 });
             }
 
-            CalenderGroup addUserToCalenderGroupResult = CalenderService.AddUserToCalenderGroup(groupId, userIdentity.Id);
+            CalenderGroup addUserToCalenderGroupResult = await CalenderService.AddUserToCalenderGroup(groupId, userIdentity.Id);
             if (addUserToCalenderGroupResult == null)
             {
                 return new JsonResult(new SignupResponseModel()

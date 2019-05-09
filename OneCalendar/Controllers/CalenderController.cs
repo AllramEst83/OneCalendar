@@ -149,7 +149,7 @@ namespace OneCalendar.Controllers
         [HttpGet]
         public async Task<ActionResult<string>> GetAllGroups()
         {
-            List<ShortHandCalanderGroup> groups = CalenderService.GetCalenderGroups();
+            List<ShortHandCalanderGroup> groups = await CalenderService.GetCalenderGroups();
             List<ShortHandUsers> users = await AccountService.GetAllUsers();
 
             UsersAndGroups usersAndGroupsToClient = new UsersAndGroups()
@@ -161,6 +161,109 @@ namespace OneCalendar.Controllers
             return new JsonResult(usersAndGroupsToClient);
         }
 
+        [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
+        [HttpPost]
+        public async Task<ActionResult<string>> AddUserToGroup(AddUserToGroupViewModel model)
+        {
+            string userId = model.UserId.ToString();
+            int groupId = model.GroupId;
+
+            bool userExists = await AccountService.UserExistById(userId);
+            if (!userExists)
+            {
+                return new JsonResult(new AddUserToGroupResponse()
+                {
+                    Content = new { },
+                    StatusCode = HttpStatusCode.NotFound,
+                    Error = "not_found",
+                    Description = "Användaren går tyvärr inte att hitta."
+                });
+            }
+
+            bool userExistsInGroup = await CalenderService.UserExistsInGroup(groupId, userId);
+            if (userExistsInGroup)
+            {
+                return new JsonResult(new AddUserToGroupResponse()
+                {
+                    Content = new { },
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Error = "bad_request",
+                    Description = "Användaren finns readn i gruppen."
+                });
+            }
+            CalenderGroup group = await CalenderService.AddUserToCalenderGroup(groupId, userId);
+            if (group == null)
+            {
+                return new JsonResult(new AddUserToGroupResponse()
+                {
+                    Content = new { },
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Error = "bad_request",
+                    Description = "Kunde inte lägga till användaren till gruppen"
+                });
+            }
+            return new JsonResult(new AddUserToGroupResponse()
+            {
+                Content = group.ListOfUserIds,
+                StatusCode = HttpStatusCode.OK,
+                Error = "no_error",
+                Description = "Användaren har lagts till i gruppen."
+            });
+        }
+
+
+        [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
+        [HttpDelete]
+        public async Task<ActionResult<string>> RemoveUserFromGroup(RemoveUserFromGroupViewModel model)
+        {
+            string userId = model.UserId.ToString();
+            int groupId = model.GroupId;
+
+            bool userExists = await AccountService.UserExistById(userId);
+            bool groupExists = await CalenderService.GroupExistById(groupId);
+            if (!userExists && !groupExists)
+            {
+                return new JsonResult(new RemoveUserFromGroupResponse()
+                {
+                    Content = new { },
+                    StatusCode = HttpStatusCode.NotFound,
+                    Error = "not_found",
+                    Description = "Användaren eller gruppen går tyvärr inte att hitta."
+                });
+            }
+
+            bool userInGroup = await CalenderService.UserExistsInGroup(groupId, userId);
+            if (!userInGroup)
+            {
+                return new JsonResult(new RemoveUserFromGroupResponse()
+                {
+                    Content = new { },
+                    StatusCode = HttpStatusCode.NotFound,
+                    Error = "not_found",
+                    Description = "Användaren finns inte i den angivna gruppen."
+                });
+            }
+
+            CalenderGroup calenderGroup = await CalenderService.RemoveUserFromCalenderGroup(groupId, userId);
+            if (calenderGroup == null)
+            {
+                return new JsonResult(new RemoveUserFromGroupResponse()
+                {
+                    Content = new { },
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Error = "bad_request",
+                    Description = "Kunde inte lägga till användaren till gruppen"
+                });
+            }
+
+            return new JsonResult(new RemoveUserFromGroupResponse()
+            {
+                Content = calenderGroup.ListOfUserIds,
+                StatusCode = HttpStatusCode.OK,
+                Error = "no_error",
+                Description = "Användaren har tagits bort i gruppen."
+            });
+        }
 
         [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
         [HttpGet]

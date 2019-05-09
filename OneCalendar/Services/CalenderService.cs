@@ -95,8 +95,6 @@ namespace OneCalendar.Services
 
                 List<CalenderGroup> calenderGroups = CalenderContext.CalenderGroups.Include(i => i.CalenderTasks).ToList();
                 CalenderGroup caldenrGroupToREMOVE_TaskFrom;
-                CalenderGroup caldenrGroupToADD_TaskTo;
-                List<CalenderTask> tempFilteredCalenderTasks;
 
                 foreach (CalenderGroup group in calenderGroups)
                 {
@@ -111,7 +109,7 @@ namespace OneCalendar.Services
 
                                 CalenderGroup newGroupToAddToTaskTo = await CalenderContext.CalenderGroups.FirstOrDefaultAsync(x => x.Id == model.GroupId);
                                 newGroupToAddToTaskTo.CalenderTasks.Add(task);
-                               
+
                                 CalenderContext.CalenderGroups.Update(caldenrGroupToREMOVE_TaskFrom);
                                 CalenderContext.CalenderGroups.Update(newGroupToAddToTaskTo);
                                 SaveChanges();
@@ -176,25 +174,24 @@ namespace OneCalendar.Services
             }
         }
 
-        public List<ShortHandCalanderGroup> GetCalenderGroups()
+        public async Task<List<ShortHandCalanderGroup>> GetCalenderGroups()
         {
-            List<ShortHandCalanderGroup> groups =
-               CalenderContext
-                .CalenderGroups.
-                Select(x => new ShortHandCalanderGroup() { Id = x.Id, Name = x.Name }).OrderBy(o => o.Name).ToList();
-            return groups;
+            List<CalenderGroup> groups = await Task.FromResult(CalenderContext.CalenderGroups.ToList());
+            List<ShortHandCalanderGroup> shorthandGroupsList = groups.Select(x => new ShortHandCalanderGroup() { Id = x.Id, Name = x.Name }).OrderBy(o => o.Name).ToList();
+
+            return shorthandGroupsList;
         }
 
         public async Task<bool> GroupExistById(int groupId)
         {
-            bool groupExist = await Task.FromResult(CalenderContext.CalenderGroups.Any(x => x.Id == groupId));
+            bool groupExist = await CalenderContext.CalenderGroups.AnyAsync(x => x.Id == groupId);
 
             return groupExist;
         }
 
-        public CalenderGroup AddUserToCalenderGroup(int groupId, string userId)
+        public async Task<CalenderGroup> AddUserToCalenderGroup(int groupId, string userId)
         {
-            CalenderGroup calenderGroup = CalenderContext.CalenderGroups.FirstOrDefault(x => x.Id == groupId);
+            CalenderGroup calenderGroup = await CalenderContext.CalenderGroups.FirstOrDefaultAsync(x => x.Id == groupId);
 
             if (calenderGroup == null)
             {
@@ -206,6 +203,47 @@ namespace OneCalendar.Services
             listOfUserIds.Add(userId);
 
             calenderGroup.ListOfUserIds = listOfUserIds.ToArray();
+
+            CalenderContext.CalenderGroups.Update(calenderGroup);
+
+            SaveChanges();
+
+            return calenderGroup;
+        }
+
+        public async Task<bool> UserExistsInGroup(int groupId, string userId)
+        {
+            bool result = false;
+            CalenderGroup group;
+            if (!string.IsNullOrEmpty(userId))
+            {
+                group = await CalenderContext.CalenderGroups.FirstOrDefaultAsync(x=>x.Id == groupId);
+                if (group != null)
+                {
+                    result = group.ListOfUserIds.Contains(userId);
+                }
+            }
+
+            return result;
+        }
+
+        public async Task<CalenderGroup> RemoveUserFromCalenderGroup(int groupId, string userId)
+        {
+            CalenderGroup calenderGroup = await CalenderContext.CalenderGroups.FirstOrDefaultAsync(x => x.Id == groupId);
+
+            if (calenderGroup == null)
+            {
+                return null;
+            }
+
+            List<string> listOfIds = calenderGroup.ListOfUserIds.ToList();
+            string user = listOfIds.SingleOrDefault(i => i == userId);
+            if (user != null)
+            {
+                listOfIds.Remove(user);
+            }
+
+            calenderGroup.ListOfUserIds = listOfIds.ToArray();
 
             CalenderContext.CalenderGroups.Update(calenderGroup);
 

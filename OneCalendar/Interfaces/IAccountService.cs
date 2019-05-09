@@ -23,5 +23,6 @@ namespace OneCalendar.Interfaces
         Task<IdentityResult> DeleteUser(User userIdentity);
         Task<IdentityResult> AddRolesToUser(User userIdentity, IEnumerable<string> userRoles);
         Task<List<ShortHandUsers>> GetAllUsers();
+        Task<bool> UserExistById(string userId);
     }
 }

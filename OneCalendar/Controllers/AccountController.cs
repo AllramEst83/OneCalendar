@@ -11,5 +11,6 @@ namespace OneCalendar.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
+        //Move userAccount queries to this controller
     }
 }

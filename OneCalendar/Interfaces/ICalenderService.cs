@@ -12,12 +12,14 @@ namespace OneCalendar.Interfaces
     {
         CalenderContext CalenderContext { get; }
 
-        List<ShortHandCalanderGroup> GetCalenderGroups();
+        Task<List<ShortHandCalanderGroup>> GetCalenderGroups();
         IEnumerable<GroupResponse> GetGroupsAndEvents(Guid userId);
-        CalenderGroup AddUserToCalenderGroup(int groupId, string userId);
+        Task<CalenderGroup> AddUserToCalenderGroup(int groupId, string userId);
         Task<bool> AddCalenderEvent(AddEventViewModel model);
         Task<bool> DeleteCalenderEvent(DeleteEventViewModel model);
         Task<bool> UpdateCalenderEvent(UpdateEventViewModel model);
         Task<bool> GroupExistById(int groupId);
+        Task<CalenderGroup> RemoveUserFromCalenderGroup(int groupId, string userId);
+        Task<bool> UserExistsInGroup(int groupId, string userId);
     }
 }

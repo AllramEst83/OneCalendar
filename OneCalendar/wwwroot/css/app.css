@@ -25,3 +25,41 @@
     border-radius: 20px;
     box-shadow: 0 10px 16px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19) !important;
 }
+
+/*Accordion*/
+.accordion {
+    width: 380px;
+    border-radius: 5px;
+    overflow: hidden;
+    margin: auto;
+}
+
+    .accordion .item .heading {
+        height: 50px;
+        line-height: 50px;
+        font-size: 17px;
+        cursor: pointer;
+        color: #fff;
+        padding-left: 15px;
+        background: #ee6363 url('arrow.png') no-repeat;
+        background-position: right 20px top -95px;
+        border-bottom: 1px solid #ec8484;
+        box-sizing: border-box;
+    }
+
+    .accordion .item.open .heading,
+    .accordion .item:last-child .heading {
+        border: 0;
+    }
+
+    .accordion .item.open .heading {
+        background-position: right 20px top -5px;
+    }
+
+    .accordion .item .content {
+        display: none;
+        padding: 15px;
+        background: #fff;
+        font-size: 14px;
+    }
+/*Accordion*/
