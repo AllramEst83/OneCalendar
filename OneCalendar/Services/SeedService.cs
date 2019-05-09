@@ -47,6 +47,8 @@ namespace OneCalendar.Services
                     CreatedBy = Kay,
                     TaskDescription = "Ett seminarium om saker och ting",
                     Edited = null,
+                    Color = "#AFFDD4",
+                    TextColor = "#ffeb84"
                 },
                 new CalenderTask()
                 {
@@ -56,6 +58,8 @@ namespace OneCalendar.Services
                     CreatedBy = Kay,
                     TaskDescription = "PÅ vårdcentralen, var inte sen.",
                     Edited = null,
+                       Color = "#AFFDD4",
+                    TextColor = "#ffeb84"
 
                 },
                 new CalenderTask()
@@ -66,6 +70,8 @@ namespace OneCalendar.Services
                     CreatedBy = Kay,
                     TaskDescription = "Glöm inte papaya",
                     Edited = null,
+                       Color = "#AFFDD4",
+                    TextColor = "#ffeb84"
                 },
 
             };
@@ -83,6 +89,8 @@ namespace OneCalendar.Services
                     CreatedBy = Kay,
                     TaskDescription = "Glöm inte",
                     Edited = null,
+                       Color = "#AFFDD4",
+                    TextColor = "#ffeb84"
                 }
             };
 

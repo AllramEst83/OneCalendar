@@ -18,6 +18,7 @@ var CalenderObject = {
                 right: 'month, agendaWeek,listWeek'
 
             },
+            height: 620,
             defaultView: "agendaWeek",
             slotLabelFormat: "HH:mm",
             slotEventOverlap: false,
@@ -224,7 +225,11 @@ var CalenderObject = {
                                 "start": eventVal.start,
                                 "end": eventVal.end,
                                 "allDay": eventVal.allDay,
-                                "description": eventVal.description
+                                "description": eventVal.description,
+                                //"color": eventVal.color,
+                                "textColor": eventVal.textColor,
+                                "borderColor": "black",
+                                "className":"eventColor_two"
                             });
                         });
                     });
@@ -292,6 +297,8 @@ var CalenderObject = {
         $("#groupSelection").empty().append(groupsHtml).slideDown();
         $("#assignUserInput").empty().append(usersHtml);
         $("#assignGroupInput").empty().append(groupsHtml);
+        $("#removeUserInput").empty().append(usersHtml);
+        $("#removeGroupInput").empty().append(groupsHtml);
 
     },
     SplitEventId: function (eventId) {
@@ -439,8 +446,8 @@ var CalenderObject = {
             messageBody.append(html);
             userMessageTitle.append(title);
 
-            userMessagePanel.fadeIn(500);
-            messageBodyPanel.slideDown(500);
+            userMessagePanel.slideDown(500);
+            //messageBodyPanel.slideDown(500);
 
         },
         Hide: function (interval) {
@@ -450,11 +457,13 @@ var CalenderObject = {
                     messageBody = $(".messageBody"),
                     userMessageTitle = $(".userMessageTitle");
 
-                messageBodyPanel.slideUp(500, function () {
-                    userMessagePanel.fadeOut(500);
+                //messageBodyPanel.slideUp(500);
+                userMessagePanel.slideUp(500, function () {
                     messageBody.empty();
                     userMessageTitle.empty();
                 });
+            
+
 
 
             }, interval);
@@ -465,10 +474,79 @@ var CalenderObject = {
         $("#assignUserToGroupBtn").on('click', function (e) {
             e.preventDefault();
 
-            var userId = $("#assignUserToGroupBtn").val(),
+            var userId = $("#assignUserInput").val(),
                 groupId = $("#assignGroupInput").val();
             if (groupId !== '' && userId) {
-                //Continue here <--------------
+                var calenderData = { userId: userId, groupId: groupId };
+                var userData = LocalStorage.Get(LocalStorage.KeyToUserData);
+                var settings = {
+                    url: "https://localhost:44305/api/calender/addusertogroup",
+                    method: "POST",
+                    data: JSON.stringify(calenderData),
+                    mediaType: 'application/json',
+                    token: userData.token
+                };
+
+                $.when(ApiObject.Request(settings)).then(function (data) {
+                    if (data.statusCode === 200) {
+                        CalenderObject.UserMessages.Show("Meddelande", data.description, "panel-info");
+                        CalenderObject.GetEvents();
+                    } else if (data.statusCode === 400) {
+                        CalenderObject.UserMessages.Show("Felmeddelande", data.description, "panel-danger");
+                    } else if (data.statusCode === 404) {
+                        CalenderObject.UserMessages.Show("Felmeddelande", data.description, "panel-danger");
+                    }
+                    CalenderObject.UserMessages.Hide(6000);
+
+                })
+                    .fail(function (jqXHR) {
+                    if (jqXHR.status === 401) {
+                        CalenderObject.UserMessages.Show("Felmeddelande", "Ett fel inträffade när när servern skulle anropas.", "panel-danger");
+                        CalenderObject.UserMessages.Hide(6000);
+                    }
+                });;
+            }
+        });
+    },
+    RemoveUserFromGroup: function () {
+        $("#removeUserToGroupBtn").on('click', function (e) {
+            e.preventDefault();
+
+            var userId = $("#removeUserInput").val(),
+                groupId = $("#removeGroupInput").val();
+
+            if (groupId !== '' && userId) {
+
+                var calenderData = { userId: userId, groupId: groupId };
+
+                var userData = LocalStorage.Get(LocalStorage.KeyToUserData);
+
+                var settings = {
+                    url: "https://localhost:44305/api/calender/removeuserfromgroup",
+                    method: "DELETE",
+                    data: JSON.stringify(calenderData),
+                    mediaType: 'application/json',
+                    token: userData.token
+                };
+
+                $.when(ApiObject.Request(settings)).then(function (data) {
+
+                    if (data.statusCode === 200) {
+                        CalenderObject.UserMessages.Show("Meddelande", data.description, "panel-info");
+                        CalenderObject.GetEvents();
+                    } else if (data.statusCode === 400) {
+                        CalenderObject.UserMessages.Show("Felmeddelande", data.description, "panel-danger");
+                    } else if (data.statusCode === 404) {
+                        CalenderObject.UserMessages.Show("Felmeddelande", data.description, "panel-danger");
+                    }
+                    CalenderObject.UserMessages.Hide(6000);
+
+                }).fail(function (jqXHR) {
+                    if (jqXHR.status === 401) {
+                        CalenderObject.UserMessages.Show("Felmeddelande", "Ett fel inträffade när när servern skulle anropas.", "panel-danger");
+                        CalenderObject.UserMessages.Hide(6000);
+                    }
+                });
             }
         });
     }
