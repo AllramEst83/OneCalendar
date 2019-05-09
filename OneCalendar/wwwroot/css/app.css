@@ -44,20 +44,19 @@
 
     /*EventKlass test*/
 .eventColor_one {
-    background-image: linear-gradient(to bottom, #fdfbaf, #ffe2a5, #ffcbae, #ffb9c2, #fdafd8);
+    background-image: url('https://media.giphy.com/media/ECWLeGxcKasCc/giphy.gif');
+    background-size: contain;
+    /*background-image: linear-gradient(to bottom, #fdfbaf, #ffe2a5, #ffcbae, #ffb9c2, #fdafd8);*/
     /*box-shadow: inset 1px -12px 17px green; <--Jobba på skuggan på varje event*/
 }
 .eventColor_two {
     background-image: linear-gradient(to bottom, #a044c0, #ee397d, #f3743e, #caaf2a, #82dc74);
-    /*box-shadow: inset 1px -12px 17px green; <--Jobba på skuggan på varje event*/
 }
 .eventColorO_three {
     background-image: linear-gradient(to bottom, #ffff00, #ffa100, #ff0051, #ff00ad, #000bff);
-    /*box-shadow: inset 1px -12px 17px green; <--Jobba på skuggan på varje event*/
 }
 .eventColor_four {
     background-image: linear-gradient(to bottom, #00ff43, #9bd700, #d1a900, #f27000, #ff0000);
-    /*box-shadow: inset 1px -12px 17px green; <--Jobba på skuggan på varje event*/
 }
 
 /*Accordion*/

@@ -140,7 +140,7 @@ var CalenderObject = {
                     title: eventObj.title,
                     content: eventObj.description,
                     trigger: 'hover',
-                    placement: 'right',
+                    placement: 'top',
                     container: 'body'
                 });
             }
@@ -229,7 +229,7 @@ var CalenderObject = {
                                 //"color": eventVal.color,
                                 "textColor": eventVal.textColor,
                                 "borderColor": "black",
-                                "className":"eventColor_two"
+                                "className":"eventColor_one"
                             });
                         });
                     });
