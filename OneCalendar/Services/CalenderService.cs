@@ -298,6 +298,8 @@ namespace OneCalendar.Services
                     Start = p.StartDate,
                     Description = p.TaskDescription,
                     End = p.EndDate,
+                    Color = p.Color,
+                    TextColor = p.TextColor,
                     AllDay = false
 
                 }).ToList()

@@ -4,21 +4,20 @@
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     padding: 20px;
     border-radius: 10px;
+    background-image: linear-gradient(to top, #d16ba5, #ee7d96, #fe978a, #ffb587, #ffd391, #f5e297, #e9f0a2, #dafeb4, #beffbe, #a0ffcd, #80fede, #5ffbf1);
+    /*background-color: rgba(214, 255, 176, 0.85);*/
 }
 
-.loginPanel, .addNewUserPanel, .linkUserAndGroupOanel {
+.loginPanel, .addNewUserPanel, .linkUserAndGroupOanel, .accordion {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .container {
-    padding-top: 55px
+    padding-top: 55px;
 }
 
-.hiddenInput {
-    display: none;
-}
-
-.container-fluid {
+.calenderWrapper {
+    background-color: #FDFBAF; /*bakgrundsfärg till kalendern*/
     padding: 30px;
     border: 1px solid #ccc !important;
     margin: 40px;
@@ -26,9 +25,44 @@
     box-shadow: 0 10px 16px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19) !important;
 }
 
+.hiddenInput {
+    display: none;
+}
+
+.container-fluid {
+}
+
+/*kalender gridfärg*/
+.fc-unthemed th, .fc-unthemed td, .fc-unthemed thead, .fc-unthemed tbody, .fc-unthemed .fc-divider, .fc-unthemed .fc-row, .fc-unthemed .fc-content, .fc-unthemed .fc-popover, .fc-unthemed .fc-list-view, .fc-unthemed .fc-list-heading td {
+    border-color: rgba(62, 53, 20, 0.4392156862745098) !important;
+}
+
+/*Gridfärg på den valda dagen*/
+    .fc-unthemed td.fc-today {
+        background: rgba(223, 150, 253, 0.51);
+    }
+
+    /*EventKlass test*/
+.eventColor_one {
+    background-image: linear-gradient(to bottom, #fdfbaf, #ffe2a5, #ffcbae, #ffb9c2, #fdafd8);
+    /*box-shadow: inset 1px -12px 17px green; <--Jobba på skuggan på varje event*/
+}
+.eventColor_two {
+    background-image: linear-gradient(to bottom, #a044c0, #ee397d, #f3743e, #caaf2a, #82dc74);
+    /*box-shadow: inset 1px -12px 17px green; <--Jobba på skuggan på varje event*/
+}
+.eventColorO_three {
+    background-image: linear-gradient(to bottom, #ffff00, #ffa100, #ff0051, #ff00ad, #000bff);
+    /*box-shadow: inset 1px -12px 17px green; <--Jobba på skuggan på varje event*/
+}
+.eventColor_four {
+    background-image: linear-gradient(to bottom, #00ff43, #9bd700, #d1a900, #f27000, #ff0000);
+    /*box-shadow: inset 1px -12px 17px green; <--Jobba på skuggan på varje event*/
+}
+
 /*Accordion*/
 .accordion {
-    width: 380px;
+    width: 100%;
     border-radius: 5px;
     overflow: hidden;
     margin: auto;
@@ -39,11 +73,11 @@
         line-height: 50px;
         font-size: 17px;
         cursor: pointer;
-        color: #fff;
+        color: #88149c; /*Textfärg*/
         padding-left: 15px;
-        background: #ee6363 url('arrow.png') no-repeat;
+        background: #FDAFD8 /*url('../images/arrow.png')*/ no-repeat; /*accordion item färg*/
         background-position: right 20px top -95px;
-        border-bottom: 1px solid #ec8484;
+        border-bottom: 1px solid #dc64de; /*Accordion nederkanst på varje item*/
         box-sizing: border-box;
     }
 

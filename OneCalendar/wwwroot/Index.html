@@ -17,165 +17,168 @@
 <body>
 
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-6">
+        <div class="calenderWrapper">
+            <div class="row">
+                <div class="col-sm-8">
 
-                <div id="calender"></div>
+                    <div id="calender"></div>
 
-            </div>
-            <div class="col-md-3">
+                </div>
+                <div class="col-md-4">
+                    <!-- ErrorMessages -->
+                    <div class="userMessagePanel panel panel-danger" style="display:none">
 
-                <!-- ErrorMessages -->
-                <div class="userMessagePanel panel panel-danger" style="display:none">
+                        <div class="panel-heading">
+                            <div>
+                                <h3 id="titlePane" class="userMessageTitle panel-title">Felmeddelande</h3>
+                            </div>
 
-                    <div class="panel-heading">
-                        <div>
-                            <h3 id="titlePane" class="userMessageTitle panel-title">Felmeddelande</h3>
+                            <div class="panel-body messageBodyPanel">
+                                <div class="messageBody">
+
+                                </div>
+                            </div>
+
                         </div>
 
-                        <div class="panel-body messageBodyPanel" style="display:none">
-                            <div class="messageBody">
+                    </div>
+                    <!-- ErrorMessages -->
+                    <!-- Accordion -->
 
+                    <div class="accordion">
+
+                        <div class="item">
+                            <div class="heading">Logga in/Logga ut</div>
+                            <div class="content">
+                                <!-- Login start -->
+                                <div class="loginPanel panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 id="loginUserTitlePane" class="panel-title">Logga in</h3>
+                                    </div>
+                                    <div class="panel-body loginUser">
+                                        <div class="form-group">
+                                            <input id="userNameInput" type="text" class="form-control" value="Kajan@altavisat.com" placeholder="Användarnamn" required="required" autocomplete="off" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
+                                        </div>
+                                        <div class="form-group">
+                                            <input id="passwordInput" type="password" class="form-control" value="test123!!" placeholder="Lösenord" required="required" autocomplete="off" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
+                                        </div>
+                                        <div class="form-group">
+                                            <button id="loggaInKnapp" type="button" class="btn btn-primary btn-block">Logga in</button>
+                                        </div>
+                                        <div class="clearfix">
+                                            <label class="pull-left checkbox-inline"><input type="checkbox"> Remember me</label>
+                                            <a href="#" class="pull-right">Forgot Password?</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Login end -->
+                                <!-- Logout -->
+                                <div>
+                                    <input id="logoutButton" style="width:100%;margin-bottom:15px;" type="button" value="Logga ut" class="btn btn-warning" />
+                                </div>
+                                <!-- Logout -->
                             </div>
                         </div>
+                        <div class="item">
+                            <div class="heading">Lägg till användare</div>
+                            <div class="content">
+                                <!-- Add user start -->
+                                <div class="addNewUserPanel panel panel-info">
+                                    <div class="panel-heading">
+                                        <h3 id="addUserTitlePane" class="panel-title">Lägg till användare</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <input id="firstName" type="text" class="form-control" value="Kay" placeholder="Förnamn" required="required" autocomplete="off" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
+                                        </div>
+                                        <div class="form-group">
+                                            <input id="lastName" type="text" class="form-control" value="Wiberg" placeholder="Efternamn" required="required" autocomplete="off" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
+                                        </div>
+                                        <div class="form-group">
+                                            <input id="addUserName" type="text" class="form-control" value="test@altavisat.com" placeholder="Användarnamn" required="required" autocomplete="off" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
+                                        </div>
+                                        <div class="form-group">
+                                            <input id="addPassword" type="password" class="form-control" value="test123!!" placeholder="Lösenord" required="required" autocomplete="off" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
+                                        </div>
+                                        <div class="form-group">
+                                            <select class="form-control" id="groupSelection">
+                                                '
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <button id="addUser" type="button" class="btn btn-primary btn-block">Skapa</button>
+                                        </div>
+                                        <div class="clearfix">
+                                            <label class="pull-left checkbox-inline"><input type="checkbox"> Remember me</label>
+                                            <a href="#" class="pull-right">Forgot Password?</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- add user end -->
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="heading">Lägg till använadre i en grupp</div>
+                            <div class="content">
+                                <!--Add to Grupp/User Admin -->
+                                <div class="linkUserAndGroupOanel panel panel-info">
 
-                    </div>
+                                    <div class="panel-heading">
+                                        <div>
+                                            <h3 class="panel-title">Lägg till använadre i en grupp</h3>
+                                        </div>
+                                    </div>
 
-                </div>
-                <!-- ErrorMessages -->
-                <!-- Login start -->
-                <div class="loginPanel panel panel-default">
-                    <div class="panel-heading">
-                        <h3 id="loginUserTitlePane" class="panel-title">Logga in</h3>
-                    </div>
-                    <div class="panel-body loginUser">
-                        <div class="form-group">
-                            <input id="userNameInput" type="text" class="form-control" value="Kajan@altavisat.com" placeholder="Användarnamn" required="required" autocomplete="off" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
-                        </div>
-                        <div class="form-group">
-                            <input id="passwordInput" type="password" class="form-control" value="test123!!" placeholder="Lösenord" required="required" autocomplete="off" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
-                        </div>
-                        <div class="form-group">
-                            <button id="loggaInKnapp" type="button" class="btn btn-primary btn-block">Logga in</button>
-                        </div>
-                        <div class="clearfix">
-                            <label class="pull-left checkbox-inline"><input type="checkbox"> Remember me</label>
-                            <a href="#" class="pull-right">Forgot Password?</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Login end -->
-                <!-- Logout -->
-                <div>
-                    <input id="logoutButton" style="width:100%;margin-bottom:15px;" type="button" value="Logga ut" class="btn btn-warning" />
-                </div>
-                <!-- Logout -->
-                <!-- Add user start -->
-                <div class="addNewUserPanel panel panel-info">
-                    <div class="panel-heading">
-                        <h3 id="addUserTitlePane" class="panel-title">Lägg till användare</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <input id="firstName" type="text" class="form-control" value="Kay" placeholder="Förnamn" required="required" autocomplete="off" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
-                        </div>
-                        <div class="form-group">
-                            <input id="lastName" type="text" class="form-control" value="Wiberg" placeholder="Efternamn" required="required" autocomplete="off" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
-                        </div>
-                        <div class="form-group">
-                            <input id="addUserName" type="text" class="form-control" value="test@altavisat.com" placeholder="Användarnamn" required="required" autocomplete="off" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
-                        </div>
-                        <div class="form-group">
-                            <input id="addPassword" type="password" class="form-control" value="test123!!" placeholder="Lösenord" required="required" autocomplete="off" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
-                        </div>
-                        <div class="form-group">
-                            <select class="form-control" id="groupSelection">
-                                '
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <button id="addUser" type="button" class="btn btn-primary btn-block">Skapa</button>
-                        </div>
-                        <div class="clearfix">
-                            <label class="pull-left checkbox-inline"><input type="checkbox"> Remember me</label>
-                            <a href="#" class="pull-right">Forgot Password?</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- add user end -->
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <label for="assignUserInput">Användare</label>
+                                            <select id="assignUserInput" class="form-control"></select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="assignGroupInput">Grupper</label>
+                                            <select id="assignGroupInput" class="form-control"></select>
+                                        </div>
+                                        <div>
+                                            <input id="assignUserToGroupBtn" style="width:100%;margin-bottom:15px;" type="button" value="Lägg till" class="btn btn-success" />
+                                        </div>
+                                    </div>
 
+                                </div>
+                                <!--Add to Grupp/User Admin -->
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="heading">Tabort använadre i en grupp</div>
+                            <div class="content">
+                                <!--Remove from Grupp/User Admin -->
+                                <div class="RemoveUserAndGroupOanel panel panel-danger">
 
-            </div>
-            <div class="col-md-3">
+                                    <div class="panel-heading">
+                                        <div>
+                                            <h3 class="panel-title">Tabort använadre i en grupp</h3>
+                                        </div>
+                                    </div>
 
-                <!--Add to Grupp/User Admin -->
-                <div class="linkUserAndGroupOanel panel panel-info">
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <label for="removeUserInput">Användare</label>
+                                            <select id="removeUserInput" class="form-control"></select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="removeGroupInput">Grupper</label>
+                                            <select id="removeGroupInput" class="form-control"></select>
+                                        </div>
+                                        <div>
+                                            <input id="removeUserToGroupBtn" style="width:100%;margin-bottom:15px;" type="button" value="Tabort" class="btn btn-success" />
+                                        </div>
+                                    </div>
 
-                    <div class="panel-heading">
-                        <div>
-                            <h3 class="panel-title">Lägg till använadre i en grupp</h3>
+                                </div>
+                                <!--Remove from Grupp/User Admin -->
+                            </div>
                         </div>
                     </div>
-
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <label for="assignUserInput">Användare</label>
-                            <select id="assignUserInput" class="form-control"></select>
-                        </div>
-                        <div class="form-group">
-                            <label for="assignGroupInput">Grupper</label>
-                            <select id="assignGroupInput" class="form-control"></select>
-                        </div>
-                        <div>
-                            <input id="assignUserToGroupBtn" style="width:100%;margin-bottom:15px;" type="button" value="Lägg till" class="btn btn-success" />
-                        </div>
-                    </div>
-
-                </div>
-                <!--Add to Grupp/User Admin -->
-                <!--Remove from Grupp/User Admin -->
-                <div class="RemoveUserAndGroupOanel panel panel-danger">
-
-                    <div class="panel-heading">
-                        <div>
-                            <h3 class="panel-title">Tabort använadre i en grupp</h3>
-                        </div>
-                    </div>
-
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <label for="removeUserInput">Användare</label>
-                            <select id="removeUserInput" class="form-control"></select>
-                        </div>
-                        <div class="form-group">
-                            <label for="removeGroupInput">Grupper</label>
-                            <select id="removeGroupInput" class="form-control"></select>
-                        </div>
-                        <div>
-                            <input id="removeUserToGroupBtn" style="width:100%;margin-bottom:15px;" type="button" value="Tabort" class="btn btn-success" />
-                        </div>
-                    </div>
-
-                </div>
-                <!--Remove from Grupp/User Admin -->
-
-                <div class="accordion">
-                    <div class="item">
-                        <div class="heading">This is the first title</div>
-                        <div class="content">This is the first content</div>
-                    </div>
-                    <div class="item">
-                        <div class="heading">This is the second title</div>
-                        <div class="content">This is the second content</div>
-                    </div>
-                    <div class="item">
-                        <div class="heading">This is the third title</div>
-                        <div class="content">This is the third content</div>
-                    </div>
-                    <div class="item">
-                        <div class="heading">This is the third title</div>
-                        <div class="content">This is the third content</div>
-                    </div>
+                    <!-- Accordion -->
                 </div>
             </div>
         </div>
