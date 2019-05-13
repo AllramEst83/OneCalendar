@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using OneCalendar.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace OneCalendar.ViewModels.Validation
 {
-    public class AddEventViewModelValidator : AbstractValidator<AddEventViewModel>
+    public class UpdateEventResponseModelValidator: AbstractValidator<AddEventViewModel>
     {
-        public AddEventViewModelValidator()
+        public UpdateEventResponseModelValidator()
         {
             RuleFor(vm => vm.UserId).NotEmpty().WithMessage("UserId cannot be empty");
             RuleFor(vm => vm.UserName).NotEmpty().WithMessage("UserId cannot be empty");

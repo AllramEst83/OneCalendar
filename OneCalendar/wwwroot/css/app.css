@@ -30,6 +30,7 @@
 }
 
 .container-fluid {
+    background-color: #6C3483;
 }
 
 /*kalender gridfärg*/
@@ -43,20 +44,74 @@
     }
 
     /*EventKlass test*/
+
+@-webkit-keyframes AnimationName {
+    0% {
+        background-position: 0% 50%
+    }
+
+    50% {
+        background-position: 100% 50%
+    }
+
+    100% {
+        background-position: 0% 50%
+    }
+}
+
+@-moz-keyframes AnimationName {
+    0% {
+        background-position: 0% 50%
+    }
+
+    50% {
+        background-position: 100% 50%
+    }
+
+    100% {
+        background-position: 0% 50%
+    }
+}
+
+@keyframes AnimationName {
+    0% {
+        background-position: 0% 50%
+    }
+
+    50% {
+        background-position: 100% 50%
+    }
+
+    100% {
+        background-position: 0% 50%
+    }
+}
+
 .eventColor_one {
-    background-image: url('https://media.giphy.com/media/ECWLeGxcKasCc/giphy.gif');
-    background-size: contain;
+    background: linear-gradient(270deg, #ffe300, #02ff00, #0600ff);
+    background-size: 600% 600%;
+    -webkit-animation: AnimationName 10s ease infinite;
+    -moz-animation: AnimationName 10s ease infinite;
+    animation: AnimationName 10s ease infinite;
+    /*background-image: url('https://media.giphy.com/media/ECWLeGxcKasCc/giphy.gif');
+    background-size: contain;*/
     /*background-image: linear-gradient(to bottom, #fdfbaf, #ffe2a5, #ffcbae, #ffb9c2, #fdafd8);*/
     /*box-shadow: inset 1px -12px 17px green; <--Jobba på skuggan på varje event*/
 }
 .eventColor_two {
-    background-image: linear-gradient(to bottom, #a044c0, #ee397d, #f3743e, #caaf2a, #82dc74);
+    background-image: url('https://media.giphy.com/media/cyhqbdmqGs5ig/giphy.gif');
+    background-size: contain;
+    /*background-image: linear-gradient(to bottom, #a044c0, #ee397d, #f3743e, #caaf2a, #82dc74);*/
 }
-.eventColorO_three {
-    background-image: linear-gradient(to bottom, #ffff00, #ffa100, #ff0051, #ff00ad, #000bff);
+.eventColor_three {
+    background-image: url('https://media.giphy.com/media/ujIIhN9fvwdsQ/giphy.gif');
+    background-size: contain;
+    /*background-image: linear-gradient(to bottom, #ffff00, #ffa100, #ff0051, #ff00ad, #000bff);*/
 }
 .eventColor_four {
-    background-image: linear-gradient(to bottom, #00ff43, #9bd700, #d1a900, #f27000, #ff0000);
+    background-image: url('https://media.giphy.com/media/4Q6o9ICLZzoCk/giphy.gif');
+    background-size: contain;
+    /*background-image: linear-gradient(to bottom, #00ff43, #9bd700, #d1a900, #f27000, #ff0000);*/
 }
 
 /*Accordion*/

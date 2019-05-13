@@ -59,6 +59,7 @@ namespace OneCalendar.Services
                 string userId = model.UserId.ToString();
                 string description = model.Description.Trim();
                 string title = model.Title.Trim();
+                string eventColor = model.EventColor.Trim();
 
                 CalenderTask taskToUpdate = await CalenderContext.CalenderTasks.FirstOrDefaultAsync(t => t.Id == model.EventId);
 
@@ -87,6 +88,7 @@ namespace OneCalendar.Services
                 taskToUpdate.TaskDescription = description;
                 taskToUpdate.StartDate = startDate;
                 taskToUpdate.EndDate = endDate;
+                taskToUpdate.EventColor = eventColor;
                 taskToUpdate.Edited = editedByList;
 
                 CalenderContext.CalenderTasks.Update(taskToUpdate);
@@ -133,6 +135,7 @@ namespace OneCalendar.Services
                 DateTime startDate = DateTime.Parse(model.Start);
                 DateTime endDate = DateTime.Parse(model.End);
                 string userId = model.UserId.ToString();
+                string eventColor = model.EventColor.Trim();
                 CalenderTask calenderTask = new CalenderTask()
                 {
                     TaskName = model.Title.Trim(),
@@ -140,6 +143,7 @@ namespace OneCalendar.Services
                     EndDate = endDate,
                     TaskDescription = model.Description.Trim(),
                     CreatedBy = userId,
+                    EventColor = eventColor,
                     Edited = null
                 };
                 await CalenderContext.CalenderTasks.AddAsync(calenderTask);
@@ -298,7 +302,7 @@ namespace OneCalendar.Services
                     Start = p.StartDate,
                     Description = p.TaskDescription,
                     End = p.EndDate,
-                    Color = p.Color,
+                    EventColor = p.EventColor,
                     TextColor = p.TextColor,
                     AllDay = false
 

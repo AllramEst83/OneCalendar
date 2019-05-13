@@ -209,7 +209,32 @@
 
                     </div>
                     <div class="form-group">
-                        <select class="form-control" id="groupSelectionModal"></select>
+                        <label>Egen bakgrundsfärg</label>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <input type="color" value="#ff0000" class="form-control" disabled/>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="color" value="#ff0000" class="form-control" disabled/>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="color" value="#ff0000" class="form-control" disabled/>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="eventColor">Bakgrundsfärg</label>
+                        <select class="form-control eventColor" id="eventColor" name="eventColor">
+                            <option value="eventColor_one">eventColor_one</option>
+                            <option value="eventColor_two">eventColor_two</option>
+                            <option value="eventColor_three">eventColor_three</option>
+                            <option value="eventColor_four">eventColor_four</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="groupSelectionModal">Eventgrupp</label>
+                        <select class="form-control" id="groupSelectionModal" name="groupSelectionModal"></select>
                     </div>
                 </div>
                 <input hidden id="eventId" value="" />

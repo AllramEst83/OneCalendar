@@ -45,7 +45,7 @@ namespace OneCalendar.Controllers
             bool DeleteEventReuslt = await CalenderService.DeleteCalenderEvent(model);
             if (!DeleteEventReuslt)
             {
-                return new JsonResult(new AddEventResponseModel()
+                return new JsonResult(new DeleteEventResponseModel()
                 {
                     Content = new { },
                     StatusCode = HttpStatusCode.UnprocessableEntity,
@@ -56,7 +56,7 @@ namespace OneCalendar.Controllers
 
             return JsonConvert
                .SerializeObject(
-                new AddEventResponseModel()
+                new DeleteEventResponseModel()
                 {
                     Content = DeleteEventReuslt,
                     StatusCode = HttpStatusCode.OK,

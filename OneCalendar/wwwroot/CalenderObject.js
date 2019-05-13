@@ -8,6 +8,35 @@ var FullCalenderVariables = {
 };
 
 var CalenderObject = {
+    GetSelectedDaterange: function (rangeSettings) {
+        var groups = LocalStorage.Get(LocalStorage.KeyToGroupsData),
+            outputHTML = "";     
+
+        var title = `<input type='text' placeholder='Skriv en titel' value='' class='form-control titleInput'/>`;
+        var description = `<input type='text' placeholder='Skriv en beskrivning' value="" class='form-control descriptionInput'/>`;
+        var start = `<input type='datetime-local' value="${rangeSettings.startEvent}" class='form-control startInput'/>`;
+        var end = `<input type='datetime-local' value="${rangeSettings.endEvent}" class='form-control endInput'/>`;
+
+        $.map(groups, function (val, index) {
+            outputHTML += `<option value='${val.id}'>${val.name}</option>`;
+        });
+
+        CalenderObject.EmptyModalInputsAndText();
+
+        $(".modal-title").append("Lägg till event");
+
+        var settings = {
+            eventIdAndGroupName: "",
+            title: title,
+            description: description,
+            start: start,
+            end: end,
+            outputHTML: outputHTML
+        };
+
+        CalenderObject.RenderModalInputs(settings);
+
+    },
     InitiateCalender: function () {
         moment().locale("sv");
 
@@ -31,42 +60,32 @@ var CalenderObject = {
             selectable: true,
             select: function (start, end, jsEvent, view) {
                 //https://fullcalendar.io/docs/v3/select-callback
-                alert('selected ' + moment(start).format("LLL") + ' to ' + moment(end).format("LLL"));
+                //alert('selected ' + moment(start).format("LLL") + ' to ' + moment(end).format("LLL"));
+
+                var startEvent = moment(start).format();
+                var endEvent = moment(end).format();
+
+                var rangeSettings = {
+                    startEvent: startEvent,
+                    endEvent: endEvent
+                };
+
+                CalenderObject.GetSelectedDaterange(rangeSettings);
+
             },
             dayClick: function (date, jsEvent, view) {
-                var groups = LocalStorage.Get(LocalStorage.KeyToGroupsData),
-                    selectHtml = "";
                 //alert('Clicked on: ' + moment(date).format("LLLL"));
 
                 var startEvent = date.format();
                 var endEvent = moment(date).add(30, 'minutes').format();
 
-                var title = `<input type='text' placeholder='Skriv en titel' value='' class='form-control titleInput'/>`;
-                var description = `<input type='text' placeholder='Skriv en beskrivning' value="" class='form-control descriptionInput'/>`;
-                var start = `<input type='datetime-local' value="${startEvent}" class='form-control startInput'/>`;
-                var end = `<input type='datetime-local' value="${endEvent}" class='form-control endInput'/>`;
+                var rangeSettings = {
+                    startEvent: startEvent,
+                    endEvent: endEvent
+                };  
 
+                CalenderObject.GetSelectedDaterange(rangeSettings);
 
-                $.map(groups, function (val, index) {
-                    selectHtml += `<option value='${val.id}'>${val.name}</option>`;
-                });
-
-                $(".modal-title").empty();
-                $("#calederEvent .title").empty();
-                $("#calederEvent .description").empty();
-                $("#calederEvent .start").empty();
-                $("#calederEvent .end").empty();
-                $("#calederEvent #groupSelectionModal").empty();
-
-                $(".modal-title").append("Lägg till event");
-                $("#calederEvent .title").append(title);
-                $("#calederEvent .description").append(description);
-                $("#calederEvent .start").append(start);
-                $("#calederEvent .end").append(end);
-                $("#calederEvent #groupSelectionModal").append(selectHtml);
-
-
-                $("#calederEvent").modal();
             },
             eventClick: function (calEvent, jsEvent, view) {
                 var groups = LocalStorage.Get(LocalStorage.KeyToGroupsData),
@@ -75,9 +94,7 @@ var CalenderObject = {
                 var eventIdAndGroupName = CalenderObject.SplitEventId(calEvent.id);
 
                 console.log(calEvent);
-
-                //alert('Event: ' + calEvent.title);
-
+                
                 if (FullCalenderVariables.DeselectEventColor !== null) {
                     FullCalenderVariables.DeselectEventColor.css('background-color', '#5B8005');
                 }
@@ -86,17 +103,10 @@ var CalenderObject = {
 
                 FullCalenderVariables.DeselectEventColor = jQuery(this);
 
-                $(".modal-title").empty();
-                $("#calederEvent .title").empty();
-                $("#calederEvent .description").empty();
-                $("#calederEvent .start").empty();
-                $("#calederEvent .end").empty();
-                $("#calederEvent #groupSelectionModal").empty();
-                $("#calederEvent #eventId").empty();
+                CalenderObject.EmptyModalInputsAndText();
 
                 var startEvent = calEvent.start.format();
                 var endEvent = calEvent.end.format();
-
 
 
                 if (groups !== "0") {
@@ -112,24 +122,23 @@ var CalenderObject = {
                     var outputHTML = userGroupName + selectHtml;
                 }
 
-                var title = `<input type='text' value='${calEvent.title}' class='form-control titleInput'/>`;
-                var description = `<input type='text' placeholder='Skriv en beskrivning' value="${calEvent.description}" class='form-control descriptionInput'/>`;
-                var start = `<input type='datetime-local' value="${startEvent}" class='form-control startInput'/>`;
-                var end = `<input type='datetime-local' value="${endEvent}" class='form-control endInput'/>`;
+                var title = `<label>Titel</label><input type='text' value='${calEvent.title}' class='form-control titleInput'/>`;
+                var description = `<label>Beskrivning</label><input type='text' placeholder='Skriv en beskrivning' value="${calEvent.description}" class='form-control descriptionInput'/>`;
+                var start = `<label>Star</label><input type='datetime-local' value="${startEvent}" class='form-control startInput'/>`;
+                var end = `<label>Slut</label><input type='datetime-local' value="${endEvent}" class='form-control endInput'/>`;
 
                 $(".modal-title").append("Ändra event");
 
-                var eventId = eventIdAndGroupName[0];
-                $("#calederEvent #eventId").attr('value', eventId);
-                $("#calederEvent .title").append(title);
-                $("#calederEvent .description").append(description);
-                $("#calederEvent .start").append(start);
-                $("#calederEvent .end").append(end);
+                var settings = {
+                    eventIdAndGroupName: eventIdAndGroupName[0],
+                    title: title,
+                    description: description,
+                    start: start,
+                    end: end,
+                    outputHTML: outputHTML
+                };
 
-                $("#calederEvent #groupSelectionModal").append(outputHTML);
-
-                $("#calederEvent").modal();
-
+                CalenderObject.RenderModalInputs(settings);
             },
             //validRange: {
             //    start: moment()
@@ -196,6 +205,25 @@ var CalenderObject = {
         }
 
     },
+    EmptyModalInputsAndText: function () {
+        $(".modal-title").empty();
+        $("#calederEvent .title").empty();
+        $("#calederEvent .description").empty();
+        $("#calederEvent .start").empty();
+        $("#calederEvent .end").empty();
+        $("#calederEvent #groupSelectionModal").empty();
+        $("#calederEvent #eventId").empty();
+    },
+    RenderModalInputs: function (settings) {
+        $("#calederEvent #eventId").attr('value', settings.eventIdAndGroupName);
+        $("#calederEvent .title").append(settings.title);
+        $("#calederEvent .description").append(settings.description);
+        $("#calederEvent .start").append(settings.start);
+        $("#calederEvent .end").append(settings.end);
+        $("#calederEvent #groupSelectionModal").append(settings.outputHTML);
+
+        $("#calederEvent").modal();
+    },
     GetEvents: function () {
 
         var userData = LocalStorage.Get(LocalStorage.KeyToUserData);
@@ -226,10 +254,9 @@ var CalenderObject = {
                                 "end": eventVal.end,
                                 "allDay": eventVal.allDay,
                                 "description": eventVal.description,
-                                //"color": eventVal.color,
                                 "textColor": eventVal.textColor,
                                 "borderColor": "black",
-                                "className":"eventColor_one"
+                                "className": eventVal.eventColor
                             });
                         });
                     });
@@ -316,6 +343,7 @@ var CalenderObject = {
                 end = "",
                 groupId = "",
                 eventId = "",
+                eventColor,
                 settings = {};
 
             title = $(".titleInput");
@@ -324,6 +352,7 @@ var CalenderObject = {
             end = $(".endInput");
             groupId = $("#groupSelectionModal");
             eventId = $("#eventId");
+            eventColor = $("#eventColor");
 
             if (CalenderObject.CheckEmptyInput(title) && CalenderObject.CheckEmptyInput(description)) {
                 var userData = LocalStorage.Get(LocalStorage.KeyToUserData);
@@ -336,6 +365,7 @@ var CalenderObject = {
                         description: description.val(),
                         start: start.val(),
                         end: end.val(),
+                        eventColor: eventColor.val(),
                         groupId: groupId.val()
                     };
                     if (!CalenderObject.CheckEmptyInput(eventId)) {
@@ -367,9 +397,13 @@ var CalenderObject = {
                                 CalenderObject.GetEvents();
                                 $('#calederEvent').modal('hide');
 
+                            } else if (calenderResponse.statusCode === 422) {
+                                $('#calederEvent').modal('hide');
+                                CalenderObject.UserMessages.Show("Felmeddelande", calenderResponse.description, "panel-danger");
+                                CalenderObject.UserMessages.Hide(6000);
                             }
-                        });
-                } else {
+                        }); 
+                } else { 
                     $('#calederEvent').modal('hide');
                     CalenderObject.UserMessages.Show("Meddelande", "V&#228;nligen logga in f&#246;r att skapa ett event.", "panel-info");
                     CalenderObject.UserMessages.Hide(6000);
@@ -462,7 +496,7 @@ var CalenderObject = {
                     messageBody.empty();
                     userMessageTitle.empty();
                 });
-            
+
 
 
 
@@ -500,11 +534,11 @@ var CalenderObject = {
 
                 })
                     .fail(function (jqXHR) {
-                    if (jqXHR.status === 401) {
-                        CalenderObject.UserMessages.Show("Felmeddelande", "Ett fel inträffade när när servern skulle anropas.", "panel-danger");
-                        CalenderObject.UserMessages.Hide(6000);
-                    }
-                });;
+                        if (jqXHR.status === 401) {
+                            CalenderObject.UserMessages.Show("Felmeddelande", "Ett fel inträffade när när servern skulle anropas.", "panel-danger");
+                            CalenderObject.UserMessages.Hide(6000);
+                        }
+                    });;
             }
         });
     },
