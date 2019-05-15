@@ -19,6 +19,7 @@ namespace OneCalendar.ViewModels.Validation
             RuleFor(vm => vm.Title).NotEmpty().WithMessage("Title cannot be empty");
             RuleFor(vm => vm.Description).NotEmpty().WithMessage("Description cannot be empty");
             RuleFor(vm => vm.EventColor).NotEmpty().WithMessage("EventColor cannot be empty");
+            RuleFor(vm => vm.EventTextColor).NotEmpty().WithMessage("EventColor cannot be empty");
 
         }
     }

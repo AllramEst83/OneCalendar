@@ -21,6 +21,8 @@ $(document).ready(function () {
     Accordion.BidnAccordion();
     CalenderObject.AddOrUpdateCalanderEvent();
     CalenderObject.DeleteEvent();
+    CalenderObject.AddNewGroup();
+    CalenderObject.Deletegroup();
     //LocalStorage.DeleteStorageOnBrowserClose();
 
 });

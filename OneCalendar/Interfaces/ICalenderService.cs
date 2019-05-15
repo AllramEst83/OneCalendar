@@ -21,5 +21,9 @@ namespace OneCalendar.Interfaces
         Task<bool> GroupExistById(int groupId);
         Task<CalenderGroup> RemoveUserFromCalenderGroup(int groupId, string userId);
         Task<bool> UserExistsInGroup(int groupId, string userId);
+        Task<bool> AddGroup(AddCalenderGroupViewModel model);
+        Task<bool> GroupExistsByName(string groupName);
+        Task<bool> DeleteGroupsById(List<int> groups);
+        Task<bool> GroupsExistsById(List<int> groups);
     }
 }

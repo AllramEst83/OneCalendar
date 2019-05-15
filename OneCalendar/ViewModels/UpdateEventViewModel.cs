@@ -14,6 +14,7 @@ namespace OneCalendar.ViewModels
         public string Start { get; set; }
         public string End { get; set; }
         public string EventColor { get; set; }
+        public string EventTextColor { get; set; }
         public int GroupId { get; set; }
         public int? EventId { get; set; }
     }

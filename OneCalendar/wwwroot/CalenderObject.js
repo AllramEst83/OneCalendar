@@ -10,7 +10,7 @@ var FullCalenderVariables = {
 var CalenderObject = {
     GetSelectedDaterange: function (rangeSettings) {
         var groups = LocalStorage.Get(LocalStorage.KeyToGroupsData),
-            outputHTML = "";     
+            outputHTML = "";
 
         var title = `<input type='text' placeholder='Skriv en titel' value='' class='form-control titleInput'/>`;
         var description = `<input type='text' placeholder='Skriv en beskrivning' value="" class='form-control descriptionInput'/>`;
@@ -82,7 +82,7 @@ var CalenderObject = {
                 var rangeSettings = {
                     startEvent: startEvent,
                     endEvent: endEvent
-                };  
+                };
 
                 CalenderObject.GetSelectedDaterange(rangeSettings);
 
@@ -94,7 +94,7 @@ var CalenderObject = {
                 var eventIdAndGroupName = CalenderObject.SplitEventId(calEvent.id);
 
                 console.log(calEvent);
-                
+
                 if (FullCalenderVariables.DeselectEventColor !== null) {
                     FullCalenderVariables.DeselectEventColor.css('background-color', '#5B8005');
                 }
@@ -254,7 +254,7 @@ var CalenderObject = {
                                 "end": eventVal.end,
                                 "allDay": eventVal.allDay,
                                 "description": eventVal.description,
-                                "textColor": eventVal.textColor,
+                                "textColor": eventVal.eventTextColor,
                                 "borderColor": "black",
                                 "className": eventVal.eventColor
                             });
@@ -326,6 +326,11 @@ var CalenderObject = {
         $("#assignGroupInput").empty().append(groupsHtml);
         $("#removeUserInput").empty().append(usersHtml);
         $("#removeGroupInput").empty().append(groupsHtml);
+        $("#addNewGroupUsers").empty().append(usersHtml);
+        $("#removeGroupSelect").empty().append(groupsHtml);
+        $("#addNewGroupUsers, #removeGroupSelect").select2({
+            width: 'resolve'
+        });
 
     },
     SplitEventId: function (eventId) {
@@ -344,7 +349,8 @@ var CalenderObject = {
                 groupId = "",
                 eventId = "",
                 eventColor,
-                settings = {};
+                eventTextColor = "";
+            settings = {};
 
             title = $(".titleInput");
             description = $(".descriptionInput");
@@ -353,6 +359,7 @@ var CalenderObject = {
             groupId = $("#groupSelectionModal");
             eventId = $("#eventId");
             eventColor = $("#eventColor");
+            eventTextColor = $("#eventTetxColor");
 
             if (CalenderObject.CheckEmptyInput(title) && CalenderObject.CheckEmptyInput(description)) {
                 var userData = LocalStorage.Get(LocalStorage.KeyToUserData);
@@ -366,6 +373,7 @@ var CalenderObject = {
                         start: start.val(),
                         end: end.val(),
                         eventColor: eventColor.val(),
+                        eventTextColor: eventTextColor.val(),
                         groupId: groupId.val()
                     };
                     if (!CalenderObject.CheckEmptyInput(eventId)) {
@@ -402,14 +410,135 @@ var CalenderObject = {
                                 CalenderObject.UserMessages.Show("Felmeddelande", calenderResponse.description, "panel-danger");
                                 CalenderObject.UserMessages.Hide(6000);
                             }
-                        }); 
-                } else { 
+                        });
+                } else {
                     $('#calederEvent').modal('hide');
                     CalenderObject.UserMessages.Show("Meddelande", "V&#228;nligen logga in f&#246;r att skapa ett event.", "panel-info");
                     CalenderObject.UserMessages.Hide(6000);
                 }
             }
         });
+    },
+    AddNewGroup: function () {
+        $("#addNewGroupButton").on('click', function () {
+            var groupName = "",
+                groupUsers = [];
+
+            groupUsers = $("#addNewGroupUsers").val();
+            groupName = $("#newGroupName");
+            if (CalenderObject.CheckEmptyInput(groupName) && CalenderObject.CheckIfArrayIsEmpty(groupUsers)) {
+                var userData = LocalStorage.Get(LocalStorage.KeyToUserData);
+                if (userData !== "0") {
+
+                    var createGroupData = {
+                        groupName: groupName.val(),
+                        groupUsers: groupUsers
+                    };
+                    var settings = {
+                        url: "https://localhost:44305/api/calender/addgroup",
+                        method: "POST",
+                        data: JSON.stringify(createGroupData),
+                        mediaType: 'application/json',
+                        token: userData.token
+                    };
+
+                    $.when(ApiObject.Request(settings)).then(function (calenderResponse) {
+                        //var calenderResponse = JSON.parse(data);
+                        if (calenderResponse.statusCode === 200) {
+
+                            CalenderObject.UserMessages.Show("Meddelande", calenderResponse.description, "panel-info");
+                            CalenderObject.UserMessages.Hide(6000);
+                            CalenderObject.GetAllUsersAndGroups();
+
+                        } else if (calenderResponse.statusCode === 422) {
+
+                            CalenderObject.UserMessages.Show("Felmeddelande", calenderResponse.description, "panel-danger");
+                            CalenderObject.UserMessages.Hide(6000);
+
+                        } else if (calenderResponse.statusCode === 409) {
+
+                            CalenderObject.UserMessages.Show("Felmeddelande", calenderResponse.description, "panel-danger");
+                            CalenderObject.UserMessages.Hide(6000);
+                        }
+                    });
+
+                } else {
+                    CalenderObject.UserMessages.Show("Meddelande", "V&#228;nligen logga in f&#246;r att lägga till en grupp.", "panel-info");
+                    CalenderObject.UserMessages.Hide(6000);
+                }
+
+
+            } else {
+                CalenderObject.UserMessages.Show("Felmeddelande", "V&#228;nligen ange ett gruppnamn eller välj minst en användare.", "panel-danger");
+                CalenderObject.UserMessages.Hide(6000);
+            }
+        });
+    },
+    Deletegroup: function () {
+
+        $("#removeGroupButton").on('click', function () {
+
+            var groups = $("#removeGroupSelect").val();
+
+            var deleteGroupData = {
+                groups: groups
+            };
+
+            var userData = LocalStorage.Get(LocalStorage.KeyToUserData);
+            var settings = {
+                url: "https://localhost:44305/api/calender/deletegroup",
+                method: "DELETE",
+                data: JSON.stringify(deleteGroupData),
+                mediaType: 'application/json',
+                token: userData.token
+            };
+    
+            if (CalenderObject.CheckIfArrayIsEmpty(groups)) {
+                if (userData !== "0") {
+
+                    $.when(ApiObject.Request(settings)).then(function (calenderResponse) {
+                        if (calenderResponse.statusCode === 200) {
+
+                            CalenderObject.UserMessages.Show("Meddelande", calenderResponse.description, "panel-info");
+                            CalenderObject.UserMessages.Hide(6000);
+                            CalenderObject.GetAllUsersAndGroups();
+                            CalenderObject.GetEvents();
+
+                        } else if (calenderResponse.statusCode === 422) {
+
+                            CalenderObject.UserMessages.Show("Felmeddelande", calenderResponse.description, "panel-danger");
+                            CalenderObject.UserMessages.Hide(6000);
+
+                        } else if (calenderResponse.statusCode === 404) {
+
+                            CalenderObject.UserMessages.Show("Felmeddelande", calenderResponse.description, "panel-danger");
+                            CalenderObject.UserMessages.Hide(6000);
+
+                        }
+                    });
+
+                } else {
+                    CalenderObject.UserMessages.Show("Meddelande", "V&#228;nligen logga in f&#246;r att lägga till en grupp.", "panel-info");
+                    CalenderObject.UserMessages.Hide(6000);
+                }
+            } else {
+                CalenderObject.UserMessages.Show("Felmeddelande", "V&#228;nligen välj minst en användare.", "panel-danger");
+                CalenderObject.UserMessages.Hide(6000);
+            }
+
+
+        });
+
+    },
+    CheckIfArrayIsEmpty: function (arr) {
+        if (!Array.isArray(arr)) {
+            return false;
+        }
+        if (arr.length > 0) {
+            return true;
+        } else {
+            return false;
+        }
     },
     CheckEmptyInput: function (input) {
         if (input.val() === "") {

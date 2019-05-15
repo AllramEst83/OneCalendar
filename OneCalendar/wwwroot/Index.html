@@ -11,6 +11,7 @@
 
     <link href="libraries/bootstrap-3.4.1/css/bootstrap.min.css" rel="stylesheet" />
     <link href="libraries/fullcalendar/fullcalendar.css" rel="stylesheet" />
+    <link href="libraries/select2/select2.min.css" rel="stylesheet" />
     <link href="css/app.css" rel="stylesheet" />
 
 </head>
@@ -177,6 +178,65 @@
                                 <!--Remove from Grupp/User Admin -->
                             </div>
                         </div>
+
+                        <div class="item">
+                            <div class="heading">Lägg till ny grupp</div>
+                            <div class="content">
+                                <!--AddNewgroup -->
+                                <div class="AddNewGroupPanel panel panel-info">
+
+                                    <div class="panel-heading">
+                                        <div>
+                                            <h3 class="panel-title">Lägg till ny grupp</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <label for="newGroupName">Gruppnamn</label>
+                                            <input type="text" id="newGroupName" class="form-control" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="addNewGroupUsers">Användare</label>
+                                            <select id="addNewGroupUsers" name="addNewGroupUsers" class="form-control" multiple="multiple" style="width: 100%"></select>
+                                        </div>
+                                        <div>
+                                            <input id="addNewGroupButton" style="width:100%;margin-bottom:15px;" type="button" value="Lägg till" class="btn btn-success" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!--AddNewGroup -->
+                            </div>
+                        </div>
+
+                        <div class="item">
+                            <div class="heading">Tabort grupp</div>
+                            <div class="content">
+                                <!--AddNewgroup -->
+                                <div class="AddNewGroupPanel panel panel-danger">
+
+                                    <div class="panel-heading">
+                                        <div>
+                                            <h3 class="panel-title">Tabort grupp</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <label for="removeGroupSelect">Grupper</label>
+                                            <select id="removeGroupSelect" name="removeGroupSelect" class="form-control" multiple="multiple" style="width: 100%"></select>
+                                        </div>
+                                        <div>
+                                            <input id="removeGroupButton" style="width:100%;margin-bottom:15px;" type="button" value="Lägg till" class="btn btn-success" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!--AddNewGroup -->
+                            </div>
+                        </div>
+
                     </div>
                     <!-- Accordion -->
                 </div>
@@ -212,16 +272,24 @@
                         <label>Egen bakgrundsfärg</label>
                         <div class="row">
                             <div class="col-md-4">
-                                <input type="color" value="#ff0000" class="form-control" disabled/>
+                                <input type="color" value="#ff0000" class="form-control" disabled />
                             </div>
                             <div class="col-md-4">
-                                <input type="color" value="#ff0000" class="form-control" disabled/>
+                                <input type="color" value="#ff0000" class="form-control" disabled />
                             </div>
                             <div class="col-md-4">
-                                <input type="color" value="#ff0000" class="form-control" disabled/>
+                                <input type="color" value="#ff0000" class="form-control" disabled />
                             </div>
                         </div>
 
+                    </div>
+                    <div class="form-group">
+                        <label for="eventTetxColor">Textfärg</label>
+                        <select class="form-control" id="eventTetxColor" name="eventTetxColor">
+                            <option value="black">Svart</option>
+                            <option value="white">Vit</option>
+                            <option value="pink">jazzy</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="eventColor">Bakgrundsfärg</label>
@@ -254,6 +322,7 @@
     <script src="libraries/moment/moment.js"></script>
     <script src="libraries/moment/moment-with-locales.min.js"></script>
     <script src="libraries/fullcalendar/fullcalendar.js"></script>
+    <script src="libraries/select2/select2.min.js"></script>
     <script src="LocalStorage.js"></script>
     <script src="ApiObject.js"></script>
     <script src="CalenderObject.js"></script>

@@ -22,6 +22,83 @@ namespace OneCalendar.Services
         public CalenderContext CalenderContext { get; }
         public IAccountService AccountService { get; }
 
+        public async Task<bool> AddGroup(AddCalenderGroupViewModel model)
+        {
+            List<Guid> userIds = model.GroupUsers;
+            foreach (Guid userId in userIds)
+            {
+                bool userExists = await AccountService.UserExistById(userId.ToString());
+                if (!userExists)
+                {
+                    return false;
+                }
+            }
+
+            string[] stringUserIds = userIds.Select(x => x.ToString()).ToArray();
+            string groupName = model.GroupName;
+
+            CalenderGroup calenderGroup = new CalenderGroup()
+            {
+                ListOfUserIds = stringUserIds,
+                Name = groupName
+            };
+
+            await CalenderContext.CalenderGroups.AddAsync(calenderGroup);
+            SaveChanges();
+
+            return true;
+        }
+
+        public async Task<bool> DeleteGroupsById(List<int> groups)
+        {
+            List<CalenderGroup> calenderGroups = await Task.FromResult(CalenderContext.CalenderGroups.Include(t => t.CalenderTasks).Where(x => groups.Contains(x.Id)).ToList());
+
+            if (calenderGroups == null)
+            {
+                return false;
+            }
+
+            foreach (CalenderGroup group in calenderGroups)
+            {
+                List<int> taskIds = group.CalenderTasks.Select(x => x.Id).ToList();
+
+                List<CalenderTask> calenderTasksToDelete = await CalenderContext.CalenderTasks.Where(x => taskIds.Contains(x.Id)).ToListAsync();
+
+                CalenderContext.CalenderTasks.RemoveRange(calenderTasksToDelete);
+            }
+
+            CalenderContext.CalenderGroups.RemoveRange(calenderGroups);
+            SaveChanges();
+
+            return true;
+        }
+
+        public async Task<bool> GroupsExistsById(List<int> groups)
+        {
+            foreach (int groupId in groups)
+            {
+                bool groupExists = await CalenderContext.CalenderGroups.AnyAsync(x => x.Id == groupId);
+                if (!groupExists)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public async Task<bool> GroupExistsByName(string groupName)
+        {
+            bool groupExists = await CalenderContext.CalenderGroups
+                .AnyAsync(x => x.Name.Trim().Equals(groupName.Trim(), StringComparison.CurrentCulture));
+            if (!groupExists)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public async Task<bool> DeleteCalenderEvent(DeleteEventViewModel model)
         {
             if (await EventExists(model.EventId))
@@ -60,6 +137,7 @@ namespace OneCalendar.Services
                 string description = model.Description.Trim();
                 string title = model.Title.Trim();
                 string eventColor = model.EventColor.Trim();
+                string eventTextColor = model.EventTextColor.Trim();
 
                 CalenderTask taskToUpdate = await CalenderContext.CalenderTasks.FirstOrDefaultAsync(t => t.Id == model.EventId);
 
@@ -89,6 +167,7 @@ namespace OneCalendar.Services
                 taskToUpdate.StartDate = startDate;
                 taskToUpdate.EndDate = endDate;
                 taskToUpdate.EventColor = eventColor;
+                taskToUpdate.EventTextColor = eventTextColor;
                 taskToUpdate.Edited = editedByList;
 
                 CalenderContext.CalenderTasks.Update(taskToUpdate);
@@ -136,6 +215,7 @@ namespace OneCalendar.Services
                 DateTime endDate = DateTime.Parse(model.End);
                 string userId = model.UserId.ToString();
                 string eventColor = model.EventColor.Trim();
+                string eventTextColor = model.EventTextColor.Trim();
                 CalenderTask calenderTask = new CalenderTask()
                 {
                     TaskName = model.Title.Trim(),
@@ -144,6 +224,7 @@ namespace OneCalendar.Services
                     TaskDescription = model.Description.Trim(),
                     CreatedBy = userId,
                     EventColor = eventColor,
+                    EventTextColor = eventTextColor,
                     Edited = null
                 };
                 await CalenderContext.CalenderTasks.AddAsync(calenderTask);
@@ -221,7 +302,7 @@ namespace OneCalendar.Services
             CalenderGroup group;
             if (!string.IsNullOrEmpty(userId))
             {
-                group = await CalenderContext.CalenderGroups.FirstOrDefaultAsync(x=>x.Id == groupId);
+                group = await CalenderContext.CalenderGroups.FirstOrDefaultAsync(x => x.Id == groupId);
                 if (group != null)
                 {
                     result = group.ListOfUserIds.Contains(userId);
@@ -303,7 +384,7 @@ namespace OneCalendar.Services
                     Description = p.TaskDescription,
                     End = p.EndDate,
                     EventColor = p.EventColor,
-                    TextColor = p.TextColor,
+                    EventTextColor = p.EventTextColor,
                     AllDay = false
 
                 }).ToList()

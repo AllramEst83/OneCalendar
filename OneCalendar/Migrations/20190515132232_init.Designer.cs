@@ -10,14 +10,14 @@ using OneCalendar.Context;
 namespace OneCalendar.Migrations
 {
     [DbContext(typeof(CalenderContext))]
-    [Migration("20190507091637_ChangedEditedByUserIdToString")]
-    partial class ChangedEditedByUserIdToString
+    [Migration("20190515132232_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
+                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -47,6 +47,10 @@ namespace OneCalendar.Migrations
                     b.Property<string>("CreatedBy");
 
                     b.Property<DateTime>("EndDate");
+
+                    b.Property<string>("EventColor");
+
+                    b.Property<string>("EventTextColor");
 
                     b.Property<DateTime>("StartDate");
 

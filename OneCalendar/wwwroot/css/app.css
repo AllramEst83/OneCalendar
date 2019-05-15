@@ -8,6 +8,15 @@
     /*background-color: rgba(214, 255, 176, 0.85);*/
 }
 
+#userNameInput:hover, #passwordInput:hover, #firstName:hover, #lastName:hover, #addUserName:hover, #addPassword:hover, #groupSelection:hover, #addUser:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#userNameInput, #passwordInput, #firstName, #lastName, #addUserName, #addPassword, #groupSelection, #addUser {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+}
+
+
 .loginPanel, .addNewUserPanel, .linkUserAndGroupOanel, .accordion {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }

@@ -14,7 +14,7 @@ namespace OneCalendar.ResponseModels
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public string EventColor { get; set; }
-        public string TextColor { get; set; }
+        public string EventTextColor { get; set; }
 
     }
 }

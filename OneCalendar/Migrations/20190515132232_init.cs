@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace OneCalendar.Migrations
 {
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -33,6 +33,8 @@ namespace OneCalendar.Migrations
                     EndDate = table.Column<DateTime>(nullable: false),
                     TaskDescription = table.Column<string>(nullable: true),
                     CreatedBy = table.Column<string>(nullable: true),
+                    EventColor = table.Column<string>(nullable: true),
+                    EventTextColor = table.Column<string>(nullable: true),
                     CalenderGroupId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -53,7 +55,7 @@ namespace OneCalendar.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     DateOfEdit = table.Column<DateTime>(nullable: false),
-                    EditedByUserId = table.Column<int>(nullable: false),
+                    EditedByUserId = table.Column<string>(nullable: true),
                     CalenderTaskId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>

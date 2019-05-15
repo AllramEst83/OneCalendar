@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using CaseSolutionsTokenValidationParameters.Models;
+﻿using CaseSolutionsTokenValidationParameters.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using OneCalendar.Context;
@@ -15,6 +8,10 @@ using OneCalendar.Interfaces;
 using OneCalendar.Models;
 using OneCalendar.ResponseModels;
 using OneCalendar.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace OneCalendar.Controllers
 {
@@ -31,6 +28,96 @@ namespace OneCalendar.Controllers
         public CalenderContext CalenderContext { get; }
         public ICalenderService CalenderService { get; }
         public IAccountService AccountService { get; }
+
+
+
+        [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
+        [HttpDelete]
+        public async Task<ActionResult<string>> DeleteGroup(DeleteGroupViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new OkObjectResult(new { messsage = "build error" });
+            }
+
+            List<int> groups = model.Groups;
+            bool groupExists = await CalenderService.GroupsExistsById(groups);
+            if (!groupExists)
+            {
+                return new JsonResult(new DeleteGroupResponse()
+                {
+                    Content = new { },
+                    StatusCode = HttpStatusCode.NotFound,
+                    Error = "conflict",
+                    Description = "Gruppnament hittades inte."
+                });
+            }
+
+            bool deleteGroupsResult = await CalenderService.DeleteGroupsById(groups);
+            if (!deleteGroupsResult)
+            {
+                return new JsonResult(new DeleteGroupResponse
+                {
+                    Content = new { },
+                    StatusCode = HttpStatusCode.UnprocessableEntity,
+                    Error = "unable_to_delete_calender_group",
+                    Description = "Unable to delete clendergroup."
+                });
+
+            }
+
+            return new JsonResult(new DeleteGroupResponse
+            {
+                Content = new { },
+                StatusCode = HttpStatusCode.OK,
+                Error = "successfully_delete_calender_group",
+                Description = "Successfully deleted calendergroup."
+            });
+        }
+
+        [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
+        [HttpPost]
+        public async Task<ActionResult<string>> AddGroup(AddCalenderGroupViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new OkObjectResult(new { messsage = "build error" });
+            }
+
+            string groupName = model.GroupName.Trim();
+            bool groupNameExists = await CalenderService.GroupExistsByName(groupName);
+            if(groupNameExists)
+            {
+               return new JsonResult(new AddUserToGroupResponse()
+                {
+                    Content = new { },
+                    StatusCode = HttpStatusCode.Conflict,
+                    Error = "conflict",
+                    Description = "Gruppnament finns redan. välj ett annat gruppnamn."
+                });
+            }
+
+            bool addGroupResult = await CalenderService.AddGroup(model);
+            if (!addGroupResult)
+            {
+                return new JsonResult(new AddCalenderGroupResponse
+                {
+                    Content = new { },
+                    StatusCode = HttpStatusCode.UnprocessableEntity,
+                    Error = "unable_to_create calender_group",
+                    Description = "Unable to add calendergroup at this time."
+                });
+            }
+
+            return new JsonResult(new AddCalenderGroupResponse
+            {
+                Content = model,
+                StatusCode = HttpStatusCode.OK,
+                Error = "calender_group_created",
+                Description = "Calendergroup successfully created."
+            });
+        }
+
 
         [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
         [HttpDelete]

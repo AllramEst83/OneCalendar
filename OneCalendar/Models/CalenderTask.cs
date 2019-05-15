@@ -16,6 +16,6 @@ namespace OneCalendar.Models
         public string CreatedBy { get; set; } //<--Manually insert UserId from Auth DB
         public IEnumerable<EditedByUser> Edited { get; set; }
         public string EventColor { get; set; }
-        public string TextColor { get; set; }
+        public string EventTextColor { get; set; }
     }
 }
