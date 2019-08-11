@@ -17,7 +17,7 @@ var FormObject = {
                 CalenderObject.UserMessages.Hide(6000);
             } else {
                 var settings = {
-                    "url": "https://localhost:44305/api/auth/login",
+                    "url": "/api/auth/login",
                     "method": "POST",
                     mediaType: 'application/json',
                     data: JSON.stringify({ userName: userName, password: password })
@@ -73,7 +73,7 @@ var FormObject = {
             var groupId = $('#groupSelection option:selected').val();
             if (userName !== '' && password !== '' && groupId !== '' && firstName !== '' && lastName !== '') {
                 var settings = {
-                    "url": "https://localhost:44305/api/auth/signup",
+                    "url": "/api/auth/signup",
                     "method": "POST",
                     mediaType: 'application/json',
                     data: JSON.stringify(
