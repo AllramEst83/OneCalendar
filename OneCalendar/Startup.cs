@@ -122,7 +122,7 @@ namespace OneCalendar
                 app.UseHsts();
             }
 
-            //seedService.SeedCalenderTasks();
+            seedService.SeedCalenderTasks();
 
             app.UseHttpsRedirection();
 

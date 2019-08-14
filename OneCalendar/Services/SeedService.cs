@@ -22,7 +22,7 @@ namespace OneCalendar.Services
 
         public void SeedCalenderTasks()
         {
-            _calenderContext.Database.EnsureCreated();
+            //_calenderContext.Database.EnsureCreated();
 
             _calenderContext.EditedByUser.RemoveRange(_calenderContext.EditedByUser);
             _calenderContext.CalenderTasks.RemoveRange(_calenderContext.CalenderTasks);

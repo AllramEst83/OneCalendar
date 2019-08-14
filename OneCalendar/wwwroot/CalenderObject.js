@@ -163,7 +163,7 @@ var CalenderObject = {
             console.log(`%c Found key: ${LocalStorage.KeyToUserData}, userName is: ${userData.userName}, ${userData.userId}`, "background: #222; color:#bada55");
 
             var settings = {
-                url: "https://localhost:44305/api/auth/revalidatetoken",
+                url: "/api/auth/revalidatetoken",
                 method: "POST",
                 mediaType: 'application/json',
                 token: userData.token
@@ -230,7 +230,7 @@ var CalenderObject = {
 
         if (userData !== "0") {
             var settings = {
-                url: "https://localhost:44305/api/calender/gettasksbyuserid",
+                url: "/api/calender/gettasksbyuserid",
                 method: "GET",
                 data: { id: userData.userId },
                 mediaType: 'application/json',
@@ -276,7 +276,7 @@ var CalenderObject = {
 
         //-->Save groups in localStorage<---
         var settings = {
-            url: "https://localhost:44305/api/calender/getallgroups",
+            url: "/api/calender/getallgroups",
             method: "GET",
             mediaType: 'application/json'
         };
@@ -378,7 +378,7 @@ var CalenderObject = {
                     };
                     if (!CalenderObject.CheckEmptyInput(eventId)) {
                         settings = {
-                            url: "https://localhost:44305/api/calender/addevent",
+                            url: "/api/calender/addevent",
                             method: "POST",
                             data: JSON.stringify(calenderData),
                             mediaType: 'application/json',
@@ -387,7 +387,7 @@ var CalenderObject = {
                     } else {
                         calenderData.eventId = eventId.val();
                         settings = {
-                            url: "https://localhost:44305/api/calender/updateevent",
+                            url: "/api/calender/updateevent",
                             method: "PUT",
                             data: JSON.stringify(calenderData),
                             mediaType: 'application/json',
@@ -435,7 +435,7 @@ var CalenderObject = {
                         groupUsers: groupUsers
                     };
                     var settings = {
-                        url: "https://localhost:44305/api/calender/addgroup",
+                        url: "/api/calender/addgroup",
                         method: "POST",
                         data: JSON.stringify(createGroupData),
                         mediaType: 'application/json',
@@ -486,7 +486,7 @@ var CalenderObject = {
 
             var userData = LocalStorage.Get(LocalStorage.KeyToUserData);
             var settings = {
-                url: "https://localhost:44305/api/calender/deletegroup",
+                url: "/api/calender/deletegroup",
                 method: "DELETE",
                 data: JSON.stringify(deleteGroupData),
                 mediaType: 'application/json',
@@ -565,7 +565,7 @@ var CalenderObject = {
                 };
 
                 var settings = {
-                    url: "https://localhost:44305/api/calender/deleteevent",
+                    url: "/api/calender/deleteevent",
                     method: "DELETE",
                     data: JSON.stringify(calenderData),
                     mediaType: 'application/json',
@@ -643,7 +643,7 @@ var CalenderObject = {
                 var calenderData = { userId: userId, groupId: groupId };
                 var userData = LocalStorage.Get(LocalStorage.KeyToUserData);
                 var settings = {
-                    url: "https://localhost:44305/api/calender/addusertogroup",
+                    url: "/api/calender/addusertogroup",
                     method: "POST",
                     data: JSON.stringify(calenderData),
                     mediaType: 'application/json',
@@ -685,7 +685,7 @@ var CalenderObject = {
                 var userData = LocalStorage.Get(LocalStorage.KeyToUserData);
 
                 var settings = {
-                    url: "https://localhost:44305/api/calender/removeuserfromgroup",
+                    url: "/api/calender/removeuserfromgroup",
                     method: "DELETE",
                     data: JSON.stringify(calenderData),
                     mediaType: 'application/json',
