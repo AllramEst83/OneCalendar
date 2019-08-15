@@ -86,9 +86,9 @@ namespace OneCalendar.Controllers
 
             string groupName = model.GroupName.Trim();
             bool groupNameExists = await CalenderService.GroupExistsByName(groupName);
-            if(groupNameExists)
+            if (groupNameExists)
             {
-               return new JsonResult(new AddUserToGroupResponse()
+                return new JsonResult(new AddUserToGroupResponse()
                 {
                     Content = new { },
                     StatusCode = HttpStatusCode.Conflict,
@@ -213,7 +213,7 @@ namespace OneCalendar.Controllers
                     Content = new { },
                     StatusCode = HttpStatusCode.UnprocessableEntity,
                     Error = "unable_to_add_event",
-                    Description = "Unable to add event at this time."
+                    Description = "Unable to add event at this time."                              
                 });
             }
 
@@ -234,16 +234,32 @@ namespace OneCalendar.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<string>> GetAllGroups()
         {
-            List<ShortHandCalanderGroup> groups = await CalenderService.GetCalenderGroups();
-            List<ShortHandUsers> users = await AccountService.GetAllUsers();
-
-            UsersAndGroups usersAndGroupsToClient = new UsersAndGroups()
+            List<ShortHandCalanderGroup> groups = new List<ShortHandCalanderGroup>();
+            List<ShortHandUsers> users = new List<ShortHandUsers>();
+            UsersAndGroups usersAndGroupsToClient;
+            try
             {
-                Users = users,
-                Groups = groups
-            };
+                groups = await CalenderService.GetCalenderGroups();
+                users = await AccountService.GetAllUsers();
+            }
+            catch (Exception ex)
+            {
+
+
+            }
+            finally
+            {
+                usersAndGroupsToClient = new UsersAndGroups()
+                {
+                    Users = users,
+                    Groups = groups
+                };
+
+            }
+
 
             return new JsonResult(usersAndGroupsToClient);
         }

@@ -82,7 +82,7 @@ var FormObject = {
                             lastName: lastName,
                             email: userName,
                             password: password,
-                            role: "admin_access",
+                            role: "admin_access",//<--Bygg så att man väljer vilken roll som man vill ha.
                             groupId: groupId
                         })
                 };

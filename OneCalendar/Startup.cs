@@ -122,7 +122,7 @@ namespace OneCalendar
                 app.UseHsts();
             }
 
-            seedService.SeedCalenderTasks();
+            //seedService.SeedCalenderTasks();
 
             app.UseHttpsRedirection();
 
@@ -141,3 +141,7 @@ namespace OneCalendar
         }
     }
 }
+
+
+//To attach web app tp process:
+//https://www.locktar.nl/uncategorized/azure-remote-debugging-manually-in-visual-studio-2017/
