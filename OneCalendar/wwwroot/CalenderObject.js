@@ -276,7 +276,7 @@ var CalenderObject = {
 
         //-->Save groups in localStorage<---
         var settings = {
-            url: "/api/calender/getallgroups",
+            url: "/api/calender/getinfo",
             method: "GET",
             mediaType: 'application/json'
         };
@@ -284,13 +284,15 @@ var CalenderObject = {
         $.when(ApiObject.SimpleRequest(settings)).then(function (data) {
 
             var groups = data.groups,
-                users = data.users;
+                users = data.users,
+                roles = data.roles;
 
 
-            if (groups.length !== 'undefined' && users !== 'undefined') {
+            if (groups.length !== 'undefined' && users !== 'undefined' && roles !== 'undefined') {
 
                 LocalStorage.Set(LocalStorage.KeyToGroupsData, groups);
                 LocalStorage.Set(LocalStorage.KeyToListOfUsersData, users);
+                LocalStorage.Set(LocalStorage.KeyToUserRolesData, roles);
 
                 CalenderObject.AddGroupAndUserInputs();
             }
@@ -301,10 +303,13 @@ var CalenderObject = {
 
         var groups = LocalStorage.Get(LocalStorage.KeyToGroupsData);
         var users = LocalStorage.Get(LocalStorage.KeyToListOfUsersData);
+        var roles = LocalStorage.Get(LocalStorage.KeyToUserRolesData);
 
         var groupsHtml = "",
-            usersHtml = "";
+            usersHtml = "",
+            rolesHtml = "";
 
+        //Groups
         if (groups !== "0") {
             $.map(groups, function (val, index) {
                 groupsHtml += `<option value='${val.id}'>${val.name}</option>`;
@@ -313,9 +318,19 @@ var CalenderObject = {
             groupsHtml = "Inga grupper";
         }
 
+        //Users
         if (users !== "0") {
             $.map(users, function (val, index) {
                 usersHtml += `<option value='${val.id}'>${val.userName}</option>`;
+            });
+        } else {
+            usersHtml = "Inga användare";
+        }
+
+        //Roles
+        if (roles !== "0") {
+            $.map(roles, function (val, index) {
+                rolesHtml += `<option value='${val.role}'>${val.role}</option>`;
             });
         } else {
             usersHtml = "Inga användare";
@@ -328,6 +343,7 @@ var CalenderObject = {
         $("#removeGroupInput").empty().append(groupsHtml);
         $("#addNewGroupUsers").empty().append(usersHtml);
         $("#removeGroupSelect").empty().append(groupsHtml);
+        $("#userRoles").empty().append(rolesHtml);
         $("#addNewGroupUsers, #removeGroupSelect").select2({
             width: 'resolve'
         });
@@ -492,7 +508,7 @@ var CalenderObject = {
                 mediaType: 'application/json',
                 token: userData.token
             };
-    
+
             if (CalenderObject.CheckIfArrayIsEmpty(groups)) {
                 if (userData !== "0") {
 

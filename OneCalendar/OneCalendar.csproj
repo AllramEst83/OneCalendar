@@ -33,6 +33,7 @@
     <None Include="wwwroot\ApiObject.js" />
     <None Include="wwwroot\CalenderObject.js" />
     <None Include="wwwroot\css\app.css" />
+    <None Include="wwwroot\favicon.ico" />
     <None Include="wwwroot\FormObject.js" />
     <None Include="wwwroot\Index.html" />
     <None Include="wwwroot\libraries\bootstrap-3.4.1\css\bootstrap-theme.css" />

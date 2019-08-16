@@ -83,7 +83,7 @@ var FormObject = {
                             lastName: lastName,
                             email: userName,
                             password: password,
-                            role: "admin_access",//<--Bygg så att man väljer vilken roll som man vill ha.
+                            role: userRole,//<--Bygg så att man väljer vilken roll som man vill ha.
                             groupId: groupId
                         })
                 };
@@ -96,10 +96,10 @@ var FormObject = {
                                 CalenderObject.UserMessages.Show("Meddelande", data.description, "panel-info");
                             } else if (data.statusCode === 400) {
                                 CalenderObject.UserMessages.Show("Felmeddelande", data.description, "panel-danger");
-                            }else if (data.statusCode === 409) {
+                            } else if (data.statusCode === 409) {
                                 CalenderObject.UserMessages.Show("Felmeddelande", data.description, "panel-danger");
                             } else if (data.statusCode === 404) {
-                                CalenderObject.UserMessages.Show("Felmeddelande", data.description, "panel-danger");                      
+                                CalenderObject.UserMessages.Show("Felmeddelande", data.description, "panel-danger");
                             }
 
                             CalenderObject.UserMessages.Hide(6000);
@@ -107,7 +107,7 @@ var FormObject = {
                     });
             } else {
                 console.log("please add userName and password");
-                CalenderObject.UserMessages.Show("Felmeddelande", "V&#228;nligen ange anv&#228;ndarnamn, l&#246;senord, f&#246;rnamn och efternamn", "panel-danger");  
+                CalenderObject.UserMessages.Show("Felmeddelande", "V&#228;nligen ange anv&#228;ndarnamn, l&#246;senord, f&#246;rnamn och efternamn", "panel-danger");
                 CalenderObject.UserMessages.Hide(6000);
             }
         });

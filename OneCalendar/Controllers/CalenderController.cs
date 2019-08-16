@@ -235,7 +235,7 @@ namespace OneCalendar.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<string>> GetAllGroups()
+        public async Task<ActionResult<string>> GetInfo()
         {
             List<ShortHandCalanderGroup> groups = new List<ShortHandCalanderGroup>();
             List<ShortHandUsers> users = new List<ShortHandUsers>();
@@ -249,8 +249,8 @@ namespace OneCalendar.Controllers
             }
             catch (Exception ex)
             {
-
-
+                
+                //Skriv felmeddelande som frontend kan hantera
             }
             finally
             {

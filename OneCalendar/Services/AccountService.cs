@@ -194,6 +194,7 @@ namespace OneCalendar.Services
             IQueryable<IdentityRole> query = await Task.FromResult(RoleManager.Roles);
             List<Roles> roles = query.Select(x => new Roles()
             {
+                Id = x.Id,
                 Role = x.Name
 
             }).ToList();

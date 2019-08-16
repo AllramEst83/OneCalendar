@@ -6,6 +6,7 @@ var LocalStorage = {
     KeyToTaskData: "___.___One__Calender__Task__Data___.___",
     KeyToGroupsData: "___.___One__Calender__Grouop__Data___.___",
     KeyToListOfUsersData: "___.___List__Of__Users__Data___.___",
+    KeyToUserRolesData: "___.___List__Of__User__Role__Data___.___",
 
     Set: function (key, input) {      
 
