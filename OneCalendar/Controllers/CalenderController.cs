@@ -246,6 +246,7 @@ namespace OneCalendar.Controllers
                 groups = await CalenderService.GetCalenderGroups();
                 users = await AccountService.GetAllUsers();
                 roles = await AccountService.GetRoles();
+
             }
             catch (Exception ex)
             {
