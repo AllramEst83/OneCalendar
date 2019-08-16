@@ -30,7 +30,7 @@ namespace OneCalendar.Services
         {
             List<ShortHandUsers> listOfUsers = null;
 
-            listOfUsers = await Task.FromResult(UserManager.Users.Select(x=> new ShortHandUsers() {Id = x.Id, UserName = x.UserName }).ToList());
+            listOfUsers = await Task.FromResult(UserManager.Users.Select(x => new ShortHandUsers() { Id = x.Id, UserName = x.UserName }).ToList());
 
             return listOfUsers;
         }
@@ -186,6 +186,19 @@ namespace OneCalendar.Services
                 SaveChages();
 
             }
+        }
+
+        public async Task<List<Roles>> GetRoles()
+        {
+
+            IQueryable<IdentityRole> query = await Task.FromResult(RoleManager.Roles);
+            List<Roles> roles = query.Select(x => new Roles()
+            {
+                Role = x.Name
+
+            }).ToList();
+
+            return roles;
         }
 
         public async Task<IList<string>> GetRolesForUser(User user)

@@ -239,11 +239,13 @@ namespace OneCalendar.Controllers
         {
             List<ShortHandCalanderGroup> groups = new List<ShortHandCalanderGroup>();
             List<ShortHandUsers> users = new List<ShortHandUsers>();
+            List<Roles> roles = new List<Roles>();
             UsersAndGroups usersAndGroupsToClient;
             try
             {
                 groups = await CalenderService.GetCalenderGroups();
                 users = await AccountService.GetAllUsers();
+                roles = await AccountService.GetRoles();
             }
             catch (Exception ex)
             {
@@ -255,7 +257,8 @@ namespace OneCalendar.Controllers
                 usersAndGroupsToClient = new UsersAndGroups()
                 {
                     Users = users,
-                    Groups = groups
+                    Groups = groups,
+                    Roles = roles
                 };
 
             }

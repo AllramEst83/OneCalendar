@@ -9,5 +9,6 @@ namespace OneCalendar.Models
     {
         public List<ShortHandCalanderGroup> Groups { get; set; }
         public List<ShortHandUsers> Users { get; set; }
+        public List<Roles> Roles  { get; set; }
     }
 }

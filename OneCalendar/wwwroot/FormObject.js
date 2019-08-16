@@ -66,12 +66,13 @@ var FormObject = {
         $("#addUser").on('click', function (e) {
             e.preventDefault();
 
-            var firstName = $("#firstName").val();
-            var lastName = $("#lastName").val();
-            var userName = $("#addUserName").val();
-            var password = $("#addPassword").val();
-            var groupId = $('#groupSelection option:selected').val();
-            if (userName !== '' && password !== '' && groupId !== '' && firstName !== '' && lastName !== '') {
+            var firstName = $("#firstName").val(),
+                lastName = $("#lastName").val(),
+                userName = $("#addUserName").val(),
+                password = $("#addPassword").val(),
+                groupId = $('#groupSelection option:selected').val(),
+                userRole = $("#userRoles option:selected").val();
+            if (userName !== '' && password !== '' && groupId !== '' && firstName !== '' && lastName !== '' && userRole !== '') {
                 var settings = {
                     "url": "/api/auth/signup",
                     "method": "POST",
