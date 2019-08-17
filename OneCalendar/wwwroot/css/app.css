@@ -1,9 +1,13 @@
 ﻿
 
+
+
+
+
 #calender {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 20px;
     background-image: linear-gradient(to top, #d16ba5, #ee7d96, #fe978a, #ffb587, #ffd391, #f5e297, #e9f0a2, #dafeb4, #beffbe, #a0ffcd, #80fede, #5ffbf1);
     /*background-color: rgba(214, 255, 176, 0.85);*/
 }
@@ -47,12 +51,12 @@
     border-color: rgba(62, 53, 20, 0.4392156862745098) !important;
 }
 
-/*Gridfärg på den valda dagen*/
+    /*Gridfärg på den valda dagen*/
     .fc-unthemed td.fc-today {
         background: rgba(223, 150, 253, 0.51);
     }
 
-    /*EventKlass test*/
+/*EventKlass test*/
 
 @-webkit-keyframes AnimationName {
     0% {
@@ -107,16 +111,19 @@
     /*background-image: linear-gradient(to bottom, #fdfbaf, #ffe2a5, #ffcbae, #ffb9c2, #fdafd8);*/
     /*box-shadow: inset 1px -12px 17px green; <--Jobba på skuggan på varje event*/
 }
+
 .eventColor_two {
     background-image: url('https://media.giphy.com/media/cyhqbdmqGs5ig/giphy.gif');
     background-size: contain;
     /*background-image: linear-gradient(to bottom, #a044c0, #ee397d, #f3743e, #caaf2a, #82dc74);*/
 }
+
 .eventColor_three {
     background-image: url('https://media.giphy.com/media/ujIIhN9fvwdsQ/giphy.gif');
     background-size: contain;
     /*background-image: linear-gradient(to bottom, #ffff00, #ffa100, #ff0051, #ff00ad, #000bff);*/
 }
+
 .eventColor_four {
     background-image: url('https://media.giphy.com/media/4Q6o9ICLZzoCk/giphy.gif');
     background-size: contain;
@@ -160,3 +167,24 @@
         font-size: 14px;
     }
 /*Accordion*/
+
+
+/*MediaQueries*/
+@media only screen and (max-width: 480px) {
+
+    .calenderWrapper {
+        margin: 5px 5px 5px 5px;
+        padding: 2px 2px 0px 2px;
+    }
+
+    .container-fluid {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    .accordion{
+        margin:15px auto auto auto
+    }
+}
+
+/*MediaQueries*/

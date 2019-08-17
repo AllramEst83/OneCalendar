@@ -42,14 +42,8 @@ var CalenderObject = {
         var screenWidth = $(window).width();
         var smallScreenThreshHold = 480;
         if (screenWidth <= smallScreenThreshHold) {
-            var _container = $(".container-fluid");
-            var _calenderWrapper = $(".calenderWrapper");
+
             var _calender = $('#calender');
-
-            _container.css({ 'padding-right': '0px', 'padding-left': '0px' });
-            _calenderWrapper.css({ 'margin': '5px' });
-            _calenderWrapper.css({ 'padding': '0px' });
-
             _calender.fullCalendar('changeView', 'agendaThreeDay');
 
             var calHeight = $(window).height() * 0.83;
