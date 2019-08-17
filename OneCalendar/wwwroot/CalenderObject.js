@@ -39,17 +39,24 @@ var CalenderObject = {
     },
     ChangeToThreeDayViewIfSmallScreen: function () {
 
-        var screenWidth = $(window).width();
-        var smallScreenThreshHold = 480;
-        if (screenWidth <= smallScreenThreshHold) {
-
+        if (/Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
             var _calender = $('#calender');
+            var _calenderWrapper = $(".calenderWrapper");
+            var _container = $(".container-fluid");
+            var _accordion = $(".accordion");
+
+            _container.css({ 'padding-right': '0px', 'padding-left': '0px' });
+
+            _accordion.css({ 'margin': '15px auto auto auto' });
+
+            _calenderWrapper.css({ 'margin': '5px 5px 5px 5px' });
+            _calenderWrapper.css({ 'padding': '2px 2px 10px 2px' });
+
             _calender.fullCalendar('changeView', 'agendaThreeDay');
 
             var calHeight = $(window).height() * 0.83;
             _calender.fullCalendar('option', 'height', calHeight);
         }
-
     },
     InitiateCalender: function () {
         moment().locale("sv");
