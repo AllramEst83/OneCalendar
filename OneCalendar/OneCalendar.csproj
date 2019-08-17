@@ -15,18 +15,12 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
-    <PackageReference Include="FluentValidation.AspNetCore" Version="8.3.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="8.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
-    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.4.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.5.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="CaseSolutionsTokenValidationParameters">
-      <HintPath>..\..\CaseSolutionsTokenValidationParameters\CaseSolutionsTokenValidationParameters\bin\Debug\netcoreapp2.2\CaseSolutionsTokenValidationParameters.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>
@@ -45,7 +39,7 @@
     <None Include="wwwroot\libraries\bootstrap-3.4.1\css\bootstrap.min.css" />
     <None Include="wwwroot\libraries\bootstrap-3.4.1\css\bootstrap.min.css.map" />
     <None Include="wwwroot\libraries\bootstrap-3.4.1\fonts\glyphicons-halflings-regular.eot" />
-    <None Include="wwwroot\libraries\bootstrap-3.4.1\fonts\glyphicons-halflings-regular.svg" />
+    <None Include="wwwroot\libraries\bootstrap-3.4.1\fonts\glyphicons-hx§alflings-regular.svg" />
     <None Include="wwwroot\libraries\bootstrap-3.4.1\fonts\glyphicons-halflings-regular.ttf" />
     <None Include="wwwroot\libraries\bootstrap-3.4.1\fonts\glyphicons-halflings-regular.woff" />
     <None Include="wwwroot\libraries\bootstrap-3.4.1\fonts\glyphicons-halflings-regular.woff2" />
@@ -59,6 +53,10 @@
     <None Include="wwwroot\libraries\moment\sv.js" />
     <None Include="wwwroot\LocalStorage.js" />
     <None Include="wwwroot\main.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\CaseSolutionsTokenValidationParameters\CaseSolutionsTokenValidationParameters\CaseSolutionsTokenValidationParameters.csproj" />
   </ItemGroup>
 
 </Project>

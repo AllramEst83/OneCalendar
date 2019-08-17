@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneCalendar", "OneCalendar\OneCalendar.csproj", "{35083E48-A74D-445C-B987-D4BB8DB99A3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneCalendar", "OneCalendar\OneCalendar.csproj", "{35083E48-A74D-445C-B987-D4BB8DB99A3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalenderReactApp", "CalenderReactApp\CalenderReactApp.csproj", "{378C0289-91E4-4E8E-BAF8-A62D1A061E76}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalenderReactApp", "CalenderReactApp\CalenderReactApp.csproj", "{378C0289-91E4-4E8E-BAF8-A62D1A061E76}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CaseSolutionsTokenValidationParameters", "..\CaseSolutionsTokenValidationParameters\CaseSolutionsTokenValidationParameters\CaseSolutionsTokenValidationParameters.csproj", "{DAD20FD5-DC47-400E-9DFF-E114B236C349}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,9 +20,12 @@ Global
 		{35083E48-A74D-445C-B987-D4BB8DB99A3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35083E48-A74D-445C-B987-D4BB8DB99A3F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{378C0289-91E4-4E8E-BAF8-A62D1A061E76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{378C0289-91E4-4E8E-BAF8-A62D1A061E76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{378C0289-91E4-4E8E-BAF8-A62D1A061E76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{378C0289-91E4-4E8E-BAF8-A62D1A061E76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAD20FD5-DC47-400E-9DFF-E114B236C349}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAD20FD5-DC47-400E-9DFF-E114B236C349}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAD20FD5-DC47-400E-9DFF-E114B236C349}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAD20FD5-DC47-400E-9DFF-E114B236C349}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
