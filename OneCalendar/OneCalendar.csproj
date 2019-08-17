@@ -56,9 +56,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="CaseSolutionsTokenValidationParameters">
-      <HintPath>bin\Release\netcoreapp2.2\CaseSolutionsTokenValidationParameters.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\..\CaseSolutionsTokenValidationParameters\CaseSolutionsTokenValidationParameters\CaseSolutionsTokenValidationParameters.csproj" />
   </ItemGroup>
+  
 
 </Project>

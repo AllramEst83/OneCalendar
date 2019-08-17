@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneCalendar", "OneCalendar\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalenderReactApp", "CalenderReactApp\CalenderReactApp.csproj", "{378C0289-91E4-4E8E-BAF8-A62D1A061E76}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CaseSolutionsTokenValidationParameters", "..\CaseSolutionsTokenValidationParameters\CaseSolutionsTokenValidationParameters\CaseSolutionsTokenValidationParameters.csproj", "{CF62FC48-75BA-49D1-B599-48B6DBA1B796}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{378C0289-91E4-4E8E-BAF8-A62D1A061E76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{378C0289-91E4-4E8E-BAF8-A62D1A061E76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{378C0289-91E4-4E8E-BAF8-A62D1A061E76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF62FC48-75BA-49D1-B599-48B6DBA1B796}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF62FC48-75BA-49D1-B599-48B6DBA1B796}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF62FC48-75BA-49D1-B599-48B6DBA1B796}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF62FC48-75BA-49D1-B599-48B6DBA1B796}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
