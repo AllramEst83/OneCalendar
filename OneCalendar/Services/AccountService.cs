@@ -1,4 +1,4 @@
-﻿using CaseSolutionsTokenValidationParameters.Models;
+﻿using TokenValidation.Models;
 using Microsoft.AspNetCore.Identity;
 using OneCalendar.Data;
 using OneCalendar.Interfaces;
