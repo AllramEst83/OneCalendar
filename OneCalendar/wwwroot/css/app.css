@@ -170,11 +170,11 @@
 
 
 /*MediaQueries*/
-@media only screen and (max-width: 480px) {
 
+@media only screen and (min-resolution: 117dpi) and (max-resolution: 119dpi), only screen and (min-resolution: 131dpi) and (max-resolution: 133dpi), only screen and (min-resolution: 145dpi) and (max-resolution: 154dpi), only screen and (min-resolution: 162dpi) and (max-resolution: 164dpi), only screen and (min-resolution: 169dpi) {
     .calenderWrapper {
         margin: 5px 5px 5px 5px;
-        padding: 2px 2px 0px 2px;
+        padding: 2px 2px 10px 2px;
     }
 
     .container-fluid {
@@ -182,9 +182,28 @@
         padding-right: 0px;
     }
 
-    .accordion{
-        margin:15px auto auto auto
+    .accordion {
+        margin: 15px auto auto auto
     }
+
+    /* Your touch-specific css goes here */
+}
+
+@media only screen and (min-resolution: 165dpi) and (max-resolution: 168dpi), only screen and (min-resolution: 155dpi) and (max-resolution: 160dpi), only screen and (min-resolution: 134dpi) and (max-resolution: 144dpi), only screen and (min-resolution: 120dpi) and (max-resolution: 130dpi), only screen and (max-resolution: 116dpi) {
+
+    /* Your click-specific css goes here */
+}
+
+@media (min-width: 541px) {
+    /* Big view stuff goes here. */
+}
+
+@media (max-width: 540px) and (min-width: 400px) {
+    /* Smaller view stuff goes here. */
+}
+
+@media (max-width: 399px) {
+    /* Stuff for really small views goes here. */
 }
 
 /*MediaQueries*/
