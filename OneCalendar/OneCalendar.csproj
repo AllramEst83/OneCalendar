@@ -57,7 +57,7 @@
 
   <ItemGroup>
     <Reference Include="CaseSolutionsTokenValidationParameters">
-      <HintPath>..\..\OneCalendar\OneCalendar\bin\Release\netcoreapp2.2\CaseSolutionsTokenValidationParameters.dll</HintPath>
+      <HintPath>bin\Release\netcoreapp2.2\CaseSolutionsTokenValidationParameters.dll</HintPath>
     </Reference>
   </ItemGroup>
 
