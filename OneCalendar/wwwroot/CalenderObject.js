@@ -37,6 +37,26 @@ var CalenderObject = {
         CalenderObject.RenderModalInputs(settings);
 
     },
+    ChangeToThreeDayViewIfSmallScreen: function () {
+
+        var screenWidth = $(window).width();
+        var smallScreenThreshHold = 480;
+        if (screenWidth <= smallScreenThreshHold) {
+            var _container = $(".container-fluid");
+            var _calenderWrapper = $(".calenderWrapper");
+            var _calender = $('#calender');
+
+            _container.css({ 'padding-right': '0px', 'padding-left': '0px' });
+            _calenderWrapper.css({ 'margin': '5px' });
+            _calenderWrapper.css({ 'padding': '0px' });
+
+            _calender.fullCalendar('changeView', 'agendaThreeDay');
+
+            var calHeight = $(window).height() * 0.83;
+            _calender.fullCalendar('option', 'height', calHeight);
+        }
+
+    },
     InitiateCalender: function () {
         moment().locale("sv");
 
@@ -44,7 +64,7 @@ var CalenderObject = {
             header: {
                 left: 'prev,next today',
                 center: 'title',
-                right: 'month, agendaWeek,listWeek'
+                right: 'month, agendaWeek,listWeek,agendaThreeDay'
 
             },
             height: 620,
@@ -152,6 +172,14 @@ var CalenderObject = {
                     placement: 'top',
                     container: 'body'
                 });
+            },
+            views: {
+                agendaThreeDay: {
+                    type: 'agenda',
+                    duration: { days: 3 },
+                    buttonText: '3 day'
+                },
+                defaultView: 'agendaThreeDay'
             }
         });
     },

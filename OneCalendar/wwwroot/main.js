@@ -23,6 +23,7 @@ $(document).ready(function () {
     CalenderObject.DeleteEvent();
     CalenderObject.AddNewGroup();
     CalenderObject.Deletegroup();
+    CalenderObject.ChangeToThreeDayViewIfSmallScreen();
     //LocalStorage.DeleteStorageOnBrowserClose();
 
 });
