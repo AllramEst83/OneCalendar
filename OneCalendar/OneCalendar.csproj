@@ -56,7 +56,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\CaseSolutionsTokenValidationParameters\CaseSolutionsTokenValidationParameters\CaseSolutionsTokenValidationParameters.csproj" />
+    <ProjectReference Include="..\..\CaseSolutionsTokenValidationParameters\CaseSolutionsTokenValidationParameters\CaseSolutionsTokenValidationParameters.csproj">
+      <Private>true</Private>
+    </ProjectReference>
   </ItemGroup>
   
 
