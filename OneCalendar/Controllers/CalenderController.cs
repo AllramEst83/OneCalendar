@@ -119,7 +119,7 @@ namespace OneCalendar.Controllers
         }
 
 
-        [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
+        [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIEditUser)]
         [HttpDelete]
         public async Task<ActionResult<string>> DeleteEvent(DeleteEventViewModel model)
         {
@@ -157,7 +157,7 @@ namespace OneCalendar.Controllers
                });
         }
 
-        [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
+        [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIEditUser)]
         [HttpPut]
         public async Task<ActionResult<string>> UpdateEvent(UpdateEventViewModel model)
         {
@@ -196,7 +196,7 @@ namespace OneCalendar.Controllers
         }
 
 
-        [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
+        [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIEditUser)]
         [HttpPost]
         public async Task<ActionResult<string>> AddEvent(AddEventViewModel model)
         {
