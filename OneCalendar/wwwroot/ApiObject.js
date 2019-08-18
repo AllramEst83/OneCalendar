@@ -1,4 +1,5 @@
 ﻿
+var CalenderObject = CalenderObject || {};
 
 var ApiObject = {
 
@@ -13,6 +14,12 @@ var ApiObject = {
                 'Authorization': `Bearer  ${settings.token}`,
                 //"Access-Control-Allow-Origin": "*",
                 "Content-Type": "application/json"
+            },
+            statusCode: {
+                403: function () {
+                    CalenderObject.UserMessages.Show("Felmeddelande", "You have to be an admin to make this action.", "panel-danger");
+                    CalenderObject.UserMessages.Hide(6000);
+                }
             }
         })
             .done(function (data, textStatus) {
@@ -20,7 +27,7 @@ var ApiObject = {
                 console.log(`%c Request success: ${data}`, 'background: #222; color:#bada55');
             })
             .fail(function (jqXHR, textStatus) {
-                console.log(`%c request failed: ${jqXHR}`, 'background: #222; color:red');       
+                console.log(`%c request failed: ${jqXHR}`, 'background: #222; color:red');
             });
     },
     RequestWithOutData: function (settings) {
@@ -52,12 +59,12 @@ var ApiObject = {
             }
         })
             .done(function (data, textStatus) {
-     
+
                 //var userData = JSON.parse(data);
                 console.log(`%c Request success: ${data.statusCode} & ${data.description}`, 'background: #222; color:#bada55');
             })
             .fail(function (jqXHR, textStatus) {
-             
+
                 console.log(`%c request failed: ${jqXHR}`, 'background: #222; color:red');
             });
     },
