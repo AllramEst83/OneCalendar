@@ -504,6 +504,10 @@ var CalenderObject = {
 
                             CalenderObject.UserMessages.Show("Felmeddelande", calenderResponse.description, "panel-danger");
                             CalenderObject.UserMessages.Hide(6000);
+                        } else if (calenderResponse.statusCode === 403) {
+
+                            CalenderObject.UserMessages.Show("Felmeddelande","You have to be an admin to make this action.", "panel-danger");
+                            CalenderObject.UserMessages.Hide(6000);
                         }
                     });
 
