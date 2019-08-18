@@ -372,7 +372,7 @@ namespace OneCalendar.Controllers
             });
         }
 
-        [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
+        [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIEditUser)]
         [HttpGet]
         public ActionResult<string> GetTasksByUserId(Guid id)
         {
