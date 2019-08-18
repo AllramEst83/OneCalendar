@@ -19,6 +19,10 @@ var ApiObject = {
                 403: function () {
                     CalenderObject.UserMessages.Show("Felmeddelande", "You have to be an admin to make this action.", "panel-danger");
                     CalenderObject.UserMessages.Hide(6000);
+                },
+                401: function () {
+                    CalenderObject.UserMessages.Show("Felmeddelande", "You are UNAUTHORIZED to make this action.", "panel-danger");
+                    CalenderObject.UserMessages.Hide(6000);
                 }
             }
         })
@@ -39,6 +43,14 @@ var ApiObject = {
             headers: {
                 'Authorization': `Bearer ${settings.token}`,
                 "Content-Type": "application/json"
+            },
+            403: function () {
+                CalenderObject.UserMessages.Show("Felmeddelande", "You have to be an admin to make this action.", "panel-danger");
+                CalenderObject.UserMessages.Hide(6000);
+            },
+            401: function () {
+                CalenderObject.UserMessages.Show("Felmeddelande", "You are UNAUTHORIZED to make this action.", "panel-danger");
+                CalenderObject.UserMessages.Hide(6000);
             }
         })
             .done(function (data, textStatus) {
