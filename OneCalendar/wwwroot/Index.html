@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿ <!DOCTYPE html>
 <html>
 <head>
 
@@ -126,6 +126,66 @@
                                 <!-- add user end -->
                             </div>
                         </div>
+
+                        <div class="item">
+                            <div class="heading">Radera användare</div>
+                            <div class="content">
+                                <!--DeleteUser -->
+                                <div class="DeleteUserPanel panel panel-danger">
+
+                                    <div class="panel-heading">
+                                        <div>
+                                            <h3 class="panel-title">Radera användare</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <label for="deletUserSelect">Användare</label>
+                                            <select id="deletUserSelect" name="deletUserSelect" class="form-control" multiple="multiple" style="width: 100%"></select>
+                                        </div>
+                                        <div>
+                                            <input id="deleteUserButton" style="width:100%;margin-bottom:15px;" type="button" value="Radera" class="btn btn-danger" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!--DeleteUser -->
+                            </div>
+                        </div>
+
+                        <div class="item">
+                            <div class="heading">Tilldela roller</div>
+                            <div class="content">
+                                <!--AssignRoleToUser -->
+                                <div class="assignRoles panel panel-danger">
+
+                                    <div class="panel-heading">
+                                        <div>
+                                            <h3 class="panel-title">Tilldela roller</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <label for="assignRolesToUserSelect">Användare</label>
+                                            <select id="assignRolesToUserSelect" name="assignRolesToUserSelect" class="form-control" multiple="multiple" style="width: 100%"></select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="listOfRoles">Roller</label>
+                                            <select id="listOfRoles" name="listOfRoles" class="form-control" multiple="multiple" style="width: 100%"></select>
+                                        </div>
+                                        <div>
+                                            <input id="assignRoleButton" style="width:100%;margin-bottom:15px;" type="button" value="Tilldela" class="btn btn-success" />
+                                            <input id="unAssignRoleButton" style="width:100%;margin-bottom:15px;" type="button" value="Avdela" class="btn btn-danger" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!--AssignRoleToUser -->
+                            </div>
+                        </div>
+
                         <div class="item">
                             <div class="heading">Lägg till använadre i en grupp</div>
                             <div class="content">
@@ -221,7 +281,7 @@
                         <div class="item">
                             <div class="heading">Tabort grupp</div>
                             <div class="content">
-                                <!--AddNewgroup -->
+                                <!--RemoveGroup -->
                                 <div class="AddNewGroupPanel panel panel-danger">
 
                                     <div class="panel-heading">
@@ -241,7 +301,7 @@
                                     </div>
 
                                 </div>
-                                <!--AddNewGroup -->
+                                <!--RemoveGroup -->
                             </div>
                         </div>
 

@@ -24,6 +24,8 @@ $(document).ready(function () {
     CalenderObject.AddNewGroup();
     CalenderObject.Deletegroup();
     CalenderObject.ChangeToThreeDayViewIfSmallScreen();
+    CalenderObject.DeleteUser();
+    CalenderObject.AssignUserRole();
     //LocalStorage.DeleteStorageOnBrowserClose();
 
 });

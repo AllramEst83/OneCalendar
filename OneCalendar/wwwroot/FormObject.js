@@ -34,7 +34,7 @@ var FormObject = {
 
                         if (existingUserData !== "0") {
 
-                            LocalStorage.DeleteLocalStorageWithKey(LocalStorage.KeyToUserData);
+                            LocalStorage.DeleteLocalStorage();
 
                         }
 
@@ -119,7 +119,7 @@ var FormObject = {
             console.log("%c Logga ut!", 'background: #222; color:#bada55');
 
             $('#calender').fullCalendar('removeEvents');
-            LocalStorage.DeleteLocalStorageWithKey(LocalStorage.KeyToUserData);
+            LocalStorage.DeleteLocalStorage();
 
             $(".loginPanel").removeClass("panel-success");
             $(".loginPanel").addClass("panel-default");

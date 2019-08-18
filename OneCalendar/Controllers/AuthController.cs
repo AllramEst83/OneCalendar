@@ -203,6 +203,7 @@ namespace OneCalendar.Controllers
             });
         }
 
+        [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
         [HttpDelete]
         public async Task<IActionResult> DeleteUser(DeleteUserViewModel model)
         {
@@ -272,7 +273,7 @@ namespace OneCalendar.Controllers
                     {
                         Content = new { id = user.Id, email = user.Email },
                         StatusCode = HttpStatusCode.UnprocessableEntity,
-                        Description = "User was not deleted. The delete task could not be completed at this time. User has no roles assign. Pleas add roles to user for access.",
+                        Description = "User was not deleted. The delete task could not be completed at this time. User has no roles assigned. Pleas add roles to user for access.",
                         Error = "Unable to complete delete opretaion. User does not have any roles"
                     });
 
@@ -284,7 +285,7 @@ namespace OneCalendar.Controllers
             {
                 Content = new { id = user.Id, email = user.Email },
                 StatusCode = HttpStatusCode.OK,
-                Description = "user_deleted",
+                Description = "User has successfully been deleted",
                 Error = "User hase successfully been deleted"
             });
         }

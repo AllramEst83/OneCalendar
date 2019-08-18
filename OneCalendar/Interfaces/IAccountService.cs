@@ -25,5 +25,6 @@ namespace OneCalendar.Interfaces
         Task<List<ShortHandUsers>> GetAllUsers();
         Task<bool> UserExistById(string userId);
         Task<List<Roles>> GetRoles();
+        Task<bool> UserHasRole(User userIdentity, string userRole);
     }
 }

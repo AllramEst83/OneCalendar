@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace OneCalendar.Controllers
 {
@@ -19,18 +20,20 @@ namespace OneCalendar.Controllers
     [ApiController]
     public class CalenderController : ControllerBase
     {
-        public CalenderController(ICalenderService calenderService, IAccountService accountService)
+        public CalenderController(ICalenderService calenderService, IAccountService accountService, RoleManager<IdentityRole> roleManager)
         {
             CalenderService = calenderService;
             AccountService = accountService;
+            RoleManager = roleManager;
         }
 
         public CalenderContext CalenderContext { get; }
         public ICalenderService CalenderService { get; }
         public IAccountService AccountService { get; }
+        public RoleManager<IdentityRole> RoleManager { get; }
 
 
-
+        //DeleteGroup
         [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
         [HttpDelete]
         public async Task<ActionResult<string>> DeleteGroup(DeleteGroupViewModel model)
@@ -75,6 +78,7 @@ namespace OneCalendar.Controllers
             });
         }
 
+        //AddGroup
         [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
         [HttpPost]
         public async Task<ActionResult<string>> AddGroup(AddCalenderGroupViewModel model)
@@ -118,7 +122,7 @@ namespace OneCalendar.Controllers
             });
         }
 
-
+        //DeleteEvent
         [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIEditUser)]
         [HttpDelete]
         public async Task<ActionResult<string>> DeleteEvent(DeleteEventViewModel model)
@@ -157,6 +161,7 @@ namespace OneCalendar.Controllers
                });
         }
 
+        //UpdateEvent
         [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIEditUser)]
         [HttpPut]
         public async Task<ActionResult<string>> UpdateEvent(UpdateEventViewModel model)
@@ -195,7 +200,7 @@ namespace OneCalendar.Controllers
            });
         }
 
-
+        //AddEvent
         [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIEditUser)]
         [HttpPost]
         public async Task<ActionResult<string>> AddEvent(AddEventViewModel model)
@@ -213,7 +218,7 @@ namespace OneCalendar.Controllers
                     Content = new { },
                     StatusCode = HttpStatusCode.UnprocessableEntity,
                     Error = "unable_to_add_event",
-                    Description = "Unable to add event at this time."                              
+                    Description = "Unable to add event at this time."
                 });
             }
 
@@ -233,6 +238,7 @@ namespace OneCalendar.Controllers
                });
         }
 
+        //GetInfo
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult<string>> GetInfo()
@@ -250,7 +256,7 @@ namespace OneCalendar.Controllers
             }
             catch (Exception ex)
             {
-                
+
                 //Skriv felmeddelande som frontend kan hantera
             }
             finally
@@ -268,6 +274,44 @@ namespace OneCalendar.Controllers
             return new JsonResult(usersAndGroupsToClient);
         }
 
+        //AssignRole
+        [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
+        [HttpPut]
+        public async Task<ActionResult<string>> AssignRole([FromBody]AssignRoleViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new JsonResult(new AssignRoleResponseModel() { });
+            }
+
+            string userId = model.Id.ToString();
+            string role = model.Role.ToString();
+
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(role))
+            {
+                return new JsonResult(new AssignRoleResponseModel() { });
+            }
+
+            User user = await AccountService.GetUserById(userId);
+            bool roleExists = await AccountService.RoleExists(role);
+
+            if (user == null || !roleExists)
+            {
+                return new JsonResult(new AssignRoleResponseModel() { });
+            }
+
+            bool userHasRole = await AccountService.UserHasRole(user, role);
+            if (userHasRole)
+            {
+                return new JsonResult(new AssignRoleResponseModel() { });
+            }
+
+            IdentityResult assigRoleToUserResult = await AccountService.AddRoleToUser(user, role);
+
+            return new OkObjectResult(new AssignRoleResponseModel() { });
+        }
+
+        //AddUserToGroup
         [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
         [HttpPost]
         public async Task<ActionResult<string>> AddUserToGroup(AddUserToGroupViewModel model)
@@ -318,7 +362,7 @@ namespace OneCalendar.Controllers
             });
         }
 
-
+        //RemoveUserFromGroup
         [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
         [HttpDelete]
         public async Task<ActionResult<string>> RemoveUserFromGroup(RemoveUserFromGroupViewModel model)
@@ -372,6 +416,7 @@ namespace OneCalendar.Controllers
             });
         }
 
+        //GetTasksByUserId
         [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIEditUser)]
         [HttpGet]
         public ActionResult<string> GetTasksByUserId(Guid id)

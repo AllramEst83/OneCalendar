@@ -65,7 +65,7 @@ var CalenderObject = {
             header: {
                 left: 'prev,next today',
                 center: 'title',
-                right: 'month, agendaWeek,listWeek,agendaThreeDay'
+                right: 'month, agendaWeek,agendaThreeDay,agendaOneDay'
 
             },
             height: 620,
@@ -180,7 +180,11 @@ var CalenderObject = {
                     duration: { days: 3 },
                     buttonText: '3 day'
                 },
-                defaultView: 'agendaThreeDay'
+                agendaOneDay: {
+                    type: 'agenda',
+                    duration: { days: 1 },
+                    buttonText: '1 day'
+                }
             }
         });
     },
@@ -367,13 +371,16 @@ var CalenderObject = {
 
         $("#groupSelection").empty().append(groupsHtml).slideDown();
         $("#assignUserInput").empty().append(usersHtml);
+        $("#deletUserSelect").empty().append(usersHtml);
         $("#assignGroupInput").empty().append(groupsHtml);
         $("#removeUserInput").empty().append(usersHtml);
         $("#removeGroupInput").empty().append(groupsHtml);
         $("#addNewGroupUsers").empty().append(usersHtml);
         $("#removeGroupSelect").empty().append(groupsHtml);
         $("#userRoles").empty().append(rolesHtml);
-        $("#addNewGroupUsers, #removeGroupSelect").select2({
+        $("#assignRolesToUserSelect").empty().append(usersHtml);
+        $("#listOfRoles").empty().append(rolesHtml);
+        $("#addNewGroupUsers, #removeGroupSelect, #deletUserSelect, #assignRolesToUserSelect, #listOfRoles").select2({
             width: 'resolve'
         });
 
@@ -464,6 +471,88 @@ var CalenderObject = {
             }
         });
     },
+    DeleteUser: function () {
+        $("#deleteUserButton").on('click', function (e) {
+            e.preventDefault();
+
+            var userId = $("#deletUserSelect").val();
+            var inputData = { id: userId[0] };
+            var userData = LocalStorage.Get(LocalStorage.KeyToUserData);
+            if (userData !== "0") {
+                var settings = {
+                    url: "/api/auth/deleteuser",
+                    method: "DELETE",
+                    data: JSON.stringify(inputData),
+                    token: userData.token
+                };
+
+                $.when(ApiObject.Request(settings)).then(function (requestResponse) {
+                    if (requestResponse.statusCode === 200) {
+
+                        CalenderObject.UserMessages.Show("Meddelande", requestResponse.description, "panel-info");
+                        CalenderObject.UserMessages.Hide(6000);
+
+                        CalenderObject.GetAllUsersAndGroups();
+
+                    } else if (requestResponse.statusCode === 422) {
+
+                        CalenderObject.UserMessages.Show("Meddelande", requestResponse.description, "panel-danger");
+                        CalenderObject.UserMessages.Hide(6000);
+                    }
+                    else if (requestResponse.statusCode === 404) {
+
+                        CalenderObject.UserMessages.Show("Meddelande", requestResponse.description, "panel-danger");
+                        CalenderObject.UserMessages.Hide(6000);
+                    }
+                });
+
+            }
+        });
+    },
+    AssignUserRole: function () {
+        $("#assignRoleButton").on("click", function (e) {
+            e.preventDefault();
+
+            var userId = $("#assignRolesToUserSelect").val();
+            var role = $("#listOfRoles").val();
+            var inputData = { id: userId[0], role: role[0] };
+            var userData = LocalStorage.Get(LocalStorage.KeyToUserData);
+
+            var settings = {
+                url: "/api/calender/assignrole",
+                method: "PUT",
+                data: JSON.stringify(inputData),
+                token: userData.token
+            };
+
+            $.when(ApiObject.Request(settings)).then(function (requestResponse) {
+                if (requestResponse.statusCode === 200) {
+
+                    CalenderObject.UserMessages.Show("Meddelande", requestResponse.description, "panel-info");
+                    CalenderObject.UserMessages.Hide(6000);
+
+                    CalenderObject.GetAllUsersAndGroups();
+
+                } else if (requestResponse.statusCode === 422) {
+
+                    CalenderObject.UserMessages.Show("Meddelande", requestResponse.description, "panel-danger");
+                    CalenderObject.UserMessages.Hide(6000);
+                }
+                else if (requestResponse.statusCode === 404) {
+
+                    CalenderObject.UserMessages.Show("Meddelande", requestResponse.description, "panel-danger");
+                    CalenderObject.UserMessages.Hide(6000);
+                }
+            });
+
+        });
+    },
+    UnAssignUserRole: function () {
+        $("#unAssignRoleButton").on("click", function (e) {
+            e.preventDefault();
+
+        });
+    },
     AddNewGroup: function () {
         $("#addNewGroupButton").on('click', function () {
             var groupName = "",
@@ -479,7 +568,7 @@ var CalenderObject = {
                         groupName: groupName.val(),
                         groupUsers: groupUsers
                     };
-                    var settings = {    
+                    var settings = {
                         url: "/api/calender/addgroup",
                         method: "POST",
                         data: JSON.stringify(createGroupData),

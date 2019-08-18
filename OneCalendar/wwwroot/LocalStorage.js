@@ -31,16 +31,16 @@ var LocalStorage = {
         }
         return stored;
     },
-    DeleteLocalStorageWithKey: function (key) {
+    DeleteLocalStorage: function () {
 
-        console.log("%c LocalStorage deleted with key.", 'background: #222;color:red');
+        console.log("%c LocalStorage cleared.", 'background: #222;color:red');
 
-        window.localStorage.removeItem(key);
+        window.localStorage.clear();
     },
     DeleteStorageOnBrowserClose: function () {
 
         $(window).on("unload", function (e) {
-            LocalStorage.DeleteLocalStorageWithKey(LocalStorage.KeyToUserData);
+            LocalStorage.DeleteLocalStorage();
         });
     }
 };

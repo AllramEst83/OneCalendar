@@ -142,6 +142,18 @@ namespace OneCalendar.Services
             return addRoleToUserResult;
         }
 
+        public async Task<bool> UserHasRole(User userIdentity, string userRole)
+        {
+            bool userHasRole = false;
+            if (userIdentity != null && !string.IsNullOrEmpty(userRole))
+            {
+                userHasRole = await UserManager.IsInRoleAsync(userIdentity, userRole);
+                SaveChages();
+            }
+
+            return userHasRole;
+        }
+
         public async Task<IdentityResult> CreateRole(string role)
         {
             IdentityRole identityRole = null;
