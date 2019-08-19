@@ -68,6 +68,17 @@ namespace OneCalendar.Services
             return removeRolesFromUserResult;
         }
 
+        public async Task<IdentityResult> RemoveRoleFromUser(User user, string userRole)
+        {
+            IdentityResult removeRoleFromUserResult = null;
+
+            removeRoleFromUserResult = await UserManager.RemoveFromRoleAsync(user, userRole);
+
+            SaveChages();
+
+            return removeRoleFromUserResult;
+        }
+
         public async Task<bool> UserExistByUserName(string userEmail)
         {
             User result = null;

@@ -564,6 +564,48 @@ var CalenderObject = {
         $("#unAssignRoleButton").on("click", function (e) {
             e.preventDefault();
 
+            var userId = [];
+            var role = [];
+            userId = $("#assignRolesToUserSelect").val();
+            role = $("#listOfRoles").val();
+
+            if (userId.length > 0 && role.length > 0) {
+
+                var inputData = { id: userId[0], role: role[0] };
+
+                var userData = LocalStorage.Get(LocalStorage.KeyToUserData);
+                
+                var settings = {
+                    url: "/api/calender/unassignrole",
+                    method: "PUT",
+                    data: JSON.stringify(inputData),
+                    token: userData.token
+                };
+
+                $.when(ApiObject.Request(settings)).then(function (requestResponse) {
+                    if (requestResponse.statusCode === 200) {
+
+                        CalenderObject.UserMessages.Show("Meddelande", requestResponse.description, "panel-info");
+                        CalenderObject.UserMessages.Hide(6000);
+
+                        CalenderObject.GetAllUsersAndGroups();
+
+                    } else if (requestResponse.statusCode === 400) {
+
+                        CalenderObject.UserMessages.Show("Meddelande", requestResponse.description, "panel-danger");
+                        CalenderObject.UserMessages.Hide(6000);
+                    }
+                    else if (requestResponse.statusCode === 409) {
+
+                        CalenderObject.UserMessages.Show("Meddelande", requestResponse.description, "panel-danger");
+                        CalenderObject.UserMessages.Hide(6000);
+                    }
+                });
+            } else {
+                CalenderObject.UserMessages.Show("Meddelande", "userId or role can not be empty", "panel-danger");
+                CalenderObject.UserMessages.Hide(6000);
+            }
+
         });
     },
     AddNewGroup: function () {

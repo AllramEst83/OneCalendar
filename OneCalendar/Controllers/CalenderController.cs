@@ -266,9 +266,7 @@ namespace OneCalendar.Controllers
                     Groups = groups,
                     Roles = roles
                 };
-
             }
-
 
             return new JsonResult(usersAndGroupsToClient);
         }
@@ -336,6 +334,73 @@ namespace OneCalendar.Controllers
                 Content = assigRoleToUserResult,
                 StatusCode = HttpStatusCode.OK,
                 Description = $"User: {user.Email} has been assigned the role: {role}",
+                Error = "no_error"
+            });
+        }
+
+        //UnAssignRole
+        [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
+        [HttpPut]
+        public async Task<ActionResult<string>> UnAssignRole([FromBody]UnAssignRoleViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new JsonResult(new UnAssignRoleResponseModel()
+                {
+                    Content = new { },
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Description = "ModelState is invalid.",
+                    Error = "modelState inValid"
+                });
+            }
+
+            string userId = model.Id.ToString();
+            string role = model.Role.ToString();
+
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(role))
+            {
+                return new JsonResult(new AssignRoleResponseModel()
+                {
+                    Content = new { },
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Description = "UserId or role can not be empty.",
+                    Error = "userid_or_role_can_not_be_empty"
+                });
+            }
+
+            User user = await AccountService.GetUserById(userId);
+            bool roleExists = await AccountService.RoleExists(role);
+
+            if (user == null || !roleExists)
+            {
+                return new JsonResult(new AssignRoleResponseModel()
+                {
+                    Content = new { },
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Description = "User or role does not exits",
+                    Error = "bad_request"
+                });
+            }
+
+            bool userHasRole = await AccountService.UserHasRole(user, role);
+            if (!userHasRole)
+            {
+                return new JsonResult(new AssignRoleResponseModel()
+                {
+                    Content = new { },
+                    StatusCode = HttpStatusCode.Conflict,
+                    Description = $"User does not have role: {role} assigned",
+                    Error = "conflict"
+                });
+            }
+
+            IdentityResult assigRoleToUserResult = await AccountService.RemoveRoleFromUser(user, role);
+
+            return new OkObjectResult(new AssignRoleResponseModel()
+            {
+                Content = assigRoleToUserResult,
+                StatusCode = HttpStatusCode.OK,
+                Description = $"Role: {role} has been romoved from user: {user.Email}",
                 Error = "no_error"
             });
         }

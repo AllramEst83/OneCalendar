@@ -26,5 +26,6 @@ namespace OneCalendar.Interfaces
         Task<bool> UserExistById(string userId);
         Task<List<Roles>> GetRoles();
         Task<bool> UserHasRole(User userIdentity, string userRole);
+        Task<IdentityResult> RemoveRoleFromUser(User user, string userRole);
     }
 }
