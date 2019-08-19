@@ -1,6 +1,6 @@
 
 var ApiObject = ApiObject || {};
-
+var CalenderObject = CalenderObject || {};
 
 var FormObject = {
 
@@ -42,9 +42,13 @@ var FormObject = {
 
                         $("#loginUserTitlePane").empty();
                         $("#loginUserTitlePane").append(userData.userName);
-                        $(".loginUser").slideUp(500);
+                        $(".loginUser").slideUp(500, function () {
+                            //$("#loggaInKnapp").hide();
+                            $("#logoutButton").slideDown();
+                        });
                         $(".loginPanel").removeClass("panel-default");
-                        $(".loginPanel").addClass("panel-success");
+                        $(".loginPanel").addClass("panel-success");                      
+                     
 
                         CalenderObject.GetEvents();
 
@@ -93,12 +97,18 @@ var FormObject = {
                         //var userData = JSON.parse(data);
                         if (textStatus === "success") {
                             if (data.statusCode === 200) {
+
                                 CalenderObject.UserMessages.Show("Meddelande", data.description, "panel-info");
+                                CalenderObject.GetAllUsersAndGroups();
+
                             } else if (data.statusCode === 400) {
+
                                 CalenderObject.UserMessages.Show("Felmeddelande", data.description, "panel-danger");
                             } else if (data.statusCode === 409) {
+
                                 CalenderObject.UserMessages.Show("Felmeddelande", data.description, "panel-danger");
                             } else if (data.statusCode === 404) {
+
                                 CalenderObject.UserMessages.Show("Felmeddelande", data.description, "panel-danger");
                             }
 
@@ -119,6 +129,8 @@ var FormObject = {
             console.log("%c Logga ut!", 'background: #222; color:#bada55');
 
             $('#calender').fullCalendar('removeEvents');
+            $("#logoutButton").hide();
+            $("#loggaInKnapp").show();
             LocalStorage.DeleteLocalStorage();
 
             $(".loginPanel").removeClass("panel-success");
