@@ -6,7 +6,6 @@ var Accordion = Accordion || {};
 
 $(document).ready(function () {
 
-
     console.log("ready!");
 
     CalenderObject.CheckForUserTokenAndReValidate();
@@ -27,6 +26,7 @@ $(document).ready(function () {
     CalenderObject.DeleteUser();
     CalenderObject.AssignUserRole();
     CalenderObject.UnAssignUserRole();
+    FormObject.ResetPassword();
     //LocalStorage.DeleteStorageOnBrowserClose();
 
 });

@@ -20,17 +20,15 @@ namespace OneCalendar.Controllers
     [ApiController]
     public class CalenderController : ControllerBase
     {
-        public CalenderController(ICalenderService calenderService, IAccountService accountService, RoleManager<IdentityRole> roleManager)
+        public CalenderController(ICalenderService calenderService, IAccountService accountService)
         {
             CalenderService = calenderService;
             AccountService = accountService;
-            RoleManager = roleManager;
         }
 
         public CalenderContext CalenderContext { get; }
         public ICalenderService CalenderService { get; }
         public IAccountService AccountService { get; }
-        public RoleManager<IdentityRole> RoleManager { get; }
 
 
         //DeleteGroup

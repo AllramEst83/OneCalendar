@@ -38,6 +38,7 @@ namespace OneCalendar.Controllers
         public RoleManager<IdentityRole> RoleManager { get; }
         public IJwtService JwtService { get; }
         public ICalenderService CalenderService { get; }
+        public IMailService MailService { get; }
 
         private readonly JwtIssuerOptions _jwtOptions;
         private readonly AppSettings _appsettings;
@@ -50,7 +51,8 @@ namespace OneCalendar.Controllers
             IJwtService jwtService,
                IOptions<JwtIssuerOptions> jwtOptions,
             IOptions<AppSettings> appsettings,
-            ICalenderService calenderService)
+            ICalenderService calenderService,
+            IMailService mailService)
         {
             AccountService = accountService;
             Mapper = mapper;
@@ -58,6 +60,7 @@ namespace OneCalendar.Controllers
             RoleManager = roleManager;
             JwtService = jwtService;
             CalenderService = calenderService;
+            MailService = mailService;
             _jwtOptions = jwtOptions.Value;
             _appsettings = appsettings.Value;
         }
@@ -368,7 +371,41 @@ namespace OneCalendar.Controllers
             return new JsonResult(new { message = "Roles have been seeded successfully.", Roles = listOfRoles });
         }
 
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword([FromBody]ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new JsonResult(new ResetPasswordResponseModel()
+                {
+                    Content = new { },
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Description = "User email can not be empty",
+                    Error = "bad_request"
+                });
+            }
 
+            MailSent mailSentResult = MailService.SendEmail(model.UserMail); //<--------Build
+            if (!mailSentResult.IsSent)
+            {
+                return new JsonResult(new ResetPasswordResponseModel()
+                {
+                    Content = new { },
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Description = mailSentResult.SentMessage,
+                    Error = "bad_request"
+                });
+            }
+
+            return new OkObjectResult(new ResetPasswordResponseModel()
+            {
+                Content = new { },
+                StatusCode = HttpStatusCode.OK,
+                Description = mailSentResult.SentMessage,
+                Error = "no_error"
+            });
+        }
 
         [Authorize(Policy = TokenValidationConstants.Policies.AuthAPIAdmin)]
         [HttpPost]

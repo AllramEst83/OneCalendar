@@ -97,6 +97,7 @@ namespace OneCalendar
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ISeedService, SeedService>();
             services.AddScoped<ICalenderService, CalenderService>();
+            services.AddScoped<IMailService, MailService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                        .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>())

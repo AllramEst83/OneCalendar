@@ -6,6 +6,8 @@ var FormObject = {
 
     LogInBinding: function () {
 
+        $("#logoutButton").hide();
+
         $("#loggaInKnapp").on("click", function (e) {
             e.preventDefault();
 
@@ -43,12 +45,12 @@ var FormObject = {
                         $("#loginUserTitlePane").empty();
                         $("#loginUserTitlePane").append(userData.userName);
                         $(".loginUser").slideUp(500, function () {
-                            //$("#loggaInKnapp").hide();
+                            $("#loggaInKnapp").hide();
                             $("#logoutButton").slideDown();
                         });
                         $(".loginPanel").removeClass("panel-default");
-                        $(".loginPanel").addClass("panel-success");                      
-                     
+                        $(".loginPanel").addClass("panel-success");
+
 
                         CalenderObject.GetEvents();
 
@@ -63,6 +65,37 @@ var FormObject = {
 
                 });
             }
+        });
+    },
+    ResetPassword: function () {
+        $("#resetPasswordLink").on('click', function () {
+
+            var userMail = $("#userNameInput").val();
+            if (userMail === '') {
+                CalenderObject.UserMessages.Show("Meddelande", "To reset password please enter your email.", "panel-info");
+                CalenderObject.GetAllUsersAndGroups();
+            }
+            var settings = {
+                "url": "/api/auth/resetpassword",
+                "method": "POST",
+                mediaType: 'application/json',
+                data: JSON.stringify({ userMail: userMail })
+            };
+
+            $.when(ApiObject.RequestWithOutAuth(settings))
+                .then(function (data) {
+                    if (data.statusCode === 200) {
+
+                        CalenderObject.UserMessages.Show("Meddelande", data.description, "panel-info");
+
+                    } else if (data.statusCode === 400) {
+
+                        CalenderObject.UserMessages.Show("Felmeddelande", data.description, "panel-danger");
+                    }
+
+                    CalenderObject.UserMessages.Hide(6000);
+
+                });
         });
     },
     AddUser: function () {
